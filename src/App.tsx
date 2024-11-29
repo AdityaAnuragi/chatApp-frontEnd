@@ -7,7 +7,7 @@ function App() {
       <h1>hey</h1>
       <button onClick={() => socket.connect()} >Connect</button>
       <button onClick={() => socket.disconnect()} >disconnect</button>
-      <button onClick={() => socket.volatile.emit("greet", "front end says hello")} >greet</button>
+      <button onClick={() => socket.emit("greet", "front end says hello")} >greet</button>
     </>
   )
 }
