@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react"
+// import { useEffect } from "react"
+import { socket } from "./socket"
 
 function App() {
-
-  const [msg, setMsg] = useState("hello world")
-
-  useEffect(() => {
-    fetch('http://localhost:3000')
-      // .then(res => res.json())
-      .then(value => value.text())
-      .then(value => setMsg(value))
-  },[])
-
-  return <h1>{msg}</h1>
+  return (
+    <>
+      <h1>hey</h1>
+      <button onClick={() => socket.connect()} >Connect</button>
+      <button onClick={() => socket.disconnect()} >disconnect</button>
+      <button onClick={() => socket.volatile.emit("greet", "front end says hello")} >greet</button>
+    </>
+  )
 }
 
 export default App
