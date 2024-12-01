@@ -2,15 +2,21 @@
 import { useEffect, useState } from "react"
 import { socket } from "./socket"
 
+const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Markus"]
+const randomId = Math.floor(Math.random() * allNames.length)
+const theName = allNames[randomId]
 function App() {
-  const [name, setName] = useState("")
-  const [draftMsg, setDraftMsg] = useState("")
-  const [allMessages, setAllMessages] = useState<string []>([])
   const [isConnected, setIsConnected] = useState(socket.connected)
+  const [name, setName] = useState(theName)
+  const [id, setId] = useState(randomId)
+  const [allMessages, setAllMessages] = useState<string[]>([])
+  const [draftMsg, setDraftMsg] = useState("")
 
   useEffect(() => {
 
-    function handleMessage(sender: string, msg: string) {
+    function handleMessage(sender: string, idReceived: number, msg: string) {
+      if(idReceived === id) return
+
       setAllMessages((curr) => {
         const copy = [...curr]
         copy.push(`${sender}: ${msg}`)
@@ -29,34 +35,48 @@ function App() {
     socket.on("message", handleMessage)
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
-  
+
     return () => {
       socket.off("message", handleMessage)
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
     }
 
-  },[])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function handleSendMsg() {
-    socket.emit("message", name, draftMsg)
+    socket.emit("message", name, id, draftMsg)
+    setAllMessages((prev) => [...prev,`${name}: ${draftMsg}`])
     setDraftMsg("")
   }
 
   return (
     <>
       <h2>Connected: {`${isConnected}`}</h2>
-      <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      <br/>
-      <br/>
-      <br/>
+      <label>
+        Name
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <br />
+      <br />
+      <br />
+
+      <label>
+        Unique ID
+        <input type="number" value={id} onChange={(e) => setId(Number(e.target.value))} />
+      </label>
+      <br />
+      <br />
+      <br />
+
       <button onClick={() => socket.connect()} >Connect</button>
       <button onClick={() => socket.disconnect()} >disconnect</button>
-      <br/>
-      <br/>
+      <br />
+      <br />
 
-      {allMessages && allMessages.map(msg => {
-        return <p>{msg}</p>
+      {allMessages && allMessages.map((msg, index) => {
+        return <p key={index} >{msg}</p>
       })}
 
       <input type="text" value={draftMsg} onChange={(e) => setDraftMsg(e.target.value)} />
