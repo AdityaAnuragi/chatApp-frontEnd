@@ -51,6 +51,12 @@ function App() {
     setDraftMsg("")
   }
 
+  function handleKeyDown(e:React.KeyboardEvent<HTMLInputElement>) {
+    if(e.key === "Enter") {
+      handleSendMsg()
+    }
+  }
+
   return (
     <>
       <h2>Connected: {`${isConnected}`}</h2>
@@ -79,8 +85,8 @@ function App() {
         return <p key={index} >{msg}</p>
       })}
 
-      <input type="text" value={draftMsg} onChange={(e) => setDraftMsg(e.target.value)} />
-      <button onClick={handleSendMsg} >Send message</button>
+      <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
+      <button onClick={handleSendMsg}  >Send message</button>
     </>
   )
 }
