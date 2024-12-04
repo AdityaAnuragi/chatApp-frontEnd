@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react"
 import { socket } from "./socket"
 
+import { Message } from "./message/Message"
+
 const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Markus"]
 const randomId = Math.floor(Math.random() * allNames.length)
 const theName = allNames[randomId]
@@ -82,7 +84,7 @@ function App() {
       <br />
 
       {allMessages && allMessages.map((msg, index) => {
-        return <p key={index} >{msg}</p>
+        return <Message key={index} msg={msg} />
       })}
 
       <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
