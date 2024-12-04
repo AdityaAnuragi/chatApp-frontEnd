@@ -1,4 +1,11 @@
 .container {
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.messageStatus {
+  margin-right: 0.5rem;
 }

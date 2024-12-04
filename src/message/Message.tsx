@@ -10,7 +10,7 @@ export function Message({msg}: MessageProps) {
 
   return (
     <div className={`${styles.container}`} >
-      <div>{sent ? "Sent" : "Sending"}</div>
+      <div className={`${styles.messageStatus}`} >{sent ? "Sent " : "Sending"}</div>
       <p>{msg}</p>
     </div>
   )
