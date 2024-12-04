@@ -8,7 +8,7 @@ type ServerToClientEvents = {
 }
 
 type ClientToServerEvents = {
-  message: (sender:string, id:number, msg:string) => void
+  message: (sender:string, id:number, msg:string, callback: (response: {status: "ok" | "error"}) => void) => void
 }
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(URL, {

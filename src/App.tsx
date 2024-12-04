@@ -48,7 +48,9 @@ function App() {
   }, [])
 
   function handleSendMsg() {
-    socket.emit("message", name, id, draftMsg)
+    socket.emit("message", name, id, draftMsg, (response) => {
+      console.log(`The status is ${response.status}`)
+    })
     setAllMessages((prev) => [...prev,`${name}: ${draftMsg}`])
     setDraftMsg("")
   }
