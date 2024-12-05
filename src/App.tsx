@@ -21,7 +21,7 @@ function App() {
 
       setAllMessages((curr) => {
         const copy = [...curr]
-        copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID()})
+        copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
         return copy
       })
     }
@@ -51,7 +51,7 @@ function App() {
     // socket.emit("message", sender, id, draftMsg, (response) => {
     //   console.log(`The status is ${response.status}`)
     // })
-    setAllMessages((prev) => [...prev,{msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID()}])
+    setAllMessages((prev) => [...prev,{msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id}])
     setDraftMsg("")
   }
 
@@ -87,7 +87,7 @@ function App() {
       <br />
 
       {(allMessages.length !== 0) && allMessages.map(value => {
-        return <Message key={value.id} sender={sender} id={id} msg={value.msg.split(": ")[1]} />
+        return <Message key={value.id} sender={sender} senderID={value.senderID} userID={id}  msg={value.msg.split(": ")[1]} />
       })}
 
       <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
@@ -98,7 +98,8 @@ function App() {
 
 type Message = {
   msg: string,
-  id: string
+  id: string,
+  senderID: number
 }
 
 export default App

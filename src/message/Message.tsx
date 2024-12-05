@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 
 import styles from  "./Message.module.scss"
 
-export function Message({sender, id, msg}: MessageProps) {
+export function Message({sender, senderID, userID, msg}: MessageProps) {
 
   const [sent, setIsSent] = useState(false)
 
@@ -13,36 +13,42 @@ export function Message({sender, id, msg}: MessageProps) {
   useEffect(() => {
     console.log(`Should an event be emitted: ${emitEvent.current}`)
 
-    // if(emitEvent) {
-    //   socket.emit("message", sender, id, msg, (response) => {
-    //     console.log(`The status is ${response.status}`)
-    //     if(response.status === "ok") {
-    //       setIsSent(true)
-    //     }
-    //   })
-    // }
+    if((userID === senderID) && emitEvent.current) {
+      console.log("inside")
+      socket.emit("message", sender, senderID, msg, (response) => {
+        console.log(`The status is ${response.status}`)
+        if(response.status === "ok") {
+          setIsSent(true)
+        }
+      })
+    }
     emitEvent.current = false
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  function handleOnClick() {
-    socket.emit("message", sender, id, msg, (response) => {
-      console.log(`The status is ${response.status}`)
-      if(response.status === "ok") {
-        setIsSent(true)
-      }
-    })
-  }
+  // function handleOnClick() {
+  //   if(userID === senderID) {
+  //     console.log("inside")
+  //     socket.emit("message", sender, senderID, msg, (response) => {
+  //       console.log(`The status is ${response.status}`)
+  //       if(response.status === "ok") {
+  //         setIsSent(true)
+  //       }
+  //     })
+  //   }
+  // }
 
   return (
     <div className={`${styles.container}`} >
-      <div className={`${styles.messageStatus}`} >{sent ? "Sent " : "Sending"}</div>
-      <p onClick={handleOnClick} >{msg}</p>
+      {(userID === senderID) && <div className={`${styles.messageStatus}`} >{sent ? "✅" : "🕗"}</div>}
+      <p>{msg}</p>
     </div>
   )
 }
 
 type MessageProps = {
   sender: string,
-  id: number,
+  senderID: number,
+  userID: number,
   msg: string
 }
