@@ -9,9 +9,9 @@ const randomId = Math.floor(Math.random() * allNames.length)
 const theName = allNames[randomId]
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected)
-  const [name, setName] = useState(theName)
+  const [sender, setSender] = useState(theName)
   const [id, setId] = useState(randomId)
-  const [allMessages, setAllMessages] = useState<string[]>([])
+  const [allMessages, setAllMessages] = useState<Message[]>([])
   const [draftMsg, setDraftMsg] = useState("")
 
   useEffect(() => {
@@ -21,7 +21,7 @@ function App() {
 
       setAllMessages((curr) => {
         const copy = [...curr]
-        copy.push(`${sender}: ${msg}`)
+        copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID()})
         return copy
       })
     }
@@ -48,10 +48,10 @@ function App() {
   }, [])
 
   function handleSendMsg() {
-    socket.emit("message", name, id, draftMsg, (response) => {
-      console.log(`The status is ${response.status}`)
-    })
-    setAllMessages((prev) => [...prev,`${name}: ${draftMsg}`])
+    // socket.emit("message", sender, id, draftMsg, (response) => {
+    //   console.log(`The status is ${response.status}`)
+    // })
+    setAllMessages((prev) => [...prev,{msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID()}])
     setDraftMsg("")
   }
 
@@ -60,13 +60,14 @@ function App() {
       handleSendMsg()
     }
   }
-
+  // console.log(`Value: ${allMessages.length !== 0}`)
+  // console.log(allMessages)
   return (
     <>
       <h2>Connected: {`${isConnected}`}</h2>
       <label>
         Name
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="text" value={sender} onChange={(e) => setSender(e.target.value)} />
       </label>
       <br />
       <br />
@@ -85,14 +86,19 @@ function App() {
       <br />
       <br />
 
-      {allMessages && allMessages.map((msg, index) => {
-        return <Message key={index} msg={msg} />
+      {(allMessages.length !== 0) && allMessages.map(value => {
+        return <Message key={value.id} sender={sender} id={id} msg={value.msg.split(": ")[1]} />
       })}
 
       <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
       <button onClick={handleSendMsg}  >Send message</button>
     </>
   )
+}
+
+type Message = {
+  msg: string,
+  id: string
 }
 
 export default App
