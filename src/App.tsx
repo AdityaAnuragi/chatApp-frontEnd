@@ -10,7 +10,7 @@ const theName = allNames[randomId]
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected)
   const [sender, setSender] = useState(theName)
-  const [id, setId] = useState(randomId)
+  const id = randomId
   const [allMessages, setAllMessages] = useState<Message[]>([])
   const [draftMsg, setDraftMsg] = useState("")
 
@@ -31,7 +31,7 @@ function App() {
     }
 
     function handleDisconnect() {
-      socket.connect()
+      // socket.connect()
       setIsConnected(false)
     }
 
@@ -44,9 +44,7 @@ function App() {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
     }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [id])
 
   function handleSendMsg() {
     // socket.emit("message", sender, id, draftMsg, (response) => {
@@ -76,14 +74,14 @@ function App() {
 
       <label>
         Unique ID
-        <input type="number" value={id} onChange={(e) => setId(Number(e.target.value))} />
+        <input type="number" readOnly value={id} />
       </label>
       <br />
       <br />
       <br />
 
       <button onClick={() => socket.connect()} >Connect</button>
-      {/* <button onClick={() => socket.disconnect()} >disconnect</button> */}
+      <button onClick={() => socket.disconnect()} >disconnect</button>
       <br />
       <br />
 

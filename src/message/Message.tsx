@@ -8,12 +8,12 @@ export function Message({sender, senderID, userID, msg}: MessageProps) {
 
   const [sent, setIsSent] = useState(false)
 
-  const emitEvent = useRef(true)
+  const emitEvent = useRef( (userID === senderID) && true )
 
   useEffect(() => {
     console.log(`Should an event be emitted: ${emitEvent.current}`)
 
-    if((userID === senderID) && emitEvent.current) {
+    if(emitEvent.current) {
       console.log("inside")
       socket.emit("message", sender, senderID, msg, (response) => {
         console.log(`The status is ${response.status}`)
@@ -23,8 +23,7 @@ export function Message({sender, senderID, userID, msg}: MessageProps) {
       })
     }
     emitEvent.current = false
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[msg, sender, senderID])
 
   // function handleOnClick() {
   //   if(userID === senderID) {
