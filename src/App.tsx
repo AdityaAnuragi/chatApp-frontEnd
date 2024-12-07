@@ -31,6 +31,7 @@ function App() {
     }
 
     function handleDisconnect() {
+      socket.connect()
       setIsConnected(false)
     }
 
