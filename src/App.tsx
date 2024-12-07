@@ -83,7 +83,7 @@ function App() {
       <br />
 
       <button onClick={() => socket.connect()} >Connect</button>
-      <button onClick={() => socket.disconnect()} >disconnect</button>
+      {/* <button onClick={() => socket.disconnect()} >disconnect</button> */}
       <br />
       <br />
 
