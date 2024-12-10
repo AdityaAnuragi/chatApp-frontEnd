@@ -85,6 +85,20 @@ function App() {
       <br />
       <br />
 
+      <button onClick={() => socket.emit("joinRoom", "one")} >Join Room one</button>
+      <button onClick={() => socket.emit("joinRoom", "two")} >Join Room two</button>
+
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <button>Group one chat</button>
+      <button>Group two chat</button>
+      <br />
+      <br />
+      <br />
+
       {(allMessages.length !== 0) && allMessages.map(value => {
         return <Message key={value.id} sender={sender} senderID={value.senderID} userID={id}  msg={value.msg.split(": ")[1]} />
       })}
@@ -100,5 +114,15 @@ type Message = {
   id: string,
   senderID: number
 }
+
+type Chats = {
+  [groupName:string ]: Message
+}
+
+// example
+// {
+//   foo: Message,
+//   bar: Message
+// }
 
 export default App
