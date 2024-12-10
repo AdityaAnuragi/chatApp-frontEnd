@@ -32,6 +32,8 @@ function App() {
       })
     }
 
+    // TODO: put the handleconnect and disconnect functions in their own seperate useEffect
+    asdf
     function handleConnect() {
       setIsConnected(true)
     }
