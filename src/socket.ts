@@ -8,7 +8,7 @@ type ServerToClientEvents = {
 }
 
 type ClientToServerEvents = {
-  message: (sender:string, id:number, msg:string, callback: (response: {status: "ok" | "error"}) => void) => void,
+  message: (sender:string, id:number, msg:string, selectedGroup: "one" | "two", callback: (response: {status: "ok" | "error"}) => void) => void,
   joinRoom: (roomName: string) => void
 }
 

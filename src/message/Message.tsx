@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 
 import styles from  "./Message.module.scss"
 
-export function Message({sender, senderID, userID, msg}: MessageProps) {
+export function Message({sender, senderID, userID, msg, selectedGroup}: MessageProps) {
 
   const [sent, setIsSent] = useState(false)
 
@@ -15,7 +15,7 @@ export function Message({sender, senderID, userID, msg}: MessageProps) {
 
     if(emitEvent.current) {
       console.log("inside")
-      socket.emit("message", sender, senderID, msg, (response) => {
+      socket.emit("message", sender, senderID, msg, selectedGroup, (response) => {
         console.log(`The status is ${response.status}`)
         if(response.status === "ok") {
           setIsSent(true)
@@ -23,7 +23,7 @@ export function Message({sender, senderID, userID, msg}: MessageProps) {
       })
     }
     emitEvent.current = false
-  },[msg, sender, senderID])
+  },[msg, selectedGroup, sender, senderID])
 
   // function handleOnClick() {
   //   if(userID === senderID) {
@@ -49,5 +49,6 @@ type MessageProps = {
   sender: string,
   senderID: number,
   userID: number,
-  msg: string
+  msg: string,
+  selectedGroup: "one" | "two"
 }

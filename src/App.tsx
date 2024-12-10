@@ -7,21 +7,27 @@ import { Message } from "./message/Message"
 const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Markus"]
 const randomId = Math.floor(Math.random() * allNames.length)
 const theName = allNames[randomId]
+
+
+
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected)
   const [sender, setSender] = useState(theName)
   const id = randomId
-  const [allMessages, setAllMessages] = useState<Message[]>([])
+  const [allMessages, setAllMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
+  const [selectedGroup, setSelectedGroup] = useState<"one" | "two" | null>(null)
 
   useEffect(() => {
-
+    // This is when we the client receives a message
     function handleMessage(sender: string, idReceived: number, msg: string) {
-      if(idReceived === id) return
+      if (idReceived === id) return
 
       setAllMessages((curr) => {
-        const copy = [...curr]
-        copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
+        const copy = { ...curr }
+        // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
+        const nonNullSelectedGroup = selectedGroup!
+        copy[nonNullSelectedGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived })
         return copy
       })
     }
@@ -44,21 +50,43 @@ function App() {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
     }
-  }, [id])
+  }, [id, selectedGroup])
 
   function handleSendMsg() {
     // socket.emit("message", sender, id, draftMsg, (response) => {
     //   console.log(`The status is ${response.status}`)
     // })
-    setAllMessages((prev) => [...prev,{msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id}])
+    // setAllMessages((prev) => [...prev,{msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id}])
+
+
+    setAllMessages((prev) => {
+      const copy = { ...prev }
+      const nonNullSelectedGroup = selectedGroup!
+      copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id })
+
+      return copy
+    })
+
+
     setDraftMsg("")
   }
 
-  function handleKeyDown(e:React.KeyboardEvent<HTMLInputElement>) {
-    if(e.key === "Enter") {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
       handleSendMsg()
     }
   }
+
+  function handleRoomSelect(roomName: "one" | "two") {
+    socket.emit("joinRoom", roomName)
+    setAllMessages(prev => {
+      const copy = { ...prev }
+      copy[roomName] = []
+      return copy
+    })
+    setSelectedGroup(roomName)
+  }
+
   // console.log(`Value: ${allMessages.length !== 0}`)
   // console.log(allMessages)
   return (
@@ -85,8 +113,8 @@ function App() {
       <br />
       <br />
 
-      <button onClick={() => socket.emit("joinRoom", "one")} >Join Room one</button>
-      <button onClick={() => socket.emit("joinRoom", "two")} >Join Room two</button>
+      <button onClick={() => handleRoomSelect("one")} >Join Room one</button>
+      <button onClick={() => handleRoomSelect("two")} >Join Room two</button>
 
       <br />
       <br />
@@ -99,8 +127,17 @@ function App() {
       <br />
       <br />
 
-      {(allMessages.length !== 0) && allMessages.map(value => {
-        return <Message key={value.id} sender={sender} senderID={value.senderID} userID={id}  msg={value.msg.split(": ")[1]} />
+      {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map(value => {
+        return (
+          <Message
+            key={value.id}
+            sender={sender}
+            senderID={value.senderID}
+            userID={id}
+            msg={value.msg.split(": ")[1]}
+            selectedGroup={selectedGroup}
+          />
+        )
       })}
 
       <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
@@ -116,13 +153,9 @@ type Message = {
 }
 
 type Chats = {
-  [groupName:string ]: Message
+  [groupName: string]: Message[]
 }
 
-// example
-// {
-//   foo: Message,
-//   bar: Message
-// }
+
 
 export default App
