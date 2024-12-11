@@ -11,12 +11,12 @@ export function Message({sender, senderID, userID, msg, selectedGroup}: MessageP
   const emitEvent = useRef( (userID === senderID) && true )
 
   useEffect(() => {
-    console.log(`Should an event be emitted: ${emitEvent.current}`)
+    // console.log(`Should an event be emitted: ${emitEvent.current}`)
 
     if(emitEvent.current) {
-      console.log("inside")
+      // console.log("inside")
       socket.emit("message", sender, senderID, msg, selectedGroup, (response) => {
-        console.log(`The status is ${response.status}`)
+        // console.log(`The status is ${response.status}`)
         if(response.status === "ok") {
           setIsSent(true)
         }

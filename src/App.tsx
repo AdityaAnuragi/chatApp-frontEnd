@@ -18,22 +18,7 @@ function App() {
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<"one" | "two" | null>(null)
 
-  useEffect(() => {
-    // This is when we the client receives a message
-    function handleMessage(sender: string, idReceived: number, msg: string) {
-      if (idReceived === id) return
-
-      setAllMessages((curr) => {
-        const copy = { ...curr }
-        // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
-        const nonNullSelectedGroup = selectedGroup!
-        copy[nonNullSelectedGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived })
-        return copy
-      })
-    }
-
-    // TODO: put the handleconnect and disconnect functions in their own seperate useEffect
-    asdf
+  useEffect(() => { 
     function handleConnect() {
       setIsConnected(true)
     }
@@ -43,29 +28,35 @@ function App() {
       setIsConnected(false)
     }
 
-    socket.on("message", handleMessage)
+    function handleMessageReceived(sender: string, idReceived: number, msg: string) {
+      if (idReceived === id) return
+
+      setAllMessages((curr) => {
+        console.log("setting this state")
+        const copy = JSON.parse(JSON.stringify(curr))
+        // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
+        const nonNullSelectedGroup = selectedGroup!
+        copy[nonNullSelectedGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived })
+        return copy
+      })
+    }
+
+    socket.on("message", handleMessageReceived)    
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
 
     return () => {
-      socket.off("message", handleMessage)
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
+      socket.off("message", handleMessageReceived)
     }
   }, [id, selectedGroup])
 
   function handleSendMsg() {
-    // socket.emit("message", sender, id, draftMsg, (response) => {
-    //   console.log(`The status is ${response.status}`)
-    // })
-    // setAllMessages((prev) => [...prev,{msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id}])
-
-
     setAllMessages((prev) => {
-      const copy = { ...prev }
+      const copy = JSON.parse(JSON.stringify(prev))
       const nonNullSelectedGroup = selectedGroup!
       copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id })
-
       return copy
     })
 
@@ -84,13 +75,12 @@ function App() {
     setAllMessages(prev => {
       const copy = { ...prev }
       copy[roomName] = []
+      console.log("Inside room select")
+      console.log(copy)
       return copy
     })
     setSelectedGroup(roomName)
   }
-
-  // console.log(`Value: ${allMessages.length !== 0}`)
-  // console.log(allMessages)
   return (
     <>
       <h2>Connected: {`${isConnected}`}</h2>
