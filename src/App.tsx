@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react"
 import { socket } from "./socket"
 
+import { ServerToClientEvents } from "./socket"
+
 import { Message } from "./message/Message"
 
-const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Markus"]
+const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Kratos", "Leon", "Markus", "Trevor"]
 const randomId = Math.floor(Math.random() * allNames.length)
 const theName = allNames[randomId]
 
@@ -28,20 +30,20 @@ function App() {
       setIsConnected(false)
     }
 
-    function handleMessageReceived(sender: string, idReceived: number, msg: string) {
+    const handleMessageReceived:ServerToClientEvents["message"] = (sender, idReceived, msg, fromGroup) => {
       if (idReceived === id) return
 
       setAllMessages((curr) => {
         console.log("setting this state")
         const copy = JSON.parse(JSON.stringify(curr))
         // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
-        const nonNullSelectedGroup = selectedGroup!
-        copy[nonNullSelectedGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived })
+        // const nonNullSelectedGroup = selectedGroup!
+        copy[fromGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived })
         return copy
       })
-    }
+    }    
 
-    socket.on("message", handleMessageReceived)    
+    socket.on("message", handleMessageReceived)
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
 
@@ -70,16 +72,16 @@ function App() {
     }
   }
 
-  function handleRoomSelect(roomName: "one" | "two") {
+  function handleRoomJoin(roomName: "one" | "two") {
     socket.emit("joinRoom", roomName)
     setAllMessages(prev => {
-      const copy = { ...prev }
+      const copy = JSON.parse(JSON.stringify(prev))
       copy[roomName] = []
       console.log("Inside room select")
       console.log(copy)
       return copy
     })
-    setSelectedGroup(roomName)
+    // setSelectedGroup(roomName)
   }
   return (
     <>
@@ -105,16 +107,16 @@ function App() {
       <br />
       <br />
 
-      <button onClick={() => handleRoomSelect("one")} >Join Room one</button>
-      <button onClick={() => handleRoomSelect("two")} >Join Room two</button>
+      <button onClick={() => handleRoomJoin("one")} >Join Room one</button>
+      <button onClick={() => handleRoomJoin("two")} >Join Room two</button>
 
       <br />
       <br />
       <br />
       <br />
 
-      <button>Group one chat</button>
-      <button>Group two chat</button>
+      <button onClick={() => setSelectedGroup("one")} >Group one chat</button>
+      <button onClick={() => setSelectedGroup("two")} >Group two chat</button>
       <br />
       <br />
       <br />
