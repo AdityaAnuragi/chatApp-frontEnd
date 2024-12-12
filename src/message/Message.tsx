@@ -9,6 +9,8 @@ export function Message({sender, senderID, userID, msg, selectedGroup}: MessageP
   const [sent, setIsSent] = useState(false)
 
   // TODO: the ref needs fixing as it's value isn't updated properly which is causing it re-emit messages
+  // I have a feeling it's because the key prop is changing causing it restart from scratch 
+  // and that's why only messages sent from this client (not the messages that are received) are being sent again
   consst emitEvent = useRef( (userID === senderID) && true )
 
   useEffect(() => {
