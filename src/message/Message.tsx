@@ -8,7 +8,8 @@ export function Message({sender, senderID, userID, msg, selectedGroup}: MessageP
 
   const [sent, setIsSent] = useState(false)
 
-  const emitEvent = useRef( (userID === senderID) && true )
+  // TODO: the ref needs fixing as it's value isn't updated properly which is causing it re-emit messages
+  consst emitEvent = useRef( (userID === senderID) && true )
 
   useEffect(() => {
     // console.log(`Should an event be emitted: ${emitEvent.current}`)
