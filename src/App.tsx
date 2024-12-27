@@ -20,10 +20,10 @@ function App() {
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<"one" | "two" | null>(null)
 
-  useEffect(() => { 
+  useEffect(() => {
     function handleConnect() {
       setIsConnected(true)
-      if(selectedGroup) {
+      if (selectedGroup) {
         socket.emit("joinRoom", selectedGroup)
       }
     }
@@ -33,18 +33,18 @@ function App() {
       setIsConnected(false)
     }
 
-    const handleMessageReceived:ServerToClientEvents["message"] = (sender, idReceived, msg, fromGroup) => {
+    const handleMessageReceived: ServerToClientEvents["message"] = (sender, idReceived, msg, fromGroup) => {
       if (idReceived === id) return
 
       setAllMessages((curr) => {
         console.log("setting this state")
-        const copy = JSON.parse(JSON.stringify(curr))
+        const copy = JSON.parse(JSON.stringify(curr)) as Chats
         // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
         // const nonNullSelectedGroup = selectedGroup!
-        copy[fromGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived })
+        copy[fromGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived, isSent: true })
         return copy
       })
-    }    
+    }
 
     socket.on("message", handleMessageReceived)
     socket.on("connect", handleConnect);
@@ -58,10 +58,12 @@ function App() {
   }, [id, selectedGroup])
 
   function handleSendMsg() {
+    let index = -1;
     setAllMessages((prev) => {
-      const copy = JSON.parse(JSON.stringify(prev))
+      const copy = JSON.parse(JSON.stringify(prev)) as Chats
       const nonNullSelectedGroup = selectedGroup!
-      copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id })
+      index = copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id, isSent: false })
+      index -= 1
       return copy
     })
 
@@ -69,9 +71,14 @@ function App() {
 
     socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, (response) => {
       // console.log(`The status is ${response.status}`)
-      // if(response.status === "ok") {
-      //   setIsSent(true)
-      // }
+      if (response.status === "ok") {
+        setAllMessages((prev) => {
+          const copy = JSON.parse(JSON.stringify(prev)) as Chats
+          const nonNullSelectedGroup = selectedGroup!
+          copy[nonNullSelectedGroup][index].isSent = true
+          return copy
+        })
+      }
     })
 
 
@@ -87,7 +94,7 @@ function App() {
   function handleRoomJoin(roomName: "one" | "two") {
     socket.emit("joinRoom", roomName)
     setAllMessages(prev => {
-      const copy = JSON.parse(JSON.stringify(prev))
+      const copy = JSON.parse(JSON.stringify(prev)) as Chats
       copy[roomName] = []
       console.log("Inside room select")
       console.log(copy)
@@ -137,11 +144,12 @@ function App() {
         return (
           <Message
             key={value.id}
-            sender={sender}
+            // sender={sender}
             senderID={value.senderID}
             userID={id}
             msg={value.msg.split(": ")[1]}
-            selectedGroup={selectedGroup}
+            isSent={value.isSent}
+            // selectedGroup={selectedGroup}
           />
         )
       })}
@@ -155,7 +163,8 @@ function App() {
 type Message = {
   msg: string,
   id: string,
-  senderID: number
+  senderID: number,
+  isSent: boolean
 }
 
 type Chats = {

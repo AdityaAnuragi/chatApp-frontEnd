@@ -1,12 +1,12 @@
-import { socket } from "../socket"
+// import { socket } from "../socket"
 
-import { useEffect, useRef, useState } from "react"
+// import { useEffect, useRef, useState } from "react"
 
 import styles from  "./Message.module.scss"
 
-export function Message({sender, senderID, userID, msg, selectedGroup}: MessageProps) {
+export function Message({senderID, userID, msg, isSent}: MessageProps) {
 
-  const [sent, setIsSent] = useState(false)
+  // const [sent, setIsSent] = useState(false)
 
   // TODO: the ref needs fixing as it's value isn't updated properly which is causing it re-emit messages
   // I have a feeling it's because the key prop is changing causing it restart from scratch 
@@ -43,16 +43,17 @@ export function Message({sender, senderID, userID, msg, selectedGroup}: MessageP
 
   return (
     <div className={`${styles.container}`} >
-      {(userID === senderID) && <div className={`${styles.messageStatus}`} >{sent ? "✅" : "🕗"}</div>}
+      {(userID === senderID) && <div className={`${styles.messageStatus}`} >{isSent ? "✅" : "🕗"}</div>}
       <p>{msg}</p>
     </div>
   )
 }
 
 type MessageProps = {
-  sender: string,
+  // sender: string,
   senderID: number,
   userID: number,
   msg: string,
-  selectedGroup: "one" | "two"
+  isSent: boolean
+  // selectedGroup: "one" | "two"
 }
