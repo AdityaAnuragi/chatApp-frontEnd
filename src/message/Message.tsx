@@ -11,23 +11,23 @@ export function Message({sender, senderID, userID, msg, selectedGroup}: MessageP
   // TODO: the ref needs fixing as it's value isn't updated properly which is causing it re-emit messages
   // I have a feeling it's because the key prop is changing causing it restart from scratch 
   // and that's why only messages sent from this client (not the messages that are received) are being sent again
-  consst emitEvent = useRef( (userID === senderID) && true )
+  // const emitEvent = useRef( (userID === senderID) && true )
 
-  useEffect(() => {
-    // console.log(`Should an event be emitted: ${emitEvent.current}`)
+  // useEffect(() => {
+  //   // console.log(`Should an event be emitted: ${emitEvent.current}`)
 
-    if(emitEvent.current) {
-      console.log("I am emitting a message!")
-      console.log(`Value is ${emitEvent.current}`)
-      socket.emit("message", sender, senderID, msg, selectedGroup, (response) => {
-        // console.log(`The status is ${response.status}`)
-        if(response.status === "ok") {
-          setIsSent(true)
-        }
-      })
-    }
-    emitEvent.current = false
-  },[msg, selectedGroup, sender, senderID])
+  //   if(emitEvent.current) {
+  //     console.log("I am emitting a message!")
+  //     console.log(`Value is ${emitEvent.current}`)
+  //     socket.emit("message", sender, senderID, msg, selectedGroup, (response) => {
+  //       // console.log(`The status is ${response.status}`)
+  //       if(response.status === "ok") {
+  //         setIsSent(true)
+  //       }
+  //     })
+  //   }
+  //   emitEvent.current = false
+  // },[msg, selectedGroup, sender, senderID])
 
   // function handleOnClick() {
   //   if(userID === senderID) {

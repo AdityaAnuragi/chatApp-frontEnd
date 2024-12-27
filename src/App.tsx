@@ -23,6 +23,9 @@ function App() {
   useEffect(() => { 
     function handleConnect() {
       setIsConnected(true)
+      if(selectedGroup) {
+        socket.emit("joinRoom", selectedGroup)
+      }
     }
 
     function handleDisconnect() {
@@ -60,6 +63,15 @@ function App() {
       const nonNullSelectedGroup = selectedGroup!
       copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id })
       return copy
+    })
+
+    const nonNullSelectedGroup = selectedGroup!
+
+    socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, (response) => {
+      // console.log(`The status is ${response.status}`)
+      // if(response.status === "ok") {
+      //   setIsSent(true)
+      // }
     })
 
 
