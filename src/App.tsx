@@ -23,9 +23,14 @@ function App() {
   useEffect(() => {
     function handleConnect() {
       setIsConnected(true)
-      if (selectedGroup) {
-        socket.emit("joinRoom", selectedGroup)
-      }
+      // if (selectedGroup) {
+      //   socket.emit("joinRoom", selectedGroup)
+      // }
+
+      Object.keys(allMessages).forEach(group => {
+        socket.emit("joinRoom", group)
+      })
+
     }
 
     function handleDisconnect() {
