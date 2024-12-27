@@ -60,7 +60,7 @@ function App() {
       socket.off("disconnect", handleDisconnect);
       socket.off("message", handleMessageReceived)
     }
-  }, [id, selectedGroup])
+  }, [allMessages, id, selectedGroup])
 
   function handleSendMsg() {
     let index = -1;
