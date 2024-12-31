@@ -143,9 +143,10 @@ function App() {
 
       <button onClick={() => setSelectedGroup("one")} >Group one chat</button>
       <button onClick={() => setSelectedGroup("two")} >Group two chat</button>
+      { selectedGroup && <h2>Selected group: {selectedGroup}</h2>}
       <br />
-      <br />
-      <br />
+      {/* <br />
+      <br /> */}
 
       {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map(value => {
         return (
