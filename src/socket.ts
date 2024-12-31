@@ -8,7 +8,7 @@ export type ServerToClientEvents = {
 }
 
 export type ClientToServerEvents = {
-  message: (sender:string, id:number, msg:string, selectedGroup: "one" | "two", callback: (response: {status: "ok" | "error"}) => void) => void,
+  message: (sender:string, id:number, msg:string, selectedGroup: "one" | "two", cryptoId: `${string}-${string}-${string}-${string}-${string}`, callback: (response: {status: "ok" | "error"}, cryptoId: `${string}-${string}-${string}-${string}-${string}`, selectedGroup: "one" | "two" ) => void) => void,
   joinRoom: (roomName: string) => void
 }
 

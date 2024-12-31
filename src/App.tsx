@@ -63,24 +63,26 @@ function App() {
   }, [allMessages, id, selectedGroup])
 
   function handleSendMsg() {
-    let index = -1;
+    // let index = -1;
+    const cryptoId = self.crypto.randomUUID()
     setAllMessages((prev) => {
       const copy = JSON.parse(JSON.stringify(prev)) as Chats
       const nonNullSelectedGroup = selectedGroup!
-      index = copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: self.crypto.randomUUID(), senderID: id, isSent: false })
-      index -= 1
+      copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, isSent: false })
+      // index -= 1
       return copy
     })
 
     const nonNullSelectedGroup = selectedGroup!
 
-    socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, (response) => {
+    socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup,cryptoId, (response,cryptoId, selectedGroup) => {
       // console.log(`The status is ${response.status}`)
       if (response.status === "ok") {
         setAllMessages((prev) => {
           const copy = JSON.parse(JSON.stringify(prev)) as Chats
-          const nonNullSelectedGroup = selectedGroup!
-          copy[nonNullSelectedGroup][index].isSent = true
+          // const nonNullSelectedGroup = selectedGroup!
+          const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId )
+          copy[selectedGroup][index].isSent = true
           return copy
         })
       }
@@ -167,7 +169,7 @@ function App() {
 
 type Message = {
   msg: string,
-  id: string,
+  id: `${string}-${string}-${string}-${string}-${string}`,
   senderID: number,
   isSent: boolean
 }
