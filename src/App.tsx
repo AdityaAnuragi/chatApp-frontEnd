@@ -133,8 +133,8 @@ function App() {
       <br />
       <br />
 
-      <button onClick={() => handleRoomJoin("one")} >Join Room one</button>
-      <button onClick={() => handleRoomJoin("two")} >Join Room two</button>
+      <button onClick={() => handleRoomJoin("one")} >Join Group one</button>
+      <button onClick={() => handleRoomJoin("two")} >Join Group two</button>
 
       <br />
       <br />
