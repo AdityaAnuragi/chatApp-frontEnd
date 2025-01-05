@@ -75,18 +75,61 @@ function App() {
 
     const nonNullSelectedGroup = selectedGroup!
 
-    socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup,cryptoId, (response,cryptoId, selectedGroup) => {
-      // console.log(`The status is ${response.status}`)
-      if (response.status === "ok") {
-        setAllMessages((prev) => {
-          const copy = JSON.parse(JSON.stringify(prev)) as Chats
-          // const nonNullSelectedGroup = selectedGroup!
-          const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId )
-          copy[selectedGroup][index].isSent = true
-          return copy
-        })
-      }
-    })
+    // const maxTries = 5
+    const theActualCryptoId = cryptoId
+    const retryMessage = (sender: string, id: number, msg: string, selectedGroup: "one" | "two", cryptoId: `${string}-${string}-${string}-${string}-${string}`, maxTries = 5) => {
+      if(maxTries === 0) {
+        console.log("I can no longer try to send the message")
+        return
+      } 
+      
+      console.log(`Trial attempt: ${5  - maxTries + 1}`)
+      socket.timeout(4000).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
+        // console.log(`The status is ${response.status}`)
+
+        if (error) {
+          console.log("there was an error, trying again")
+          console.log(`Retry crypto id is ${cryptoId}`)
+          retryMessage(sender, id, draftMsg, nonNullSelectedGroup, theActualCryptoId, maxTries - 1)
+        }
+
+        else {
+          console.log(`Got a response ${response.status}, with attempt number ${maxTries}`)
+          console.log(`Returned cryptoId is ${cryptoId}`)
+          setAllMessages((prev) => {
+            const copy = JSON.parse(JSON.stringify(prev)) as Chats
+            // const nonNullSelectedGroup = selectedGroup!
+            console.log("state is ")
+            console.log(copy)
+            const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
+            console.log(`Returned crypto id is`)
+            console.log(`index is ${index}`)
+            if(index !== null) {
+              if(copy[selectedGroup][index]) {
+                copy[selectedGroup][index].isSent = true
+              }
+            }
+            return copy
+          })
+        }
+      })
+    }
+
+    retryMessage(sender, id, draftMsg, nonNullSelectedGroup, cryptoId)
+
+    // socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, cryptoId, (response, cryptoId, selectedGroup) => {
+    //   // console.log(`The status is ${response.status}`)
+
+    //   if (response.status === "ok") {
+    //     setAllMessages((prev) => {
+    //       const copy = JSON.parse(JSON.stringify(prev)) as Chats
+    //       // const nonNullSelectedGroup = selectedGroup!
+    //       const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
+    //       copy[selectedGroup][index].isSent = true
+    //       return copy
+    //     })
+    //   }
+    // })
 
 
     setDraftMsg("")
@@ -143,7 +186,7 @@ function App() {
 
       <button onClick={() => setSelectedGroup("one")} >Group one chat</button>
       <button onClick={() => setSelectedGroup("two")} >Group two chat</button>
-      { selectedGroup && <h2>Selected group: {selectedGroup}</h2>}
+      {selectedGroup && <h2>Selected group: {selectedGroup}</h2>}
       <br />
       {/* <br />
       <br /> */}
@@ -157,7 +200,7 @@ function App() {
             userID={id}
             msg={value.msg.split(": ")[1]}
             isSent={value.isSent}
-            // selectedGroup={selectedGroup}
+          // selectedGroup={selectedGroup}
           />
         )
       })}
