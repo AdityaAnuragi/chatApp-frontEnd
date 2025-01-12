@@ -4,7 +4,7 @@
 
 import styles from  "./Message.module.scss"
 
-export function Message({senderID, userID, msg, isSent}: MessageProps) {
+export function Message({senderID, userID, msg, messageStatus}: MessageProps) {
 
   // const [sent, setIsSent] = useState(false)
 
@@ -43,7 +43,7 @@ export function Message({senderID, userID, msg, isSent}: MessageProps) {
 
   return (
     <div className={`${styles.container}`} >
-      {(userID === senderID) && <div className={`${styles.messageStatus}`} >{isSent ? "✅" : "🕗"}</div>}
+      {(userID === senderID) && <div className={`${styles.messageStatus}`} >{messageStatus}</div>}
       <p>{msg}</p>
     </div>
   )
@@ -54,6 +54,6 @@ type MessageProps = {
   senderID: number,
   userID: number,
   msg: string,
-  isSent: boolean
+  messageStatus: "🕗" | "✅" | "❌"
   // selectedGroup: "one" | "two"
 }

@@ -46,7 +46,7 @@ function App() {
         const copy = JSON.parse(JSON.stringify(curr)) as Chats
         // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
         // const nonNullSelectedGroup = selectedGroup!
-        copy[fromGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived, isSent: true })
+        copy[fromGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived, messageStatus: "✅" })
         return copy
       })
     }
@@ -68,22 +68,30 @@ function App() {
     setAllMessages((prev) => {
       const copy = JSON.parse(JSON.stringify(prev)) as Chats
       const nonNullSelectedGroup = selectedGroup!
-      copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, isSent: false })
+      copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗" })
       // index -= 1
       return copy
     })
 
     const nonNullSelectedGroup = selectedGroup!
 
-    // const maxTries = 5
+    const totalTries = 2
     const theActualCryptoId = cryptoId
-    const retryMessage = (sender: string, id: number, msg: string, selectedGroup: "one" | "two", cryptoId: `${string}-${string}-${string}-${string}-${string}`, maxTries = 5) => {
-      if(maxTries === 0) {
+    const retryMessage = (sender: string, id: number, msg: string, selectedGroup: "one" | "two", cryptoId: `${string}-${string}-${string}-${string}-${string}`, maxTries = totalTries) => {
+      if (maxTries === 0) {
         console.log("I can no longer try to send the message")
+
+        setAllMessages((prev) => {
+          const copy = JSON.parse(JSON.stringify(prev)) as Chats
+          const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
+          copy[selectedGroup][index].messageStatus = "❌"
+          return copy
+        })
+
         return
-      } 
-      
-      console.log(`Trial attempt: ${5  - maxTries + 1}`)
+      }
+
+      console.log(`Trial attempt: ${totalTries - maxTries + 1}`)
       socket.timeout(4000).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
         // console.log(`The status is ${response.status}`)
 
@@ -104,11 +112,12 @@ function App() {
             const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
             console.log(`Returned crypto id is`)
             console.log(`index is ${index}`)
-            if(index !== null) {
-              if(copy[selectedGroup][index]) {
-                copy[selectedGroup][index].isSent = true
-              }
-            }
+            // if(index !== null) {
+            //   if(copy[selectedGroup][index]) {
+            //      copy[selectedGroup][index].isSent = true
+            //   }
+            // }
+            copy[selectedGroup][index].messageStatus = "✅"
             return copy
           })
         }
@@ -199,7 +208,7 @@ function App() {
             senderID={value.senderID}
             userID={id}
             msg={value.msg.split(": ")[1]}
-            isSent={value.isSent}
+            messageStatus={value.messageStatus}
           // selectedGroup={selectedGroup}
           />
         )
@@ -215,7 +224,7 @@ type Message = {
   msg: string,
   id: `${string}-${string}-${string}-${string}-${string}`,
   senderID: number,
-  isSent: boolean
+  messageStatus: "🕗" | "✅" | "❌"
 }
 
 type Chats = {
