@@ -107,7 +107,7 @@ function App() {
       }
 
       console.log(`Trial attempt: ${totalTries - maxTries + 1}`)
-      socket.timeout(400).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
+      socket.timeout(4000).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
         // console.log(`The status is ${response.status}`)
 
         if (error) {
