@@ -13,9 +13,7 @@ const theName = allNames[randomId]
 
 // NEXT TASKS: 
 
-// 1) fix the types for the function retryMessage as the types are just hardcoded
-
-// 2) add the functionality to resend a message
+// 1) make the function handleSendMsg take in only 1 parameter (number datatype) to determine if it's a retry or not
 
 // 3) integrate postgreSQL datatbase
 
