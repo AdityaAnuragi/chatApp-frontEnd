@@ -1,16 +1,23 @@
 // import { useEffect } from "react"
 import { useEffect, useState } from "react"
-import { socket } from "./socket"
 
-import { ServerToClientEvents } from "./socket"
+import styles from "./App.module.scss"
 
+import { socket, ServerToClientEvents, ParametersToSendMessage } from "./socket"
 import { Message } from "./message/Message"
+
 
 const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Kratos", "Leon", "Markus", "Trevor"]
 const randomId = Math.floor(Math.random() * allNames.length)
 const theName = allNames[randomId]
 
+// NEXT TASKS: 
 
+// 1) fix the types for the function retryMessage as the types are just hardcoded
+
+// 2) add the functionality to resend a message
+
+// 3) integrate postgreSQL datatbase
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected)
@@ -62,22 +69,30 @@ function App() {
     }
   }, [allMessages, id, selectedGroup])
 
-  function handleSendMsg() {
+  function handleSendMsg(isRetry: boolean, indexOfMessage: number = -1) {
     // let index = -1;
-    const cryptoId = self.crypto.randomUUID()
-    setAllMessages((prev) => {
-      const copy = JSON.parse(JSON.stringify(prev)) as Chats
-      const nonNullSelectedGroup = selectedGroup!
-      copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗" })
-      // index -= 1
-      return copy
-    })
+    const cryptoId = isRetry ? allMessages[selectedGroup!][indexOfMessage].id : self.crypto.randomUUID()
+
+    console.log(`cryptoId is ${cryptoId}`)
+
+    if(!isRetry) {
+      setAllMessages((prev) => {
+        const copy = JSON.parse(JSON.stringify(prev)) as Chats
+        const nonNullSelectedGroup = selectedGroup!
+        copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗" })
+        // index -= 1
+        return copy
+      })
+    }
 
     const nonNullSelectedGroup = selectedGroup!
 
     const totalTries = 2
     const theActualCryptoId = cryptoId
-    const retryMessage = (sender: string, id: number, msg: string, selectedGroup: "one" | "two", cryptoId: `${string}-${string}-${string}-${string}-${string}`, maxTries = totalTries) => {
+
+    // const foo: ParametersToSendMessage
+
+    const retryMessage = (sender: ParametersToSendMessage[0], id: ParametersToSendMessage[1], msg: ParametersToSendMessage[2], selectedGroup: ParametersToSendMessage[3], cryptoId: ParametersToSendMessage[4], maxTries = totalTries) => {
       if (maxTries === 0) {
         console.log("I can no longer try to send the message")
 
@@ -92,18 +107,18 @@ function App() {
       }
 
       console.log(`Trial attempt: ${totalTries - maxTries + 1}`)
-      socket.timeout(4000).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
+      socket.timeout(400).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
         // console.log(`The status is ${response.status}`)
 
         if (error) {
           console.log("there was an error, trying again")
-          console.log(`Retry crypto id is ${cryptoId}`)
+          // console.log(`Retry crypto id is ${cryptoId}`)
           retryMessage(sender, id, draftMsg, nonNullSelectedGroup, theActualCryptoId, maxTries - 1)
         }
 
         else {
           console.log(`Got a response ${response.status}, with attempt number ${maxTries}`)
-          console.log(`Returned cryptoId is ${cryptoId}`)
+          // console.log(`Returned cryptoId is ${cryptoId}`)
           setAllMessages((prev) => {
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
             // const nonNullSelectedGroup = selectedGroup!
@@ -112,11 +127,6 @@ function App() {
             const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
             console.log(`Returned crypto id is`)
             console.log(`index is ${index}`)
-            // if(index !== null) {
-            //   if(copy[selectedGroup][index]) {
-            //      copy[selectedGroup][index].isSent = true
-            //   }
-            // }
             copy[selectedGroup][index].messageStatus = "✅"
             return copy
           })
@@ -124,7 +134,7 @@ function App() {
       })
     }
 
-    retryMessage(sender, id, draftMsg, nonNullSelectedGroup, cryptoId)
+    retryMessage(sender, id, isRetry ? allMessages[selectedGroup!][indexOfMessage].msg.split(": ")[1] : draftMsg, nonNullSelectedGroup, cryptoId)
 
     // socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, cryptoId, (response, cryptoId, selectedGroup) => {
     //   // console.log(`The status is ${response.status}`)
@@ -146,7 +156,7 @@ function App() {
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      handleSendMsg()
+      handleSendMsg(false)
     }
   }
 
@@ -200,22 +210,25 @@ function App() {
       {/* <br />
       <br /> */}
 
-      {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map(value => {
+      {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map((value, index) => {
         return (
-          <Message
-            key={value.id}
-            // sender={sender}
-            senderID={value.senderID}
-            userID={id}
-            msg={value.msg.split(": ")[1]}
-            messageStatus={value.messageStatus}
-          // selectedGroup={selectedGroup}
-          />
+          <div className={styles.messageAndTryAgainContainer} >
+            <Message
+              key={value.id}
+              // sender={sender}
+              senderID={value.senderID}
+              userID={id}
+              msg={value.msg.split(": ")[1]}
+              messageStatus={value.messageStatus}
+            // selectedGroup={selectedGroup}
+            />
+            {value.messageStatus === "❌" && <p onClick={() => handleSendMsg(true, index)} >Message failed try again</p> }
+          </div>
         )
       })}
 
       <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
-      <button onClick={handleSendMsg}  >Send message</button>
+      <button onClick={() => handleSendMsg(false)}  >Send message</button>
     </>
   )
 }

@@ -12,6 +12,8 @@ export type ClientToServerEvents = {
   joinRoom: (roomName: string) => void
 }
 
+export type ParametersToSendMessage = Parameters<ClientToServerEvents["message"]>
+
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(URL, {
   autoConnect: false
 });
