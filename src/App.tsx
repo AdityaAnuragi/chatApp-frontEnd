@@ -13,9 +13,9 @@ const theName = allNames[randomId]
 
 // NEXT TASKS: 
 
-// 1) make the function handleSendMsg take in only 1 parameter (number datatype) to determine if it's a retry or not
+// 1) prevent retry when retrying
 
-// 3) integrate postgreSQL datatbase
+// 2) integrate postgreSQL datatbase
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected)
@@ -51,7 +51,7 @@ function App() {
         const copy = JSON.parse(JSON.stringify(curr)) as Chats
         // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
         // const nonNullSelectedGroup = selectedGroup!
-        copy[fromGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived, messageStatus: "✅" })
+        copy[fromGroup].push({ msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived, messageStatus: "✅", isRetrying: false })
         return copy
       })
     }
@@ -84,8 +84,20 @@ function App() {
       setAllMessages((prev) => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
         const nonNullSelectedGroup = selectedGroup!
-        copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗" })
+        copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗", isRetrying: false })
         // index -= 1
+        return copy
+      })
+    }
+
+    else {
+      setAllMessages((prev) => {
+        const copy = JSON.parse(JSON.stringify(prev)) as Chats
+        const nonNullSelectedGroup = selectedGroup!
+        // copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗", isRetrying: false })
+        // index -= 1
+        console.log("setting isRetying to true")
+        copy[nonNullSelectedGroup][indexOfMessage].isRetrying = true
         return copy
       })
     }
@@ -105,6 +117,7 @@ function App() {
           const copy = JSON.parse(JSON.stringify(prev)) as Chats
           const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
           copy[selectedGroup][index].messageStatus = "❌"
+          copy[selectedGroup][index].isRetrying= false
           return copy
         })
 
@@ -231,7 +244,13 @@ function App() {
               messageStatus={value.messageStatus}
             // selectedGroup={selectedGroup}
             />
-            {value.messageStatus === "❌" && <p onClick={() => handleSendMsg(index)} >Message failed try again</p> }
+            {value.messageStatus === "❌" 
+              && (
+              value.isRetrying
+                ? <p>Retrying...</p>
+                : <button onClick={() => handleSendMsg(index)} >Message failed try again</button> 
+              )
+            }
           </div>
         )
       })}
@@ -246,7 +265,8 @@ type Message = {
   msg: string,
   id: `${string}-${string}-${string}-${string}-${string}`,
   senderID: number,
-  messageStatus: "🕗" | "✅" | "❌"
+  messageStatus: "🕗" | "✅" | "❌",
+  isRetrying: boolean
 }
 
 type Chats = {
