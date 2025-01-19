@@ -67,13 +67,20 @@ function App() {
     }
   }, [allMessages, id, selectedGroup])
 
-  function handleSendMsg(isRetry: boolean, indexOfMessage: number = -1) {
+  function handleSendMsg(indexOfMessage?: number) {
     // let index = -1;
-    const cryptoId = isRetry ? allMessages[selectedGroup!][indexOfMessage].id : self.crypto.randomUUID()
+    // console.log(`isRetry: ${isRetry}`)
+    // console.log(`index: ${indexOfMessage !== undefined}`)
+    // console.log("")
+    const cryptoId = (indexOfMessage !== undefined) ? allMessages[selectedGroup!][indexOfMessage!].id : self.crypto.randomUUID()
 
     console.log(`cryptoId is ${cryptoId}`)
 
-    if(!isRetry) {
+    // console.log(`isRetry: ${!isRetry}`)
+    // console.log(`index: ${indexOfMessage === undefined}`)
+    // console.log("")
+
+    if(indexOfMessage === undefined) {
       setAllMessages((prev) => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
         const nonNullSelectedGroup = selectedGroup!
@@ -132,7 +139,11 @@ function App() {
       })
     }
 
-    retryMessage(sender, id, isRetry ? allMessages[selectedGroup!][indexOfMessage].msg.split(": ")[1] : draftMsg, nonNullSelectedGroup, cryptoId)
+    // console.log(`isRetry: ${isRetry}`)
+    // console.log(`index: ${indexOfMessage !== undefined}`)
+    // console.log("")
+
+    retryMessage(sender, id, (indexOfMessage !== undefined) ? allMessages[selectedGroup!][indexOfMessage!].msg.split(": ")[1] : draftMsg, nonNullSelectedGroup, cryptoId)
 
     // socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, cryptoId, (response, cryptoId, selectedGroup) => {
     //   // console.log(`The status is ${response.status}`)
@@ -154,7 +165,7 @@ function App() {
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      handleSendMsg(false)
+      handleSendMsg()
     }
   }
 
@@ -220,13 +231,13 @@ function App() {
               messageStatus={value.messageStatus}
             // selectedGroup={selectedGroup}
             />
-            {value.messageStatus === "❌" && <p onClick={() => handleSendMsg(true, index)} >Message failed try again</p> }
+            {value.messageStatus === "❌" && <p onClick={() => handleSendMsg(index)} >Message failed try again</p> }
           </div>
         )
       })}
 
       <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
-      <button onClick={() => handleSendMsg(false)}  >Send message</button>
+      <button onClick={() => handleSendMsg()}  >Send message</button>
     </>
   )
 }
