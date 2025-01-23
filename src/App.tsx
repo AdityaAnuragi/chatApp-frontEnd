@@ -26,6 +26,10 @@ function App() {
   const [selectedGroup, setSelectedGroup] = useState<"one" | "two" | null>(null)
 
   useEffect(() => {
+    console.log("A project by Aditya Anuragi")
+  },[])
+
+  useEffect(() => {
     function handleConnect() {
       setIsConnected(true)
       // if (selectedGroup) {
