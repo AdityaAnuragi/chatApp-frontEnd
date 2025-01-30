@@ -7,7 +7,8 @@ import { socket, ServerToClientEvents, ParametersToSendMessage } from "./socket"
 import { Message } from "./message/Message"
 
 
-const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Kratos", "Leon", "Markus", "Trevor"]
+// const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Kratos", "Leon", "Markus", "Trevor"]
+const allNames = ["Aditya", "Ben"]
 const randomId = Math.floor(Math.random() * allNames.length)
 const theName = allNames[randomId]
 
