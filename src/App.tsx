@@ -14,9 +14,9 @@ const theName = allNames[randomId]
 
 // NEXT TASKS: 
 
-// 1) prevent retry when retrying
+// 1) change the types, server just sends an any[]
 
-// 2) integrate postgreSQL datatbase
+// 2) make it dynamic, make the userId work
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected)
@@ -61,14 +61,21 @@ function App() {
       })
     }
 
+    const handleGetMissedMessages: ServerToClientEvents["getMissedMessages"] = (message) => {
+      console.log(`message on online is`)
+      console.log(message)
+    }
+
     socket.on("message", handleMessageReceived)
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
-
+    socket.on("getMissedMessages", handleGetMissedMessages);
+    
     return () => {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
       socket.off("message", handleMessageReceived)
+      socket.off("getMissedMessages", handleGetMissedMessages);
     }
   }, [allMessages, id, selectedGroup])
 

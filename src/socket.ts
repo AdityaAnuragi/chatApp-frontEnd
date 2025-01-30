@@ -4,7 +4,8 @@ import { io, Socket } from 'socket.io-client';
 const URL = 'http://localhost:3000';
 
 export type ServerToClientEvents = {
-  message: (sender: string, id: number, msg: string, fromGroup: "one" | "two") => void;
+  message: (sender: string, id: number, msg: string, fromGroup: "one" | "two") => void,
+  getMissedMessages: (message: any[]) => void
 }
 
 export type ClientToServerEvents = {
