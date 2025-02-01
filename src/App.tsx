@@ -3,15 +3,16 @@ import { useEffect, useState } from "react"
 
 import styles from "./App.module.scss"
 
-import { socket, ServerToClientEvents, ParametersToSendMessage } from "./socket"
+import { socket, ServerToClientEvents, ParametersToSendMessage, allNames, randomId } from "./socket"
 import { Message } from "./message/Message"
 
 
-// const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Kratos", "Leon", "Markus", "Trevor"]
-const allNames = ["Aditya", "Ben"]
-const randomId = Math.floor(Math.random() * allNames.length)
-const theName = allNames[randomId]
 
+// const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Kratos", "Leon", "Markus", "Trevor"]
+// const allNames = ["", "Aditya", "Ben"]
+// const randomId = Math.floor(Math.random() * (allNames.length - 1) ) + 1
+const theName = allNames[randomId]
+console.log(`index is ${randomId}`)
 // NEXT TASKS: 
 
 // 1) change the types, server just sends an any[]
@@ -24,7 +25,7 @@ function App() {
   const id = randomId
   const [allMessages, setAllMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
-  const [selectedGroup, setSelectedGroup] = useState<"one" | "two" | null>(null)
+  const [selectedGroup, setSelectedGroup] = useState<"1" | "2" | null>(null)
 
   useEffect(() => {
     console.log("A project by Aditya Anuragi")
@@ -194,7 +195,7 @@ function App() {
     }
   }
 
-  function handleRoomJoin(roomName: "one" | "two") {
+  function handleRoomJoin(roomName: "1" | "2") {
     socket.emit("joinRoom", roomName)
     setAllMessages(prev => {
       const copy = JSON.parse(JSON.stringify(prev)) as Chats
@@ -229,16 +230,16 @@ function App() {
       <br />
       <br />
 
-      <button onClick={() => handleRoomJoin("one")} >Join Group one</button>
-      <button onClick={() => handleRoomJoin("two")} >Join Group two</button>
+      <button onClick={() => handleRoomJoin("1")} >Join Group one</button>
+      <button onClick={() => handleRoomJoin("2")} >Join Group two</button>
 
       <br />
       <br />
       <br />
       <br />
 
-      <button onClick={() => setSelectedGroup("one")} >Group one chat</button>
-      <button onClick={() => setSelectedGroup("two")} >Group two chat</button>
+      <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
+      <button onClick={() => setSelectedGroup("2")} >Group two chat</button>
       {selectedGroup && <h2>Selected group: {selectedGroup}</h2>}
       <br />
       {/* <br />
