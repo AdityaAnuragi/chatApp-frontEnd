@@ -65,6 +65,16 @@ function App() {
     const handleGetMissedMessages: ServerToClientEvents["getMissedMessages"] = (message) => {
       console.log(`message on online is`)
       console.log(message)
+
+      Object.keys(message).forEach(group => {
+        message[group].forEach(message => {
+          message.isRetrying = false
+          message.messageStatus = "✅"
+        })
+      })
+
+      setAllMessages(message)
+
     }
 
     socket.on("message", handleMessageReceived)
@@ -199,7 +209,9 @@ function App() {
     socket.emit("joinRoom", roomName)
     setAllMessages(prev => {
       const copy = JSON.parse(JSON.stringify(prev)) as Chats
-      copy[roomName] = []
+      if(!(copy[roomName])) {
+        copy[roomName] = []
+      }
       console.log("Inside room select")
       console.log(copy)
       return copy

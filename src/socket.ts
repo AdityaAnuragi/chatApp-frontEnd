@@ -5,7 +5,7 @@ const URL = 'http://localhost:3000';
 
 export type ServerToClientEvents = {
   message: (sender: string, id: number, msg: string, fromGroup: "1" | "2") => void,
-  getMissedMessages: (message: any[]) => void
+  getMissedMessages: (message: {[group: string]: {id: `${string}-${string}-${string}-${string}-${string}`, msg: string, senderID: number, messageStatus: "🕗" | "✅" | "❌",isRetrying: boolean}[] }) => void
 }
 
 export type ClientToServerEvents = {
