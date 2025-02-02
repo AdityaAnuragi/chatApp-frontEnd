@@ -6,7 +6,7 @@ const URL = 'http://localhost:3000';
 export type ServerToClientEvents = {
   message: (sender: string, id: number, msg: string, fromGroup: string) => void,
   getMissedMessages: (message: {[group: string]: {id: `${string}-${string}-${string}-${string}-${string}`, msg: string, senderID: number, messageStatus: "🕗" | "✅" | "❌",isRetrying: boolean}[] }) => void,
-  getGroupIdsAndNames: (groupIdsAndName: {[id: string]: string}) => void
+  getGroupIdsAndNames: (groupIdsAndName: {[id: string]: {name: string, chatType: "group" | "private"} }) => void
 }
 
 export type ClientToServerEvents = {

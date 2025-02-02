@@ -1,5 +1,5 @@
 // import { useEffect } from "react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 
 import styles from "./App.module.scss"
 
@@ -27,7 +27,7 @@ function App() {
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
 
-  const groups = useRef<{[groupId: string]: string}>({})
+  const [groups, setGroups] = useState<Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]>({})
 
   useEffect(() => {
     console.log("A project by Aditya Anuragi")
@@ -82,8 +82,9 @@ function App() {
     const handleGetGroupIdsAndNames: ServerToClientEvents["getGroupIdsAndNames"] = (groupIdsAndName) => {
       console.log("the groups are: ")
       console.log(groupIdsAndName)
-      groups.current = groupIdsAndName
-      Object.keys(groups.current).forEach(group => handleRoomJoin(group))
+      // groups.current = groupIdsAndName
+      setGroups(groupIdsAndName)
+      Object.keys(groups).forEach(group => handleRoomJoin(group))
     }
 
     socket.on("message", handleMessageReceived)
@@ -99,7 +100,40 @@ function App() {
       socket.off("getMissedMessages", handleGetMissedMessages);
       socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
     }
-  }, [allMessages, id, selectedGroup])
+  }, [allMessages, groups, id, selectedGroup])
+
+  useEffect(() => {
+    function handleFocus() {
+      socket.connect()
+      if(window.navigator.onLine) {
+        setIsConnected(true)
+      }
+      else {
+        setIsConnected(false)
+      }
+      console.log("window was focused")
+    }
+
+    function handleOffline() {
+      setIsConnected(false)
+    }
+
+    function handleOnline() {
+      socket.connect()
+      setIsConnected(true)
+    }
+
+    window.addEventListener("focus", handleFocus)
+    window.addEventListener("offline", handleOffline)
+    window.addEventListener("online", handleOnline)
+    
+    return () => {
+      window.removeEventListener("focus", handleFocus)
+      window.removeEventListener("offline", handleOffline)
+      window.removeEventListener("online", handleOnline)
+    }
+
+  },[])
 
   function handleSendMsg(indexOfMessage?: number) {
     // let index = -1;
@@ -264,9 +298,9 @@ function App() {
       {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
       <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
 
-      {Object.keys(groups.current).map(group => {
+      {Object.keys(groups).map(group => {
         return(
-          <button onClick={() => setSelectedGroup(group)}>{`${groups.current[group]}`}</button>
+          <button onClick={() => setSelectedGroup(group)}>{`${groups[group].name}`}</button>
         )
       })}
 
