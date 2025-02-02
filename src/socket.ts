@@ -4,12 +4,13 @@ import { io, Socket } from 'socket.io-client';
 const URL = 'http://localhost:3000';
 
 export type ServerToClientEvents = {
-  message: (sender: string, id: number, msg: string, fromGroup: "1" | "2") => void,
-  getMissedMessages: (message: {[group: string]: {id: `${string}-${string}-${string}-${string}-${string}`, msg: string, senderID: number, messageStatus: "🕗" | "✅" | "❌",isRetrying: boolean}[] }) => void
+  message: (sender: string, id: number, msg: string, fromGroup: string) => void,
+  getMissedMessages: (message: {[group: string]: {id: `${string}-${string}-${string}-${string}-${string}`, msg: string, senderID: number, messageStatus: "🕗" | "✅" | "❌",isRetrying: boolean}[] }) => void,
+  getGroupIdsAndNames: (groupIdsAndName: {[id: string]: string}) => void
 }
 
 export type ClientToServerEvents = {
-  message: (sender:string, id:number, msg:string, selectedGroup: "1" | "2", cryptoId: `${string}-${string}-${string}-${string}-${string}`, callback: (response: {status: "ok" | "error"}, cryptoId: `${string}-${string}-${string}-${string}-${string}`, selectedGroup: "1" | "two" ) => void) => void,
+  message: (sender:string, id:number, msg:string, selectedGroup: string, cryptoId: `${string}-${string}-${string}-${string}-${string}`, callback: (response: {status: "ok" | "error"}, cryptoId: `${string}-${string}-${string}-${string}-${string}`, selectedGroup: string ) => void) => void,
   joinRoom: (roomName: string) => void
 }
 

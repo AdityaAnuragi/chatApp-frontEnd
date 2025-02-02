@@ -55,5 +55,5 @@ type MessageProps = {
   userID: number,
   msg: string,
   messageStatus: "🕗" | "✅" | "❌"
-  // selectedGroup: "1" | "2"
+  // selectedGroup: string
 }

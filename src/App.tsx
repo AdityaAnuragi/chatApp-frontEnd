@@ -1,5 +1,5 @@
 // import { useEffect } from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import styles from "./App.module.scss"
 
@@ -25,7 +25,9 @@ function App() {
   const id = randomId
   const [allMessages, setAllMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
-  const [selectedGroup, setSelectedGroup] = useState<"1" | "2" | null>(null)
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
+
+  const groups = useRef<{[groupId: string]: string}>({})
 
   useEffect(() => {
     console.log("A project by Aditya Anuragi")
@@ -77,16 +79,25 @@ function App() {
 
     }
 
+    const handleGetGroupIdsAndNames: ServerToClientEvents["getGroupIdsAndNames"] = (groupIdsAndName) => {
+      console.log("the groups are: ")
+      console.log(groupIdsAndName)
+      groups.current = groupIdsAndName
+      Object.keys(groups.current).forEach(group => handleRoomJoin(group))
+    }
+
     socket.on("message", handleMessageReceived)
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
     socket.on("getMissedMessages", handleGetMissedMessages);
+    socket.on("getGroupIdsAndNames", handleGetGroupIdsAndNames)
     
     return () => {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
       socket.off("message", handleMessageReceived)
       socket.off("getMissedMessages", handleGetMissedMessages);
+      socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
     }
   }, [allMessages, id, selectedGroup])
 
@@ -205,11 +216,11 @@ function App() {
     }
   }
 
-  function handleRoomJoin(roomName: "1" | "2") {
+  function handleRoomJoin(roomName: string) {
     socket.emit("joinRoom", roomName)
     setAllMessages(prev => {
       const copy = JSON.parse(JSON.stringify(prev)) as Chats
-      if(!(copy[roomName])) {
+      if(copy[roomName] === undefined) {
         copy[roomName] = []
       }
       console.log("Inside room select")
@@ -242,16 +253,23 @@ function App() {
       <br />
       <br />
 
-      <button onClick={() => handleRoomJoin("1")} >Join Group one</button>
-      <button onClick={() => handleRoomJoin("2")} >Join Group two</button>
+      {/* <button onClick={() => handleRoomJoin("1")} >Join Group one</button>
+      <button onClick={() => handleRoomJoin("2")} >Join Group two</button> */}
 
       <br />
       <br />
       <br />
       <br />
 
-      <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
-      <button onClick={() => setSelectedGroup("2")} >Group two chat</button>
+      {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
+      <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
+
+      {Object.keys(groups.current).map(group => {
+        return(
+          <button onClick={() => setSelectedGroup(group)}>{`${groups.current[group]}`}</button>
+        )
+      })}
+
       {selectedGroup && <h2>Selected group: {selectedGroup}</h2>}
       <br />
       {/* <br />
