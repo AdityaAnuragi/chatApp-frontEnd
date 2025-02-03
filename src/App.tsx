@@ -5,6 +5,8 @@ import styles from "./App.module.scss"
 
 import { socket, ServerToClientEvents, ParametersToSendMessage, allNames, randomId } from "./socket"
 import { Message } from "./message/Message"
+import { GroupLists } from "./groupLists/GroupLists"
+import { ActiveChat } from "./activeChat/ActiveChat"
 
 
 
@@ -31,7 +33,7 @@ function App() {
 
   useEffect(() => {
     console.log("A project by Aditya Anuragi")
-  },[])
+  }, [])
 
   useEffect(() => {
     function handleConnect() {
@@ -92,7 +94,7 @@ function App() {
     socket.on("disconnect", handleDisconnect);
     socket.on("getMissedMessages", handleGetMissedMessages);
     socket.on("getGroupIdsAndNames", handleGetGroupIdsAndNames)
-    
+
     return () => {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
@@ -105,7 +107,7 @@ function App() {
   useEffect(() => {
     function handleFocus() {
       socket.connect()
-      if(socket.connected) {
+      if (socket.connected) {
         setIsConnected(true)
       }
       else {
@@ -120,7 +122,7 @@ function App() {
 
     function handleOnline() {
       socket.connect()
-      if(socket.connected) {
+      if (socket.connected) {
         setIsConnected(true)
       }
     }
@@ -128,14 +130,14 @@ function App() {
     window.addEventListener("focus", handleFocus)
     window.addEventListener("offline", handleOffline)
     window.addEventListener("online", handleOnline)
-    
+
     return () => {
       window.removeEventListener("focus", handleFocus)
       window.removeEventListener("offline", handleOffline)
       window.removeEventListener("online", handleOnline)
     }
 
-  },[])
+  }, [])
 
   function handleSendMsg(indexOfMessage?: number) {
     // let index = -1;
@@ -150,7 +152,7 @@ function App() {
     // console.log(`index: ${indexOfMessage === undefined}`)
     // console.log("")
 
-    if(indexOfMessage === undefined) {
+    if (indexOfMessage === undefined) {
       setAllMessages((prev) => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
         const nonNullSelectedGroup = selectedGroup!
@@ -187,7 +189,7 @@ function App() {
           const copy = JSON.parse(JSON.stringify(prev)) as Chats
           const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
           copy[selectedGroup][index].messageStatus = "❌"
-          copy[selectedGroup][index].isRetrying= false
+          copy[selectedGroup][index].isRetrying = false
           return copy
         })
 
@@ -256,7 +258,7 @@ function App() {
     socket.emit("joinRoom", roomName)
     setAllMessages(prev => {
       const copy = JSON.parse(JSON.stringify(prev)) as Chats
-      if(copy[roomName] === undefined) {
+      if (copy[roomName] === undefined) {
         copy[roomName] = []
       }
       console.log("Inside room select")
@@ -292,26 +294,32 @@ function App() {
       {/* <button onClick={() => handleRoomJoin("1")} >Join Group one</button>
       <button onClick={() => handleRoomJoin("2")} >Join Group two</button> */}
 
-      <br />
-      <br />
-      <br />
-      <br />
-
       {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
       <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
 
-      {Object.keys(groups).map(group => {
+      <div className={`${styles.groupListAndActiveChat}`} >
+        <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} />
+
+        {(selectedGroup && allMessages[selectedGroup].length !== 0) && (
+          <div className={`${styles.activeChatWrapper}`} >
+            <ActiveChat allMessages={allMessages} id={id} selectedGroup={selectedGroup} handleSendMsg={handleSendMsg} />
+          </div>
+        )}
+      </div>
+
+
+      {/* {Object.keys(groups).map(group => {
         return(
           <button onClick={() => setSelectedGroup(group)}>{`${groups[group].name}`}</button>
         )
-      })}
+      })} */}
 
-      {selectedGroup && <h2>Selected group: {selectedGroup}</h2>}
+      {/* {selectedGroup && <h2>Selected group: {selectedGroup}</h2>} */}
       <br />
       {/* <br />
       <br /> */}
 
-      {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map((value, index) => {
+      {/* {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map((value, index) => {
         return (
           <div className={styles.messageAndTryAgainContainer} >
             <Message
@@ -332,7 +340,7 @@ function App() {
             }
           </div>
         )
-      })}
+      })} */}
 
       <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
       <button onClick={() => handleSendMsg()}  >Send message</button>
@@ -348,7 +356,7 @@ type Message = {
   isRetrying: boolean
 }
 
-type Chats = {
+export type Chats = {
   [groupName: string]: Message[]
 }
 

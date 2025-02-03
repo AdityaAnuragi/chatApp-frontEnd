@@ -43,8 +43,8 @@ export function Message({senderID, userID, msg, messageStatus}: MessageProps) {
 
   return (
     <div className={`${styles.container}`} >
-      {(userID === senderID) && <div className={`${styles.messageStatus}`} >{messageStatus}</div>}
       <p>{msg}</p>
+      {(userID === senderID) && <div className={`${styles.messageStatus}`} >{messageStatus}</div>}
     </div>
   )
 }
