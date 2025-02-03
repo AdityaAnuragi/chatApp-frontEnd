@@ -105,7 +105,7 @@ function App() {
   useEffect(() => {
     function handleFocus() {
       socket.connect()
-      if(window.navigator.onLine) {
+      if(socket.connected) {
         setIsConnected(true)
       }
       else {
@@ -120,7 +120,9 @@ function App() {
 
     function handleOnline() {
       socket.connect()
-      setIsConnected(true)
+      if(socket.connected) {
+        setIsConnected(true)
+      }
     }
 
     window.addEventListener("focus", handleFocus)
