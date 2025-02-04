@@ -1,5 +1,6 @@
 .container {
-  width: 20%;
+  // width: auto;
+  flex-grow: 1;
   min-height: 98%;
   border: 2px solid blue;
 }
