@@ -291,14 +291,14 @@ function App() {
       <br />
       <br />
 
-      {/* <button onClick={() => handleRoomJoin("1")} >Join Group one</button>
-      <button onClick={() => handleRoomJoin("2")} >Join Group two</button> */}
+      <button onClick={() => handleRoomJoin("1")} >Join Group one</button>
+      <button onClick={() => handleRoomJoin("2")} >Join Group two</button>
 
       {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
       <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
 
       <div className={`${styles.groupListAndActiveChat}`} >
-        <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} />
+        {Object.keys(groups).length !== 0 && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} />}
 
         {(selectedGroup && allMessages[selectedGroup].length !== 0) && (
           <div className={`${styles.activeChatWrapper}`} >

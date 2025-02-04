@@ -1,8 +1,11 @@
 .container {
-  // width: auto;
-  flex-grow: 1;
+  width: 20%;
+  // flex-grow: 1;
   min-height: 98%;
-  border: 2px solid blue;
+  // border: 2px solid blue;
+  border-width: 0rem 0.0625rem 0rem 0rem;
+  border-style: solid;
+  border-color: black;
 }
 
 .group {
