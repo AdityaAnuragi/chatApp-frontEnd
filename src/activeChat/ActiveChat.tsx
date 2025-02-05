@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { Chats } from "../App"
 import { Message } from "../message/Message"
 
