@@ -292,8 +292,8 @@ function App() {
       <br />
       <br />
 
-      <button onClick={() => handleRoomJoin("1")} >Join Group one</button>
-      <button onClick={() => handleRoomJoin("2")} >Join Group two</button>
+      {/*<button onClick={() => handleRoomJoin("1")} >Join Group one</button>
+      <button onClick={() => handleRoomJoin("2")} >Join Group two</button>*/}
 
       {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
       <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
