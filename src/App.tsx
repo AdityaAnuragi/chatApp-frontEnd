@@ -86,7 +86,8 @@ function App() {
       console.log(groupIdsAndName)
       // groups.current = groupIdsAndName
       setGroups(groupIdsAndName)
-      Object.keys(groups).forEach(group => handleRoomJoin(group))
+      console.log(Object.keys(groupIdsAndName))
+      Object.keys(groupIdsAndName).forEach(group => handleRoomJoin(group))
     }
 
     socket.on("message", handleMessageReceived)
