@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import { Chats } from "../App"
 import { Message } from "../message/Message"
 
@@ -19,7 +19,7 @@ export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg, draf
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     console.log("🚀 ~ useLayoutEffect ~ scrollContainer.current.scrollTop:", scrollContainer.current.scrollTop)
     console.log("🚀 ~ useLayoutEffect ~ scrollContainer.current.scrollHeight:", scrollContainer.current.scrollHeight)
     console.log(`scroll height is ${scrollContainer.current.scrollHeight - scrollContainer.current.scrollTop}`)
