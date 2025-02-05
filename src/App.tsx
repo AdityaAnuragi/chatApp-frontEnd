@@ -250,11 +250,11 @@ function App() {
     }
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      handleSendMsg()
-    }
-  }
+  // function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+  //   if (e.key === "Enter") {
+  //     handleSendMsg()
+  //   }
+  // }
 
   function handleRoomJoin(roomName: string) {
     socket.emit("joinRoom", roomName)
@@ -310,7 +310,7 @@ function App() {
               selectedGroup={selectedGroup}
               handleSendMsg={handleSendMsg}
               draftMsg={draftMsg}
-              handleKeyDown={handleKeyDown}
+              // handleKeyDown={handleKeyDown}
               handleOnChange={(e) => setDraftMsg(e.target.value)}
             />
           </div>

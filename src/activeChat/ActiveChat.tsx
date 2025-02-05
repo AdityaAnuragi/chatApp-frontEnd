@@ -1,11 +1,37 @@
+import { useLayoutEffect, useRef } from "react"
 import { Chats } from "../App"
 import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
 
-export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg, draftMsg, handleKeyDown, handleOnChange }: ActiveChatTypes) {
+export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg, draftMsg, handleOnChange }: ActiveChatTypes) {
+
+  const scrollContainer = useRef() as React.MutableRefObject<HTMLDivElement>
+
+  // function scrollDownAndSendMsg() {
+  //   scrollContainer.current.scrollTo(0,scrollContainer.current.scrollHeight + 100)
+  //   handleSendMsg()
+  // }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      handleSendMsg()
+    }
+  }
+
+  useLayoutEffect(() => {
+    console.log("🚀 ~ useLayoutEffect ~ scrollContainer.current.scrollTop:", scrollContainer.current.scrollTop)
+    console.log("🚀 ~ useLayoutEffect ~ scrollContainer.current.scrollHeight:", scrollContainer.current.scrollHeight)
+    console.log(`scroll height is ${scrollContainer.current.scrollHeight - scrollContainer.current.scrollTop}`)
+    scrollContainer.current.scrollTo({
+      top: scrollContainer.current.scrollHeight,
+      left: 0,
+      behavior: (scrollContainer.current.scrollHeight - scrollContainer.current.scrollTop) <= 1000 ? "smooth" : "instant",
+    })
+  }, [allMessages])
+
   return (
-    <div className={styles.containerForOverflow} >
+    <div className={styles.containerForOverflow} ref={scrollContainer} >
       {allMessages[selectedGroup].map((value, index) => {
         return (
           <div className={`${styles.messageAndTryAgainContainer} ${value.senderID === id ? styles.rightSide : styles.leftSide}`} >
@@ -42,6 +68,6 @@ type ActiveChatTypes = {
   id: number,
   handleSendMsg: (indexOfMessage?: number | undefined) => void,
   draftMsg: string,
-  handleKeyDown: React.KeyboardEventHandler<HTMLInputElement>,
+  // handleKeyDown: React.KeyboardEventHandler<HTMLInputElement>,
   handleOnChange: React.ChangeEventHandler<HTMLInputElement>
 }
