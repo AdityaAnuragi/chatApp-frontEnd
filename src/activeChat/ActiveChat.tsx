@@ -3,7 +3,7 @@ import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
 
-export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg }: ActiveChatTypes) {
+export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg, draftMsg, handleKeyDown, handleOnChange }: ActiveChatTypes) {
   return (
     <div className={styles.containerForOverflow} >
       {allMessages[selectedGroup].map((value, index) => {
@@ -28,6 +28,10 @@ export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg }: Ac
           </div>
         )
       })}
+      <div className={styles.inputFieldAndButtonContainer}>
+        <input className={styles.inputField} maxLength={40} placeholder="Type a message" type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={handleOnChange} />
+        <button className={styles.sendButton} onClick={() => handleSendMsg()}  >Send message</button>
+      </div>
     </div>
   )
 }
@@ -36,5 +40,8 @@ type ActiveChatTypes = {
   allMessages: Chats,
   selectedGroup: string,
   id: number,
-  handleSendMsg: (indexOfMessage?: number | undefined) => void
+  handleSendMsg: (indexOfMessage?: number | undefined) => void,
+  draftMsg: string,
+  handleKeyDown: React.KeyboardEventHandler<HTMLInputElement>,
+  handleOnChange: React.ChangeEventHandler<HTMLInputElement>
 }

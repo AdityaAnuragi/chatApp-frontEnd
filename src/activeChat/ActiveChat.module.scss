@@ -1,4 +1,5 @@
 $distance-from-message: 0.75rem;
+$border-radius: 0.5rem;
 
 .messageAndTryAgainContainer {
   display: flex;
@@ -29,4 +30,36 @@ $distance-from-message: 0.75rem;
 
 .containerForOverflow {
   overflow-y: scroll;
+  padding: 0rem 1rem;
+  border: 2px solid red;
 }
+
+.inputFieldAndButtonContainer {
+  display: flex;
+  align-items: stretch;
+
+  position: sticky;
+  bottom: 0px;
+
+  width: 100%;
+  height: 2.5rem;
+
+  background-color: white;
+  // border: 2px solid blue;
+}
+
+.sendButton {
+  width: fit-content;
+  margin-left: 1rem;
+  border-radius: $border-radius;
+}
+
+.inputField {
+  flex-grow: 1;
+  font-size: 1.2rem;
+  border-radius: $border-radius;
+  // margin-bottom: 0.5rem;
+}
+
+
+

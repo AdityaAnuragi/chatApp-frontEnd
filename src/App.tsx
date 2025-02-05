@@ -245,8 +245,9 @@ function App() {
     //   }
     // })
 
-
-    setDraftMsg("")
+    if(indexOfMessage === undefined) {
+      setDraftMsg("")
+    }
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -303,7 +304,15 @@ function App() {
 
         {(selectedGroup && allMessages[selectedGroup].length !== 0) && (
           <div className={`${styles.activeChatWrapper}`} >
-            <ActiveChat allMessages={allMessages} id={id} selectedGroup={selectedGroup} handleSendMsg={handleSendMsg} />
+            <ActiveChat
+              allMessages={allMessages}
+              id={id}
+              selectedGroup={selectedGroup}
+              handleSendMsg={handleSendMsg}
+              draftMsg={draftMsg}
+              handleKeyDown={handleKeyDown}
+              handleOnChange={(e) => setDraftMsg(e.target.value)}
+            />
           </div>
         )}
       </div>
@@ -343,8 +352,8 @@ function App() {
         )
       })} */}
 
-      <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
-      <button onClick={() => handleSendMsg()}  >Send message</button>
+      {/* <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
+      <button onClick={() => handleSendMsg()}  >Send message</button> */}
     </>
   )
 }
