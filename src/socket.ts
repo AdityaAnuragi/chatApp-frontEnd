@@ -22,7 +22,7 @@ export const randomId = Math.floor(Math.random() * (allNames.length - 1) ) + 1
 // export const theName = allNames[randomId]
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(URL, {
-  autoConnect: false,
+  autoConnect: true,
   query: {
     userId: randomId
   }

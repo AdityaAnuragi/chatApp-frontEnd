@@ -1,5 +1,10 @@
 .container {
   width: 20%;
+
+  @media (max-width: 426px) {
+    width: 100%;
+  }
+
   // flex-grow: 1;
   min-height: 98%;
   // border: 2px solid blue;
@@ -8,11 +13,15 @@
   border-color: black;
 }
 
+.invisible {
+  display: none;
+}
+
 .group {
   box-sizing: border-box;
 
   width: 98%;
-  
+
   cursor: pointer;
 
   font-size: 1.3rem;

@@ -299,10 +299,12 @@ function App() {
       {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
       <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
 
-      <div className={`${styles.groupListAndActiveChat}`} >
-        {Object.keys(groups).length !== 0 && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} />}
+      { (selectedGroup !== null && window.innerWidth <= 425 ) && <button onClick={() => setSelectedGroup(null)} >Back</button>}
 
-        {(selectedGroup && allMessages[selectedGroup].length !== 0) && (
+      <div className={`${styles.groupListAndActiveChat}`} >
+        { ( (Object.keys(groups).length !== 0) && ((selectedGroup === null) || window.innerWidth > 425) ) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} />}
+
+        { (selectedGroup !== null) && (selectedGroup && allMessages[selectedGroup].length !== 0) && (
           <div className={`${styles.activeChatWrapper}`} >
             <ActiveChat
               allMessages={allMessages}

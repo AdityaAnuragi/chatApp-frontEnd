@@ -30,6 +30,21 @@ export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg, draf
     })
   }, [allMessages])
 
+  // useEffect(() => {
+  //   function handleBeforeUnload(e: HashChangeEvent) {
+  //     e.preventDefault()
+  //     alert("back button pressed")
+  //   }
+
+  //   window.addEventListener("hashchange", handleBeforeUnload)
+    
+  //   return () => {
+  //     window.removeEventListener("hashchange", handleBeforeUnload)
+  //   }
+    
+
+  // }, [])
+
   return (
     <div className={styles.containerForOverflow} ref={scrollContainer} >
       {allMessages[selectedGroup].map((value, index) => {
