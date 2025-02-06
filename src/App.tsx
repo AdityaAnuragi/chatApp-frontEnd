@@ -302,7 +302,7 @@ function App() {
       { (selectedGroup !== null && window.innerWidth <= 425 ) && <button onClick={() => setSelectedGroup(null)} >Back</button>}
 
       <div className={`${styles.groupListAndActiveChat}`} >
-        { ( (Object.keys(groups).length !== 0) && ((selectedGroup === null) || window.innerWidth > 425) ) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} />}
+        { ( (Object.keys(groups).length !== 0) && ((selectedGroup === null) || window.innerWidth > 425) ) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />}
 
         { (selectedGroup !== null) && (selectedGroup && allMessages[selectedGroup].length !== 0) && (
           <div className={`${styles.activeChatWrapper}`} >
