@@ -7,6 +7,7 @@ import { socket, ServerToClientEvents, ParametersToSendMessage, allNames, random
 import { Message } from "./message/Message"
 import { GroupLists } from "./groupLists/GroupLists"
 import { ActiveChat } from "./activeChat/ActiveChat"
+import { SearchUsers } from "./searchUsers/SearchUsers"
 
 
 
@@ -273,6 +274,7 @@ function App() {
     <>
       <div className={styles.wrapFullScreen} >
 
+        <SearchUsers />
 
         <h2>Connected: {`${isConnected}`}</h2>
         <label>
@@ -297,12 +299,13 @@ function App() {
         <br />
 
         <button>Create Group</button>
+        <button>Search users</button>
 
         {/*<button onClick={() => handleRoomJoin("1")} >Join Group one</button>
-      <button onClick={() => handleRoomJoin("2")} >Join Group two</button>*/}
+        <button onClick={() => handleRoomJoin("2")} >Join Group two</button>*/}
 
         {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
-      <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
+        <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
 
         {(selectedGroup !== null && window.innerWidth <= 425) && <button onClick={() => setSelectedGroup(null)} >Back</button>}
 
