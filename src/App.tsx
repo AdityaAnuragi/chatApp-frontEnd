@@ -29,7 +29,7 @@ function App() {
   const [allMessages, setAllMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
-
+  const [showSearchUser, setShowSearchUser] = useState(false)
   const [groups, setGroups] = useState<Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]>({})
 
   useEffect(() => {
@@ -274,7 +274,7 @@ function App() {
     <>
       <div className={styles.wrapFullScreen} >
 
-        <SearchUsers />
+        {showSearchUser && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} />}
 
         <h2>Connected: {`${isConnected}`}</h2>
         <label>
@@ -299,7 +299,7 @@ function App() {
         <br />
 
         <button>Create Group</button>
-        <button>Search users</button>
+        <button onClick={() => setShowSearchUser(true)} >Search users</button>
 
         {/*<button onClick={() => handleRoomJoin("1")} >Join Group one</button>
         <button onClick={() => handleRoomJoin("2")} >Join Group two</button>*/}

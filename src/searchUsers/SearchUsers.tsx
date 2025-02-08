@@ -1,7 +1,7 @@
 import { useState } from "react"
 import styles from "./SearchUsers.module.scss"
 
-export function SearchUsers() {
+export function SearchUsers({ userId, setShowSearchUser }: SearchUsersParams) {
 
   const [searchInput, setSearchInput] = useState("")
   const [hasError, setHasError] = useState(false)
@@ -34,14 +34,29 @@ export function SearchUsers() {
 
   return (
     <>
-      <div className={styles.container} >
-        <div className={styles.searchFieldAndUserList} >
+      <div className={styles.container} onMouseDown={() => setShowSearchUser(false)} >
+        <div className={styles.searchFieldAndUserList} onMouseDown={e => e.stopPropagation()} >
           <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} />
           <button onClick={handleSearch} >Search</button>
 
-          {hasError 
+          {hasError
             ? <p>There was an error</p>
-            : users?.map(user => <p key={user.id}>{user.name}</p>)
+            : users?.length !== 0
+              ? users?.filter(user => {
+                  // console.log(`user.id is ${user.id}`)
+                  // console.log(typeof userId)
+                  // console.log(typeof user.id)
+                  console.log(`${user.id}` !== `${userId}`)
+                  return `${user.id}` !== `${userId}`
+                }).map(user => {
+                  return (
+                    <div key={user.id} className={styles.userNameAndAddUser} >
+                      <p>{user.name}</p>
+                      <button className={styles.addUser}>Add user</button>
+                    </div>
+                  )
+                })
+              : <p>No users found</p>
           }
 
         </div>
@@ -50,6 +65,12 @@ export function SearchUsers() {
   )
 }
 
+type SearchUsersParams = {
+  userId: number,
+  setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 type User = {
-  id: number, name: string
+  id: number, 
+  name: string
 }
