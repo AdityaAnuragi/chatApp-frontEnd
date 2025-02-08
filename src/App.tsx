@@ -245,7 +245,7 @@ function App() {
     //   }
     // })
 
-    if(indexOfMessage === undefined) {
+    if (indexOfMessage === undefined) {
       setDraftMsg("")
     }
   }
@@ -271,67 +271,72 @@ function App() {
   }
   return (
     <>
-      <h2>Connected: {`${isConnected}`}</h2>
-      <label>
-        Name
-        <input type="text" value={sender} onChange={(e) => setSender(e.target.value)} />
-      </label>
-      <br />
-      <br />
-      <br />
+      <div className={styles.wrapFullScreen} >
 
-      <label>
-        Unique ID
-        <input type="number" readOnly value={id} />
-      </label>
-      <br />
-      <br />
-      <br />
 
-      <button onClick={() => socket.connect()} >Connect</button>
-      <button onClick={() => socket.disconnect()} >disconnect</button>
-      <br />
-      <br />
+        <h2>Connected: {`${isConnected}`}</h2>
+        <label>
+          Name
+          <input type="text" value={sender} onChange={(e) => setSender(e.target.value)} />
+        </label>
+        <br />
+        <br />
+        <br />
 
-      {/*<button onClick={() => handleRoomJoin("1")} >Join Group one</button>
+        <label>
+          Unique ID
+          <input type="number" readOnly value={id} />
+        </label>
+        <br />
+        <br />
+        <br />
+
+        <button onClick={() => socket.connect()} >Connect</button>
+        <button onClick={() => socket.disconnect()} >disconnect</button>
+        <br />
+        <br />
+
+        <button>Create Group</button>
+
+        {/*<button onClick={() => handleRoomJoin("1")} >Join Group one</button>
       <button onClick={() => handleRoomJoin("2")} >Join Group two</button>*/}
 
-      {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
+        {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
       <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
 
-      { (selectedGroup !== null && window.innerWidth <= 425 ) && <button onClick={() => setSelectedGroup(null)} >Back</button>}
+        {(selectedGroup !== null && window.innerWidth <= 425) && <button onClick={() => setSelectedGroup(null)} >Back</button>}
 
-      <div className={`${styles.groupListAndActiveChat}`} >
-        { ( (Object.keys(groups).length !== 0) && ((selectedGroup === null) || window.innerWidth > 425) ) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />}
+        <div className={`${styles.groupListAndActiveChat}`} >
+          {((Object.keys(groups).length !== 0) && ((selectedGroup === null) || window.innerWidth > 425)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />}
 
-        { (selectedGroup !== null) && (selectedGroup && allMessages[selectedGroup].length !== 0) && (
-          <div className={`${styles.activeChatWrapper}`} >
-            <ActiveChat
-              allMessages={allMessages}
-              id={id}
-              selectedGroup={selectedGroup}
-              handleSendMsg={handleSendMsg}
-              draftMsg={draftMsg}
-              // handleKeyDown={handleKeyDown}
-              handleOnChange={(e) => setDraftMsg(e.target.value)}
-            />
-          </div>
-        )}
-      </div>
+          {(selectedGroup !== null) && (selectedGroup && allMessages[selectedGroup].length !== 0) && (
+            <div className={`${styles.activeChatWrapper}`} >
+              <ActiveChat
+                allMessages={allMessages}
+                id={id}
+                selectedGroup={selectedGroup}
+                handleSendMsg={handleSendMsg}
+                draftMsg={draftMsg}
+                // handleKeyDown={handleKeyDown}
+                handleOnChange={(e) => setDraftMsg(e.target.value)}
+              />
+            </div>
+          )}
+        </div>
 
 
-      {/* {Object.keys(groups).map(group => {
+        {/* {Object.keys(groups).map(group => {
         return(
           <button onClick={() => setSelectedGroup(group)}>{`${groups[group].name}`}</button>
         )
       })} */}
 
-      {/* {selectedGroup && <h2>Selected group: {selectedGroup}</h2>} */}
-      <br />
-      {/* <br />
+        {/* {selectedGroup && <h2>Selected group: {selectedGroup}</h2>} */}
+        <br />
+        {/* <br />
       <br /> */}
 
-      {/* {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map((value, index) => {
+        {/* {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map((value, index) => {
         return (
           <div className={styles.messageAndTryAgainContainer} >
             <Message
@@ -354,8 +359,9 @@ function App() {
         )
       })} */}
 
-      {/* <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
+        {/* <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
       <button onClick={() => handleSendMsg()}  >Send message</button> */}
+      </div>
     </>
   )
 }
