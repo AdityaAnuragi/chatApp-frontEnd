@@ -42,13 +42,7 @@ export function SearchUsers({ userId, setShowSearchUser }: SearchUsersParams) {
           {hasError
             ? <p>There was an error</p>
             : users?.length !== 0
-              ? users?.filter(user => {
-                  // console.log(`user.id is ${user.id}`)
-                  // console.log(typeof userId)
-                  // console.log(typeof user.id)
-                  console.log(`${user.id}` !== `${userId}`)
-                  return `${user.id}` !== `${userId}`
-                }).map(user => {
+              ? users?.filter(user => `${user.id}` !== `${userId}`).map(user => {
                   return (
                     <div key={user.id} className={styles.userNameAndAddUser} >
                       <p>{user.name}</p>
