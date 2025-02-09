@@ -76,7 +76,7 @@ function App() {
       if (idReceived === id) return
 
       setAllMessages((curr) => {
-        console.log("setting this state")
+        // console.log("setting this state")
         const copy = JSON.parse(JSON.stringify(curr)) as Chats
         // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
         // const nonNullSelectedGroup = selectedGroup!
@@ -86,8 +86,8 @@ function App() {
     }
 
     const handleGetMissedMessages: ServerToClientEvents["getMissedMessages"] = (message) => {
-      console.log(`message on online is`)
-      console.log(message)
+      // console.log(`message on online is`)
+      // console.log(message)
 
       Object.keys(message).forEach(group => {
         message[group].forEach(message => {
@@ -180,7 +180,7 @@ function App() {
     // console.log("")
     const cryptoId = (indexOfMessage !== undefined) ? allMessages[selectedGroup!][indexOfMessage!].id : self.crypto.randomUUID()
 
-    console.log(`cryptoId is ${cryptoId}`)
+    // console.log(`cryptoId is ${cryptoId}`)
 
     // console.log(`isRetry: ${!isRetry}`)
     // console.log(`index: ${indexOfMessage === undefined}`)
@@ -202,7 +202,7 @@ function App() {
         const nonNullSelectedGroup = selectedGroup!
         // copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗", isRetrying: false })
         // index -= 1
-        console.log("setting isRetying to true")
+        // console.log("setting isRetying to true")
         copy[nonNullSelectedGroup][indexOfMessage].isRetrying = true
         return copy
       })
@@ -217,7 +217,7 @@ function App() {
 
     const retryMessage = (sender: ParametersToSendMessage[0], id: ParametersToSendMessage[1], msg: ParametersToSendMessage[2], selectedGroup: ParametersToSendMessage[3], cryptoId: ParametersToSendMessage[4], maxTries = totalTries) => {
       if (maxTries === 0) {
-        console.log("I can no longer try to send the message")
+        // console.log("I can no longer try to send the message")
 
         setAllMessages((prev) => {
           const copy = JSON.parse(JSON.stringify(prev)) as Chats
@@ -232,7 +232,7 @@ function App() {
 
       console.log(`Trial attempt: ${totalTries - maxTries + 1}`)
       socket.timeout(4000).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
-        // console.log(`The status is ${response.status}`)
+        console.log(`The status is ${response.status}`)
 
         if (error) {
           console.log("there was an error, trying again")
@@ -241,16 +241,16 @@ function App() {
         }
 
         else {
-          console.log(`Got a response ${response.status}, with attempt number ${maxTries}`)
+          // console.log(`Got a response ${response.status}, with attempt number ${maxTries}`)
           // console.log(`Returned cryptoId is ${cryptoId}`)
           setAllMessages((prev) => {
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
             // const nonNullSelectedGroup = selectedGroup!
-            console.log("state is ")
-            console.log(copy)
+            // console.log("state is ")
+            // console.log(copy)
             const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
-            console.log(`Returned crypto id is`)
-            console.log(`index is ${index}`)
+            // console.log(`Returned crypto id is`)
+            // console.log(`index is ${index}`)
             copy[selectedGroup][index].messageStatus = "✅"
             return copy
           })
