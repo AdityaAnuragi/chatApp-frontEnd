@@ -15,7 +15,7 @@ import { SearchUsers } from "./searchUsers/SearchUsers"
 // const allNames = ["", "Aditya", "Ben"]
 // const randomId = Math.floor(Math.random() * (allNames.length - 1) ) + 1
 const theName = allNames[randomId]
-console.log(`index is ${randomId}`)
+// console.log(`index is ${randomId}`)
 // NEXT TASKS: 
 
 // 1) change the types, server just sends an any[]
@@ -43,11 +43,12 @@ function App() {
       }
       setAllMessages(prev => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
+        // console.log(`${roomName} is the roomName`)
         if (copy[roomName] === undefined) {
           copy[roomName] = []
         }
-        console.log("Inside room select")
-        console.log(copy)
+        // console.log("Inside room select")
+        // console.log(copy)
         return copy
       })
       // setSelectedGroup(roomName)
@@ -58,8 +59,8 @@ function App() {
       // if (selectedGroup) {
       //   socket.emit("joinRoom", selectedGroup)
       // }
-      console.log("groups to join")
-      console.log(Object.keys(allMessages))
+      // console.log("groups to join")
+      // console.log(Object.keys(allMessages))
       Object.keys(allMessages).forEach(group => {
         socket.emit("joinRoom", group)
       })
@@ -100,16 +101,16 @@ function App() {
     }
 
     const handleGetGroupIdsAndNames: ServerToClientEvents["getGroupIdsAndNames"] = (groupIdsAndName) => {
-      console.log("the groups are: ")
-      console.log(groupIdsAndName)
+      // console.log("the groups are: ")
+      // console.log(groupIdsAndName)
       // groups.current = groupIdsAndName
       setGroups(groupIdsAndName)
-      console.log(Object.keys(groupIdsAndName))
+      // console.log(Object.keys(groupIdsAndName))
       Object.keys(groupIdsAndName).forEach(group => handleRoomJoin(group))
     }
 
-    const handleMakeUiButDontJoinRoom: ServerToClientEvents["makeUiButDontJoinRoom"] = (pvtConvoId,pvtConvoName) => {
-      handleRoomJoin(pvtConvoName, false)
+    const handleMakeUiButDontJoinRoom: ServerToClientEvents["makeClientJoinRoom"] = (pvtConvoId,pvtConvoName) => {
+      handleRoomJoin(pvtConvoId, true)
       setGroups(prevState => {
         const copy = JSON.parse(JSON.stringify(prevState)) as Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]
         copy[pvtConvoId] = {
@@ -125,7 +126,7 @@ function App() {
     socket.on("disconnect", handleDisconnect);
     socket.on("getMissedMessages", handleGetMissedMessages);
     socket.on("getGroupIdsAndNames", handleGetGroupIdsAndNames)
-    socket.on("makeUiButDontJoinRoom", handleMakeUiButDontJoinRoom)
+    socket.on("makeClientJoinRoom", handleMakeUiButDontJoinRoom)
     
     return () => {
       socket.off("connect", handleConnect);
@@ -133,7 +134,7 @@ function App() {
       socket.off("message", handleMessageReceived)
       socket.off("getMissedMessages", handleGetMissedMessages);
       socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
-      socket.off("makeUiButDontJoinRoom", handleMakeUiButDontJoinRoom)
+      socket.off("makeClientJoinRoom", handleMakeUiButDontJoinRoom)
     }
   }, [allMessages, groups, id, selectedGroup])
 
@@ -146,7 +147,7 @@ function App() {
       else {
         setIsConnected(false)
       }
-      console.log("window was focused")
+      // console.log("window was focused")
     }
 
     function handleOffline() {

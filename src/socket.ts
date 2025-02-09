@@ -7,7 +7,7 @@ export type ServerToClientEvents = {
   message: (sender: string, id: number, msg: string, fromGroup: string) => void,
   getMissedMessages: (message: {[group: string]: {id: `${string}-${string}-${string}-${string}-${string}`, msg: string, senderID: number, messageStatus: "🕗" | "✅" | "❌",isRetrying: boolean}[] }) => void,
   getGroupIdsAndNames: (groupIdsAndName: {[id: string]: {name: string, chatType: "group" | "private"} }) => void,
-  makeUiButDontJoinRoom: (pvtConvId: string,pvtConvoName: string) => void
+  makeClientJoinRoom: (pvtConvId: string,pvtConvoName: string) => void
 }
 
 export type ClientToServerEvents = {

@@ -20,9 +20,9 @@ export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg, draf
   }
 
   useEffect(() => {
-    console.log("🚀 ~ useLayoutEffect ~ scrollContainer.current.scrollTop:", scrollContainer.current.scrollTop)
-    console.log("🚀 ~ useLayoutEffect ~ scrollContainer.current.scrollHeight:", scrollContainer.current.scrollHeight)
-    console.log(`scroll height is ${scrollContainer.current.scrollHeight - scrollContainer.current.scrollTop}`)
+    // console.log("🚀 ~ useLayoutEffect ~ scrollContainer.current.scrollTop:", scrollContainer.current.scrollTop)
+    // console.log("🚀 ~ useLayoutEffect ~ scrollContainer.current.scrollHeight:", scrollContainer.current.scrollHeight)
+    // console.log(`scroll height is ${scrollContainer.current.scrollHeight - scrollContainer.current.scrollTop}`)
     scrollContainer.current.scrollTo({
       top: scrollContainer.current.scrollHeight,
       left: 0,
@@ -47,7 +47,7 @@ export function ActiveChat({ allMessages, selectedGroup, id, handleSendMsg, draf
 
   return (
     <div className={styles.containerForOverflow} ref={scrollContainer} >
-      {allMessages[selectedGroup].map((value, index) => {
+      {allMessages[selectedGroup]?.map((value, index) => {
         return (
           <div className={`${styles.messageAndTryAgainContainer} ${value.senderID === id ? styles.rightSide : styles.leftSide}`} >
             <Message
