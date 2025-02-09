@@ -23,12 +23,18 @@
 
   margin-top: 10%;
 
+  @media (max-width: 426px) {
+    width: 60%;
+    margin-top: 30%;
+  }
+
 }
 
 .searchField {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  // margin-left: auto;
+  // margin-right: auto;
+  width: 60%;
 }
 
 .userNameAndAddUser {
@@ -44,4 +50,15 @@
 
 .addUser {
   height: fit-content;
+  display: block;
+}
+
+.searchInputAndButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  // border: 2px solid blue;
+  padding: 0rem 0.75rem;
+  margin-top: 0.5rem;
 }

@@ -37,12 +37,29 @@ function App() {
   }, [])
 
   useEffect(() => {
+    function handleRoomJoin(roomName: string, joinRoom: boolean = true) {
+      if(joinRoom) {
+        socket.emit("joinRoom", roomName)
+      }
+      setAllMessages(prev => {
+        const copy = JSON.parse(JSON.stringify(prev)) as Chats
+        if (copy[roomName] === undefined) {
+          copy[roomName] = []
+        }
+        console.log("Inside room select")
+        console.log(copy)
+        return copy
+      })
+      // setSelectedGroup(roomName)
+    }
+
     function handleConnect() {
       setIsConnected(true)
       // if (selectedGroup) {
       //   socket.emit("joinRoom", selectedGroup)
       // }
-
+      console.log("groups to join")
+      console.log(Object.keys(allMessages))
       Object.keys(allMessages).forEach(group => {
         socket.emit("joinRoom", group)
       })
@@ -91,18 +108,32 @@ function App() {
       Object.keys(groupIdsAndName).forEach(group => handleRoomJoin(group))
     }
 
+    const handleMakeUiButDontJoinRoom: ServerToClientEvents["makeUiButDontJoinRoom"] = (pvtConvoId,pvtConvoName) => {
+      handleRoomJoin(pvtConvoName, false)
+      setGroups(prevState => {
+        const copy = JSON.parse(JSON.stringify(prevState)) as Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]
+        copy[pvtConvoId] = {
+          name: pvtConvoName,
+          chatType: "private"
+        }
+        return copy
+      })
+    }
+    
     socket.on("message", handleMessageReceived)
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
     socket.on("getMissedMessages", handleGetMissedMessages);
     socket.on("getGroupIdsAndNames", handleGetGroupIdsAndNames)
-
+    socket.on("makeUiButDontJoinRoom", handleMakeUiButDontJoinRoom)
+    
     return () => {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
       socket.off("message", handleMessageReceived)
       socket.off("getMissedMessages", handleGetMissedMessages);
       socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
+      socket.off("makeUiButDontJoinRoom", handleMakeUiButDontJoinRoom)
     }
   }, [allMessages, groups, id, selectedGroup])
 
@@ -257,24 +288,12 @@ function App() {
   //   }
   // }
 
-  function handleRoomJoin(roomName: string) {
-    socket.emit("joinRoom", roomName)
-    setAllMessages(prev => {
-      const copy = JSON.parse(JSON.stringify(prev)) as Chats
-      if (copy[roomName] === undefined) {
-        copy[roomName] = []
-      }
-      console.log("Inside room select")
-      console.log(copy)
-      return copy
-    })
-    // setSelectedGroup(roomName)
-  }
+  
   return (
     <>
       <div className={styles.wrapFullScreen} >
 
-        {showSearchUser && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} />}
+        {showSearchUser && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} />}
 
         <h2>Connected: {`${isConnected}`}</h2>
         <label>
@@ -312,7 +331,7 @@ function App() {
         <div className={`${styles.groupListAndActiveChat}`} >
           {((Object.keys(groups).length !== 0) && ((selectedGroup === null) || window.innerWidth > 425)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />}
 
-          {(selectedGroup !== null) && (selectedGroup && allMessages[selectedGroup].length !== 0) && (
+          {(selectedGroup !== null) && (selectedGroup) && (
             <div className={`${styles.activeChatWrapper}`} >
               <ActiveChat
                 allMessages={allMessages}

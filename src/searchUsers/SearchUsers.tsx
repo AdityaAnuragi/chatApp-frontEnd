@@ -1,7 +1,9 @@
 import { useState } from "react"
 import styles from "./SearchUsers.module.scss"
 
-export function SearchUsers({ userId, setShowSearchUser }: SearchUsersParams) {
+import { socket } from "../socket"
+
+export function SearchUsers({ userId, setShowSearchUser, sender }: SearchUsersParams) {
 
   const [searchInput, setSearchInput] = useState("")
   const [hasError, setHasError] = useState(false)
@@ -32,12 +34,18 @@ export function SearchUsers({ userId, setShowSearchUser }: SearchUsersParams) {
     })()
   }
 
+  function handleClick(newUserId: string, newUserName: string) {
+    socket.emit("createPvtConvo", userId, sender, newUserId, newUserName)
+  }
+
   return (
     <>
       <div className={styles.container} onMouseDown={() => setShowSearchUser(false)} >
         <div className={styles.searchFieldAndUserList} onMouseDown={e => e.stopPropagation()} >
-          <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} />
-          <button onClick={handleSearch} >Search</button>
+          <div className={styles.searchInputAndButton} >
+            <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} />
+            <button onClick={handleSearch} >Search</button>
+          </div>
 
           {hasError
             ? <p>There was an error</p>
@@ -46,7 +54,7 @@ export function SearchUsers({ userId, setShowSearchUser }: SearchUsersParams) {
                   return (
                     <div key={user.id} className={styles.userNameAndAddUser} >
                       <p>{user.name}</p>
-                      <button className={styles.addUser}>Add user</button>
+                      <button className={styles.addUser} onClick={() => handleClick(user.id, user.name)} >Add user</button>
                     </div>
                   )
                 })
@@ -61,10 +69,11 @@ export function SearchUsers({ userId, setShowSearchUser }: SearchUsersParams) {
 
 type SearchUsersParams = {
   userId: number,
-  setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>
+  setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>,
+  sender: string
 }
 
 type User = {
-  id: number, 
+  id: string, 
   name: string
 }
