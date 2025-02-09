@@ -8,6 +8,7 @@ import { Message } from "./message/Message"
 import { GroupLists } from "./groupLists/GroupLists"
 import { ActiveChat } from "./activeChat/ActiveChat"
 import { SearchUsers } from "./searchUsers/SearchUsers"
+import { CreateGroup } from "./createGroups/CreateGroups"
 
 
 
@@ -29,8 +30,9 @@ function App() {
   const [allMessages, setAllMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
-  const [showSearchUser, setShowSearchUser] = useState(false)
   const [groups, setGroups] = useState<Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]>({})
+  const [showSearchUser, setShowSearchUser] = useState(false)
+  const [showCreateGroup, setShowCreateGroup] = useState(false)
 
   useEffect(() => {
     console.log("A project by Aditya Anuragi")
@@ -39,7 +41,7 @@ function App() {
   useEffect(() => {
     function handleRoomJoin(roomName: string, joinRoom: boolean = true) {
       if(joinRoom) {
-        socket.emit("joinRoom", roomName)
+      socket.emit("joinRoom", roomName)
       }
       setAllMessages(prev => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
@@ -232,7 +234,7 @@ function App() {
 
       console.log(`Trial attempt: ${totalTries - maxTries + 1}`)
       socket.timeout(4000).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
-        console.log(`The status is ${response.status}`)
+        console.log(`The status is ${response}`)
 
         if (error) {
           console.log("there was an error, trying again")
@@ -295,6 +297,7 @@ function App() {
       <div className={styles.wrapFullScreen} >
 
         {showSearchUser && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} />}
+        {showCreateGroup && <CreateGroup setShowCreateGroup={setShowCreateGroup} userId={id} />}
 
         <h2>Connected: {`${isConnected}`}</h2>
         <label>
@@ -318,7 +321,7 @@ function App() {
         <br />
         <br />
 
-        <button>Create Group</button>
+        <button onClick={() => setShowCreateGroup(true)} >Create Group</button>
         <button onClick={() => setShowSearchUser(true)} >Search users</button>
 
         {/*<button onClick={() => handleRoomJoin("1")} >Join Group one</button>

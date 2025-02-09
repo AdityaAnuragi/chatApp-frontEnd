@@ -43,7 +43,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender }: SearchUsersPa
       <div className={styles.container} onMouseDown={() => setShowSearchUser(false)} >
         <div className={styles.searchFieldAndUserList} onMouseDown={e => e.stopPropagation()} >
           <div className={styles.searchInputAndButton} >
-            <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} />
+            <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} placeholder="Search for user" />
             <button onClick={handleSearch} >Search</button>
           </div>
 

@@ -13,7 +13,8 @@ export type ServerToClientEvents = {
 export type ClientToServerEvents = {
   message: (sender:string, id:number, msg:string, selectedGroup: string, cryptoId: `${string}-${string}-${string}-${string}-${string}`, callback: (response: {status: "ok" | "error"}, cryptoId: `${string}-${string}-${string}-${string}-${string}`, selectedGroup: string ) => void) => void,
   joinRoom: (roomName: string) => void,
-  createPvtConvo: (fromId: number,fromName: string, toId:string, toName: string) => void
+  createPvtConvo: (fromId: number,fromName: string, toId:string, toName: string) => void,
+  createGroup: (groupName: string, fromUserId: string) => void
 }
 
 export type ParametersToSendMessage = Parameters<ClientToServerEvents["message"]>
