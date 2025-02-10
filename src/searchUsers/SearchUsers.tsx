@@ -3,7 +3,7 @@ import styles from "./SearchUsers.module.scss"
 
 import { socket } from "../socket"
 
-export function SearchUsers({ userId, setShowSearchUser, sender }: SearchUsersParams) {
+export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtConvo, selectedGroupId, setShowInviteToGroup }: SearchUsersParams) {
 
   const [searchInput, setSearchInput] = useState("")
   const [hasError, setHasError] = useState(false)
@@ -34,13 +34,28 @@ export function SearchUsers({ userId, setShowSearchUser, sender }: SearchUsersPa
     })()
   }
 
-  function handleClick(newUserId: string, newUserName: string) {
+  function createPvtConvo(newUserId: string, newUserName: string) {
     socket.emit("createPvtConvo", userId, sender, newUserId, newUserName)
+  }
+
+  function inviteToGroup(groupId: string | null, invitedUserId: string) {
+    if(groupId) {
+      socket.emit("inviteUserToGroup", groupId, invitedUserId)
+    }
+  }
+
+  function handleClick(newUserId: string, newUserName: string) {
+    if( forCreatingPvtConvo ) {
+      createPvtConvo(newUserId, newUserName)
+    }
+    else {
+      inviteToGroup(selectedGroupId, newUserId)
+    }
   }
 
   return (
     <>
-      <div className={styles.container} onMouseDown={() => setShowSearchUser(false)} >
+      <div className={styles.container} onMouseDown={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >
         <div className={styles.searchFieldAndUserList} onMouseDown={e => e.stopPropagation()} >
           <div className={styles.searchInputAndButton} >
             <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} placeholder="Search for user" />
@@ -69,8 +84,11 @@ export function SearchUsers({ userId, setShowSearchUser, sender }: SearchUsersPa
 
 type SearchUsersParams = {
   userId: number,
-  setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>,
   sender: string
+  forCreatingPvtConvo: boolean,
+  selectedGroupId: string | null
+  setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>,
+  setShowInviteToGroup: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type User = {

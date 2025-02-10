@@ -33,6 +33,7 @@ function App() {
   const [groups, setGroups] = useState<Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]>({})
   const [showSearchUser, setShowSearchUser] = useState(false)
   const [showCreateGroup, setShowCreateGroup] = useState(false)
+  const [showInviteToGroup, setShowInviteToGroup] = useState(false)
 
   useEffect(() => {
     console.log("A project by Aditya Anuragi")
@@ -109,13 +110,13 @@ function App() {
       Object.keys(groupIdsAndName).forEach(group => handleRoomJoin(group))
     }
 
-    const makeClientJoinRoom: ServerToClientEvents["makeClientJoinRoom"] = (pvtConvoId, pvtConvoName) => {
+    const makeClientJoinRoom: ServerToClientEvents["makeClientJoinRoom"] = (pvtConvoId, pvtConvoName, chatType) => {
       handleRoomJoin(pvtConvoId)
       setGroups(prevState => {
         const copy = JSON.parse(JSON.stringify(prevState)) as Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]
         copy[pvtConvoId] = {
           name: pvtConvoName,
-          chatType: "private"
+          chatType: chatType
         }
         return copy
       })
@@ -294,7 +295,7 @@ function App() {
     <>
       <div className={styles.wrapFullScreen} >
 
-        {showSearchUser && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} />}
+        {(showSearchUser || showInviteToGroup) && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} forCreatingPvtConvo={showSearchUser} selectedGroupId={selectedGroup} setShowInviteToGroup={setShowInviteToGroup} />}
         {showCreateGroup && <CreateGroup setShowCreateGroup={setShowCreateGroup} userId={id} />}
 
         <h2>Connected: {`${isConnected}`}</h2>
@@ -339,10 +340,12 @@ function App() {
                 allMessages={allMessages}
                 id={id}
                 selectedGroup={selectedGroup}
+                selectedGroupName={groups[selectedGroup].name}
                 handleSendMsg={handleSendMsg}
                 draftMsg={draftMsg}
                 // handleKeyDown={handleKeyDown}
                 handleOnChange={(e) => setDraftMsg(e.target.value)}
+                setShowInviteToGroup={setShowInviteToGroup}
               />
             </div>
           )}
