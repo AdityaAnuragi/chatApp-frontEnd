@@ -39,10 +39,8 @@ function App() {
   }, [])
 
   useEffect(() => {
-    function handleRoomJoin(roomName: string, joinRoom: boolean = true) {
-      if(joinRoom) {
+    function handleRoomJoin(roomName: string) {
       socket.emit("joinRoom", roomName)
-      }
       setAllMessages(prev => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
         // console.log(`${roomName} is the roomName`)
@@ -111,8 +109,8 @@ function App() {
       Object.keys(groupIdsAndName).forEach(group => handleRoomJoin(group))
     }
 
-    const handleMakeUiButDontJoinRoom: ServerToClientEvents["makeClientJoinRoom"] = (pvtConvoId,pvtConvoName) => {
-      handleRoomJoin(pvtConvoId, true)
+    const makeClientJoinRoom: ServerToClientEvents["makeClientJoinRoom"] = (pvtConvoId, pvtConvoName) => {
+      handleRoomJoin(pvtConvoId)
       setGroups(prevState => {
         const copy = JSON.parse(JSON.stringify(prevState)) as Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]
         copy[pvtConvoId] = {
@@ -122,21 +120,21 @@ function App() {
         return copy
       })
     }
-    
+
     socket.on("message", handleMessageReceived)
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
     socket.on("getMissedMessages", handleGetMissedMessages);
     socket.on("getGroupIdsAndNames", handleGetGroupIdsAndNames)
-    socket.on("makeClientJoinRoom", handleMakeUiButDontJoinRoom)
-    
+    socket.on("makeClientJoinRoom", makeClientJoinRoom)
+
     return () => {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
       socket.off("message", handleMessageReceived)
       socket.off("getMissedMessages", handleGetMissedMessages);
       socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
-      socket.off("makeClientJoinRoom", handleMakeUiButDontJoinRoom)
+      socket.off("makeClientJoinRoom", makeClientJoinRoom)
     }
   }, [allMessages, groups, id, selectedGroup])
 
@@ -291,7 +289,7 @@ function App() {
   //   }
   // }
 
-  
+
   return (
     <>
       <div className={styles.wrapFullScreen} >
