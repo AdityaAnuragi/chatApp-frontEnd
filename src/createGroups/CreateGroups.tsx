@@ -12,11 +12,16 @@ export function CreateGroup( {setShowCreateGroup, userId}: CreateGroupParams ) {
     socket.emit("createGroup", groupName, `${userId}`)
   }
 
+  function handleClick() {
+    handleCreateGroup()
+    setShowCreateGroup(false)
+  }
+
   return (
     <div className={styles.container} onMouseDown={() => setShowCreateGroup(false)} >
       <div className={styles.inputFieldAndUsers} onMouseDown={e => e.stopPropagation()} >
         <input type="text" value={groupName} onChange={(e) => setGroupName(e.target.value)} placeholder="Group name" />
-        <button className={styles.button} onClick={handleCreateGroup} >Create group</button>
+        <button className={styles.button} onClick={handleClick} >Create group</button>
       </div>
     </div>
   )
