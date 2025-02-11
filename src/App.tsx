@@ -295,7 +295,7 @@ function App() {
     <>
       <div className={styles.wrapFullScreen} >
 
-        {(showSearchUser || showInviteToGroup) && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} forCreatingPvtConvo={showSearchUser} selectedGroupId={selectedGroup} setShowInviteToGroup={setShowInviteToGroup} />}
+        {(showSearchUser || showInviteToGroup) && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} forCreatingPvtConvo={showSearchUser} selectedGroupId={selectedGroup} setShowInviteToGroup={setShowInviteToGroup} selectedGroupName={groups[selectedGroup!].name} />}
         {showCreateGroup && <CreateGroup setShowCreateGroup={setShowCreateGroup} userId={id} />}
 
         <h2>Connected: {`${isConnected}`}</h2>

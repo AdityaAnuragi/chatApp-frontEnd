@@ -15,13 +15,13 @@ export type ClientToServerEvents = {
   joinRoom: (roomName: string) => void,
   createPvtConvo: (fromId: number,fromName: string, toId:string, toName: string) => void,
   createGroup: (groupName: string, fromUserId: string) => void,
-  inviteUserToGroup: (groupId: string, userId: string) => void
+  inviteUserToGroup: (groupId: string, userId: string, groupName: string) => void
 }
 
 export type ParametersToSendMessage = Parameters<ClientToServerEvents["message"]>
 
 // this is needed to send the unique id of the client to the server on connection
-export const allNames = ["", "Aditya", "Ben"]
+export const allNames = ["", "Aditya", "Ben", "Connor"]
 export const randomId = Math.floor(Math.random() * (allNames.length - 1) ) + 1
 // export const theName = allNames[randomId]
 

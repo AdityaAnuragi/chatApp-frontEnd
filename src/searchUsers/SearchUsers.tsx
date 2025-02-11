@@ -3,7 +3,7 @@ import styles from "./SearchUsers.module.scss"
 
 import { socket } from "../socket"
 
-export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtConvo, selectedGroupId, setShowInviteToGroup }: SearchUsersParams) {
+export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtConvo, selectedGroupId, setShowInviteToGroup, selectedGroupName }: SearchUsersParams) {
 
   const [searchInput, setSearchInput] = useState("")
   const [hasError, setHasError] = useState(false)
@@ -40,7 +40,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
 
   function inviteToGroup(groupId: string | null, invitedUserId: string) {
     if(groupId) {
-      socket.emit("inviteUserToGroup", groupId, invitedUserId)
+      socket.emit("inviteUserToGroup", groupId, invitedUserId, selectedGroupName)
     }
   }
 
@@ -86,7 +86,8 @@ type SearchUsersParams = {
   userId: number,
   sender: string
   forCreatingPvtConvo: boolean,
-  selectedGroupId: string | null
+  selectedGroupId: string | null,
+  selectedGroupName: string
   setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>,
   setShowInviteToGroup: React.Dispatch<React.SetStateAction<boolean>>
 }
