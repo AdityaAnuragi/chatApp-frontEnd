@@ -39,7 +39,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
   }
 
   function inviteToGroup(groupId: string | null, invitedUserId: string) {
-    if(groupId) {
+    if(groupId && selectedGroupName) {
       socket.emit("inviteUserToGroup", groupId, invitedUserId, selectedGroupName)
     }
   }
@@ -87,7 +87,7 @@ type SearchUsersParams = {
   sender: string
   forCreatingPvtConvo: boolean,
   selectedGroupId: string | null,
-  selectedGroupName: string
+  selectedGroupName: string | null
   setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>,
   setShowInviteToGroup: React.Dispatch<React.SetStateAction<boolean>>
 }

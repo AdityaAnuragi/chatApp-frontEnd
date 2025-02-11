@@ -4,7 +4,7 @@ import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
 
-export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup }: ActiveChatTypes) {
+export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup }: ActiveChatTypes) {
 
   const scrollContainer = useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -48,7 +48,10 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
   return (
     <>
       <div className={styles.container} >
-        <h3 onClick={() => setShowInviteToGroup(true)} className={styles.groupName} >{selectedGroupName}</h3>
+        <div className={styles.backButtonAndConvName} >
+          <button onClick={() => setSelectedGroup(null)} >back</button>
+          <h3 onClick={() => setShowInviteToGroup(true)} className={styles.groupName} >{selectedGroupName}</h3>
+        </div>
         <div className={styles.containerForOverflow} ref={scrollContainer} >
           {allMessages[selectedGroup]?.map((value, index) => {
             return (
@@ -90,5 +93,6 @@ type ActiveChatTypes = {
   draftMsg: string,
   handleSendMsg: (indexOfMessage?: number | undefined) => void,
   handleOnChange: React.ChangeEventHandler<HTMLInputElement>,
-  setShowInviteToGroup: React.Dispatch<React.SetStateAction<boolean>>
+  setShowInviteToGroup: React.Dispatch<React.SetStateAction<boolean>>,
+  setSelectedGroup: React.Dispatch<React.SetStateAction<string | null>>
 }

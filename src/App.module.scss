@@ -7,7 +7,8 @@
 
 .groupListAndActiveChat {
   width: 97vw;
-  height: 55vh;
+  flex-grow: 1;
+  // height: 90vh;
   border: 2px solid black;
 
   margin-left: auto;
@@ -38,7 +39,27 @@
 
 
 .wrapFullScreen {
+  display: flex;
+  flex-direction: column;
+
   width: 98vw;
   height: 96vh;
 }
 
+// @media (max-width: 426px) {
+//   .createGroupAndPvtChatContainer {
+//     visibility: hidden;
+//   }
+// }
+
+.createGroupAndPvtChatContainer {
+  margin-bottom: 0.375rem;
+}
+
+.createConvoButton {
+  background-color: white;
+  height: 2rem;
+  border: 1px solid black;
+  border-radius: 1rem;
+  margin-right: 1rem;
+}

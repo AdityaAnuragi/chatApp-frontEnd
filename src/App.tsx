@@ -25,7 +25,8 @@ const theName = allNames[randomId]
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected)
-  const [sender, setSender] = useState(theName)
+  // const [sender, setSender] = useState(theName)
+  const sender = theName
   const id = randomId
   const [allMessages, setAllMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
@@ -295,11 +296,11 @@ function App() {
     <>
       <div className={styles.wrapFullScreen} >
 
-        {(showSearchUser || showInviteToGroup) && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} forCreatingPvtConvo={showSearchUser} selectedGroupId={selectedGroup} setShowInviteToGroup={setShowInviteToGroup} selectedGroupName={groups[selectedGroup!].name} />}
+        {(showSearchUser || showInviteToGroup) && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} forCreatingPvtConvo={showSearchUser} selectedGroupId={selectedGroup} setShowInviteToGroup={setShowInviteToGroup} selectedGroupName={selectedGroup && groups[selectedGroup].name} />}
         {showCreateGroup && <CreateGroup setShowCreateGroup={setShowCreateGroup} userId={id} />}
 
-        <h2>Connected: {`${isConnected}`}</h2>
-        <label>
+        {(!isConnected) && <h2>You are offline right now</h2>}
+        {/* <label>
           Name
           <input type="text" value={sender} onChange={(e) => setSender(e.target.value)} />
         </label>
@@ -313,15 +314,17 @@ function App() {
         </label>
         <br />
         <br />
-        <br />
+        <br /> */}
 
-        <button onClick={() => socket.connect()} >Connect</button>
+        {/* <button onClick={() => socket.connect()} >Connect</button>
         <button onClick={() => socket.disconnect()} >disconnect</button>
         <br />
-        <br />
+        <br /> */}
 
-        <button onClick={() => setShowCreateGroup(true)} >Create Group</button>
-        <button onClick={() => setShowSearchUser(true)} >Search users</button>
+        <div className={styles.createGroupAndPvtChatContainer} >
+          <button onClick={() => setShowCreateGroup(true)} className={styles.createConvoButton} >Create Group</button>
+          <button onClick={() => setShowSearchUser(true)} className={styles.createConvoButton} >Search users</button>
+        </div>
 
         {/*<button onClick={() => handleRoomJoin("1")} >Join Group one</button>
         <button onClick={() => handleRoomJoin("2")} >Join Group two</button>*/}
@@ -329,7 +332,7 @@ function App() {
         {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
         <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
 
-        {(selectedGroup !== null && window.innerWidth <= 425) && <button onClick={() => setSelectedGroup(null)} >Back</button>}
+        {/* {(selectedGroup !== null && window.innerWidth <= 425) && <button onClick={() => setSelectedGroup(null)} >Back</button>} */}
 
         <div className={`${styles.groupListAndActiveChat}`} >
           {((Object.keys(groups).length !== 0) && ((selectedGroup === null) || window.innerWidth > 425)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />}
@@ -346,6 +349,7 @@ function App() {
                 // handleKeyDown={handleKeyDown}
                 handleOnChange={(e) => setDraftMsg(e.target.value)}
                 setShowInviteToGroup={setShowInviteToGroup}
+                setSelectedGroup={setSelectedGroup}
               />
             </div>
           )}
