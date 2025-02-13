@@ -5,7 +5,14 @@ import { Dispatch, SetStateAction } from "react"
 export function GroupLists({groups, setSelectedGroup, selectedGroup}: GroupListsProps ) {
   return (
     <div className={`${styles.container}`} >
-      {Object.keys(groups).map(group => <div className={`${styles.group} ${group === selectedGroup ? styles.selectedGroup : ""}`} key={group} onClick={() => setSelectedGroup(group)}>{`${groups[group].name}`}</div>)}
+      <div className={styles.routeAndButtonContainer} >
+        <h2>Chats</h2>
+        <div>
+          <button>a</button>
+          <button>b</button>
+        </div>
+      </div>
+      {Object.keys(groups).map((group, index) => <div className={`${styles.group} ${group === selectedGroup ? styles.selectedGroup : ""} ${index === 0 ? styles.firstGroup : ""}`} key={group} onClick={() => setSelectedGroup(group)}>{`${groups[group].name}`}</div>)}
     </div>
   )
 }

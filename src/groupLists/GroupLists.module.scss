@@ -1,16 +1,34 @@
-.container {
-  width: 20%;
+$borderRadius: 1rem;
 
-  
+.container {
+  width: 24%;
+  min-width: 24%;
+
+
   // flex-grow: 1;
   min-height: 98%;
+  max-height: 90vh;
   // border: 2px solid blue;
-  border-width: 0rem 0.0625rem 0rem 0rem;
-  border-style: solid;
-  border-color: black;
-  
+  // border-width: 0rem 0.0625rem 0rem 0rem;
+  // border-style: solid;
+  // border-color: black;
+
+  background-color: rgb(252, 229, 229);
+  border-radius: $borderRadius;
+
+  @media (max-width: 1024px) {
+    width: 30%;
+    min-width: 30%;
+  }
+
+  @media (max-width: 768px) {
+    width: 40%;
+    min-width: 40%;
+  }
+
   @media (max-width: 426px) {
     width: 100%;
+    min-width: 100%;
   }
 }
 
@@ -21,27 +39,56 @@
 .group {
   box-sizing: border-box;
 
-  width: 98%;
+  width: 100%;
+  // height: 3rem;
+  // padding: 0px 5rem;
 
   cursor: pointer;
 
   font-size: 1.3rem;
   text-align: center;
 
-  padding: 0.5rem;
+  padding: 1rem;
 
-  border-width: 0px 0px 0.125rem;
+  border-width: 0px 0px 0.0625rem;
   border-style: solid;
   border-color: grey;
 
-  margin-bottom: 1.2rem;
+  // margin-bottom: 1.2rem;
 
   // border-radius: 2rem;
   // border: 4px solid red;
 
 }
 
+.group:hover {
+  background-color: rgb(208, 254, 208);
+}
+
+
+.firstGroup {
+  // border-top-left-radius: $borderRadius;
+  // border-top-right-radius: $borderRadius;
+  border-width: 0.0625rem 0px;
+  border-style: solid;
+  border-color: grey;
+  // border: 2px solid blue;
+}
 
 .selectedGroup {
-  background-color: rgb(232, 225, 255);
+  background-color: rgb(188, 250, 188);
+  // background-color: rgb(232, 225, 255);
+}
+
+.selectedGroup:hover {
+  background-color: rgb(188, 250, 188);
+}
+
+.routeAndButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 0.5rem;
+  // border: 2px solid blue;
 }
