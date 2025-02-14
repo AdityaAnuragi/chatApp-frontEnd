@@ -15,9 +15,10 @@
 }
 
 .searchFieldAndUserList {
-  border: 2px solid yellow;
+  // border: 2px solid yellow;
   background-color: white;
-
+  border-radius: 1rem;
+  padding: 0.3rem;
   display: flex;
   flex-direction: column;
 
