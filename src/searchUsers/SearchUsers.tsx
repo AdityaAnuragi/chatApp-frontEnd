@@ -64,8 +64,10 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
       <div className={styles.container} onMouseDown={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >
         <div className={styles.searchFieldAndUserList} onMouseDown={e => e.stopPropagation()} >
           <button className={styles.closeButton} onClick={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >X</button>
+          {/* {forCreatingPvtConvo ? <h4>Search for users</h4> :<h4>Add new user to group</h4>} */}
+          <h4 className={styles.information} >{forCreatingPvtConvo ? "Search for users" : "Add new user to group"}</h4>
           <div className={styles.searchInputAndButton} >
-            <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Search for user" autoFocus />
+            <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="eg: Aditya" autoFocus />
             <button className={styles.searchButton} onClick={handleSearch} >Search</button>
           </div>
 
