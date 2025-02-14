@@ -17,10 +17,24 @@ export function CreateGroup( {setShowCreateGroup, userId}: CreateGroupParams ) {
     setShowCreateGroup(false)
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if(e.key === "Enter") {
+      handleClick()
+    }
+  }
+
   return (
     <div className={styles.container} onMouseDown={() => setShowCreateGroup(false)} >
       <div className={styles.inputFieldAndUsers} onMouseDown={e => e.stopPropagation()} >
-        <input type="text" className={styles.inputField} value={groupName} onChange={(e) => setGroupName(e.target.value)} placeholder="Group name" autoFocus />
+        <input
+          type="text"
+          className={styles.inputField}
+          value={groupName}
+          onChange={(e) => setGroupName(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Group name"
+          autoFocus 
+        />
         <button className={styles.button} onClick={handleClick} >Create group</button>
       </div>
     </div>

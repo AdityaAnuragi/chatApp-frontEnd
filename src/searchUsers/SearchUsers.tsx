@@ -53,13 +53,19 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
     }
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if(e.key === "Enter") {
+      handleSearch()
+    }
+  }
+
   return (
     <>
       <div className={styles.container} onMouseDown={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >
         <div className={styles.searchFieldAndUserList} onMouseDown={e => e.stopPropagation()} >
           <button className={styles.closeButton} onClick={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >X</button>
           <div className={styles.searchInputAndButton} >
-            <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} placeholder="Search for user" autoFocus />
+            <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Search for user" autoFocus />
             <button className={styles.searchButton} onClick={handleSearch} >Search</button>
           </div>
 

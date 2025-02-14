@@ -35,6 +35,7 @@ function App() {
   const [showSearchUser, setShowSearchUser] = useState(false)
   const [showCreateGroup, setShowCreateGroup] = useState(false)
   const [showInviteToGroup, setShowInviteToGroup] = useState(false)
+  const [windowSize, setWindowSize] = useState(document.getElementsByTagName("html")[0].clientWidth)
 
   useEffect(() => {
     console.log("A project by Aditya Anuragi")
@@ -174,6 +175,19 @@ function App() {
     }
 
   }, [])
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize(document.getElementsByTagName("html")[0].clientWidth)
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+
+  },[])
 
   function handleSendMsg(indexOfMessage?: number) {
     // let index = -1;
@@ -335,7 +349,7 @@ function App() {
         {/* {(selectedGroup !== null && window.innerWidth <= 425) && <button onClick={() => setSelectedGroup(null)} >Back</button>} */}
 
         <div className={`${styles.groupListAndActiveChat}`} >
-          {((Object.keys(groups).length !== 0) && ((selectedGroup === null) || window.innerWidth > 425)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />}
+          {((Object.keys(groups).length !== 0) && ((selectedGroup === null) || windowSize > 600)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />}
 
           {(selectedGroup !== null) && (selectedGroup) && (
             <div className={`${styles.activeChatWrapper}`} >

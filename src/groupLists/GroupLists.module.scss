@@ -26,8 +26,19 @@ $borderRadius: 1rem;
     min-width: 40%;
   }
 
+  //fix this
+  @media (max-width: 600px) {
+    width: 96%;
+    min-width: 100%;
+
+    // .invisible {
+    //   visibility: hidden;
+    // }
+
+  }
+
   @media (max-width: 426px) {
-    width: 100%;
+    width: 96%;
     min-width: 100%;
   }
 }
@@ -92,3 +103,9 @@ $borderRadius: 1rem;
   margin-bottom: 0.5rem;
   // border: 2px solid blue;
 }
+
+// @media (max-width: 600px) {
+//   .invisible {
+//     visibility: hidden;
+//   }
+// }

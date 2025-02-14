@@ -12,6 +12,7 @@ export function GroupLists({groups, setSelectedGroup, selectedGroup}: GroupLists
           <button>b</button>
         </div>
       </div>
+      {/* ${selectedGroup !== null ? styles.invisible : ""} */}
       {Object.keys(groups).map((group, index) => <div className={`${styles.group} ${group === selectedGroup ? styles.selectedGroup : ""} ${index === 0 ? styles.firstGroup : ""}`} key={group} onClick={() => setSelectedGroup(group)}>{`${groups[group].name}`}</div>)}
     </div>
   )
