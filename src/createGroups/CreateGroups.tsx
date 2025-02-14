@@ -26,13 +26,14 @@ export function CreateGroup( {setShowCreateGroup, userId}: CreateGroupParams ) {
   return (
     <div className={styles.container} onMouseDown={() => setShowCreateGroup(false)} >
       <div className={styles.inputFieldAndUsers} onMouseDown={e => e.stopPropagation()} >
+        <h4 className={styles.information} >Create a new group</h4>
         <input
           type="text"
           className={styles.inputField}
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Group name"
+          placeholder="eg: Project team"
           autoFocus 
         />
         <button className={styles.button} onClick={handleClick} >Create group</button>
