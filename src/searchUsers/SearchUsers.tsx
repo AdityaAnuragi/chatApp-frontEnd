@@ -39,13 +39,13 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
   }
 
   function inviteToGroup(groupId: string | null, invitedUserId: string) {
-    if(groupId && selectedGroupName) {
+    if (groupId && selectedGroupName) {
       socket.emit("inviteUserToGroup", groupId, invitedUserId, selectedGroupName)
     }
   }
 
   function handleClick(newUserId: string, newUserName: string) {
-    if( forCreatingPvtConvo ) {
+    if (forCreatingPvtConvo) {
       createPvtConvo(newUserId, newUserName)
     }
     else {
@@ -57,15 +57,17 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
     <>
       <div className={styles.container} onMouseDown={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >
         <div className={styles.searchFieldAndUserList} onMouseDown={e => e.stopPropagation()} >
+          <button className={styles.closeButton} onClick={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >X</button>
           <div className={styles.searchInputAndButton} >
             <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} placeholder="Search for user" />
-            <button onClick={handleSearch} >Search</button>
+            <button className={styles.searchButton} onClick={handleSearch} >Search</button>
           </div>
 
-          {hasError
-            ? <p>There was an error</p>
-            : users?.length !== 0
-              ? users?.filter(user => `${user.id}` !== `${userId}`).map(user => {
+          <div className={styles.queryResult} >
+            {hasError
+              ? <p>There was an error</p>
+              : users?.length !== 0
+                ? users?.filter(user => `${user.id}` !== `${userId}`).map(user => {
                   return (
                     <div key={user.id} className={styles.userNameAndAddUser} >
                       <p>{user.name}</p>
@@ -73,8 +75,9 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
                     </div>
                   )
                 })
-              : <p>No users found</p>
-          }
+                : <p>No users found</p>
+            }
+          </div>
 
         </div>
       </div>
@@ -93,6 +96,6 @@ type SearchUsersParams = {
 }
 
 type User = {
-  id: string, 
+  id: string,
   name: string
 }

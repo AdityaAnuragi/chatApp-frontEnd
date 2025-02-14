@@ -18,14 +18,24 @@
   border: 2px solid yellow;
   background-color: white;
 
+  display: flex;
+  flex-direction: column;
+
   height: 50%;
-  width: 35%;
+  width: 45%;
 
   margin-top: 10%;
 
-  @media (max-width: 634px) {
-    width: 60%;
+  @media (max-width: 768px) {
+    width: 70%;
     margin-top: 10%;
+  }
+
+  @media (max-width: 425px) {
+    width: 80%;
+    height: 70%;
+    margin-top: 20%;
+    // background-color: blue;
   }
 
 }
@@ -34,8 +44,31 @@
   display: block;
   // margin-left: auto;
   // margin-right: auto;
-  width: 60%;
+  // width: 60%;
+  flex-grow: 1;
+  font-size: 2rem;
+  
+  @media (max-width: 2560px) {
+    max-width: 80%;
+  }
+  @media (max-width: 1440px) {
+    // max-width: 60%;
+    font-size: 1.4rem;
+  }
+
+
+  @media (max-width: 425px) {
+    font-size: 1rem;
+    max-width: 75%;
+    height: 2rem;
+  }
+
+  // height: 2rem;
 }
+
+// .searchButton {
+//   margin-left: 2rem;
+// }
 
 .userNameAndAddUser {
   display: flex;
@@ -56,9 +89,24 @@
 .searchInputAndButton {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
 
   // border: 2px solid blue;
   padding: 0rem 0.75rem;
   margin-top: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.closeButton {
+  display: block;
+  margin-right: auto;
+  width: 2rem;
+  height: 2rem;
+  margin: 0rem 0.75rem;
+}
+
+.queryResult {
+  // max-height: 65%;
+  flex-grow: 1;
+  overflow-y: auto;
 }
