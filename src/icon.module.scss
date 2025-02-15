@@ -1,0 +1,15 @@
+@mixin iconStyles {
+  font-size: 1.5rem;
+  border-radius: 2rem;
+
+  padding: 0.4rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+@mixin iconStylesOnHover {
+  background-color: rgb(206, 199, 199);
+}

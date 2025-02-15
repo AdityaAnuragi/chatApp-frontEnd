@@ -1,3 +1,5 @@
+@import '../icon.module.scss';
+
 $distance-from-message: 0.75rem;
 $border-radius: 0.5rem;
 
@@ -39,7 +41,7 @@ $border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
 
-  border: 2px solid red;
+  // border: 2px solid red;
 }
 
 .inputFieldAndButtonContainer {
@@ -102,5 +104,25 @@ $border-radius: 0.5rem;
 
 .backButtonAndConvName {
   display: flex;
-  
+  align-items: center;
+  // border: 2px solid blue;
+}
+
+.icon {
+  // border: 2px solid red;
+  // font-size: 1.5rem;
+  // border-radius: 2rem;
+
+  // padding: 0.4rem;
+  // margin-left: 0.5rem;
+  // margin-right: 0.5rem;
+
+  // margin-top: auto;
+  // margin-bottom: auto;
+  @include iconStyles;
+}
+
+.icon:hover {
+  // background-color: rgb(206, 199, 199);
+  @include iconStylesOnHover;
 }

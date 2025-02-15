@@ -63,12 +63,14 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
     <>
       <div className={styles.container} onMouseDown={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >
         <div className={styles.searchFieldAndUserList} onMouseDown={e => e.stopPropagation()} >
-          <button className={styles.closeButton} onClick={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >X</button>
+          {/* <button className={styles.closeButton} onClick={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} >X</button> */}
+          <i onClick={() => forCreatingPvtConvo ? setShowSearchUser(false) : setShowInviteToGroup(false)} className={`fa-solid fa-xmark ${styles.icon}`}></i>
           {/* {forCreatingPvtConvo ? <h4>Search for users</h4> :<h4>Add new user to group</h4>} */}
-          <h4 className={styles.information} >{forCreatingPvtConvo ? "Search for users" : "Add new user to group"}</h4>
+          <h2 className={styles.information} >{forCreatingPvtConvo ? "Search for users" : "Add new user to group"}</h2>
           <div className={styles.searchInputAndButton} >
             <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="eg: Aditya" autoFocus />
-            <button className={styles.searchButton} onClick={handleSearch} >Search</button>
+            {/* <button className={styles.searchButton} onClick={handleSearch} >Search</button> */}
+            <i onClick={handleSearch} className={`fa-solid fa-magnifying-glass ${styles.icon}`}></i>
           </div>
 
           <div className={styles.queryResult} >

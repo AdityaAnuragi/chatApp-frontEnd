@@ -314,42 +314,9 @@ function App() {
         {showCreateGroup && <CreateGroup setShowCreateGroup={setShowCreateGroup} userId={id} />}
 
         {(!isConnected) && <h2>You are offline right now</h2>}
-        {/* <label>
-          Name
-          <input type="text" value={sender} onChange={(e) => setSender(e.target.value)} />
-        </label>
-        <br />
-        <br />
-        <br />
-
-        <label>
-          Unique ID
-          <input type="number" readOnly value={id} />
-        </label>
-        <br />
-        <br />
-        <br /> */}
-
-        {/* <button onClick={() => socket.connect()} >Connect</button>
-        <button onClick={() => socket.disconnect()} >disconnect</button>
-        <br />
-        <br /> */}
-
-        <div className={styles.createGroupAndPvtChatContainer} >
-          <button onClick={() => setShowCreateGroup(true)} className={styles.createConvoButton} >Create Group</button>
-          <button onClick={() => setShowSearchUser(true)} className={styles.createConvoButton} >Search users</button>
-        </div>
-
-        {/*<button onClick={() => handleRoomJoin("1")} >Join Group one</button>
-        <button onClick={() => handleRoomJoin("2")} >Join Group two</button>*/}
-
-        {/* <button onClick={() => setSelectedGroup("1")} >Group one chat</button>
-        <button onClick={() => setSelectedGroup("2")} >Group two chat</button> */}
-
-        {/* {(selectedGroup !== null && window.innerWidth <= 425) && <button onClick={() => setSelectedGroup(null)} >Back</button>} */}
 
         <div className={`${styles.groupListAndActiveChat}`} >
-          {((Object.keys(groups).length !== 0) && ((selectedGroup === null) || windowSize > 600)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} />}
+          {((Object.keys(groups).length !== 0) && ((selectedGroup === null) || windowSize > 600)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} setShowCreateGroup={setShowCreateGroup} setShowSearchUser={setShowSearchUser} />}
 
           {(selectedGroup !== null) && (selectedGroup) && (
             <div className={`${styles.activeChatWrapper}`} >
@@ -369,43 +336,6 @@ function App() {
           )}
         </div>
 
-
-        {/* {Object.keys(groups).map(group => {
-        return(
-          <button onClick={() => setSelectedGroup(group)}>{`${groups[group].name}`}</button>
-        )
-      })} */}
-
-        {/* {selectedGroup && <h2>Selected group: {selectedGroup}</h2>} */}
-        <br />
-        {/* <br />
-      <br /> */}
-
-        {/* {(selectedGroup && allMessages[selectedGroup].length !== 0) && allMessages[selectedGroup].map((value, index) => {
-        return (
-          <div className={styles.messageAndTryAgainContainer} >
-            <Message
-              key={value.id}
-              // sender={sender}
-              senderID={value.senderID}
-              userID={id}
-              msg={value.msg.split(": ")[1]}
-              messageStatus={value.messageStatus}
-            // selectedGroup={selectedGroup}
-            />
-            {value.messageStatus === "❌" 
-              && (
-              value.isRetrying
-                ? <p>Retrying...</p>
-                : <button onClick={() => handleSendMsg(index)} >Message failed try again</button> 
-              )
-            }
-          </div>
-        )
-      })} */}
-
-        {/* <input type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={(e) => setDraftMsg(e.target.value)} />
-      <button onClick={() => handleSendMsg()}  >Send message</button> */}
       </div>
     </>
   )

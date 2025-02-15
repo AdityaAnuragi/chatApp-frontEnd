@@ -49,7 +49,8 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
     <>
       <div className={styles.container} >
         <div className={styles.backButtonAndConvName} >
-          <button onClick={() => setSelectedGroup(null)} >back</button>
+          {/* <button onClick={() => setSelectedGroup(null)} >back</button> */}
+          <i onClick={() => setSelectedGroup(null)} tabIndex={0} className={`fa-solid fa-arrow-left ${styles.icon}`}></i>
           <h3 onClick={() => setShowInviteToGroup(true)} className={styles.groupName} >{selectedGroupName}</h3>
         </div>
         <div className={styles.containerForOverflow} ref={scrollContainer} >
@@ -78,7 +79,8 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
         </div>
         <div className={styles.inputFieldAndButtonContainer}>
           <input className={styles.inputField} maxLength={40} placeholder="Type a message" type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={handleOnChange} />
-          <button className={styles.sendButton} onClick={() => handleSendMsg()}  >Send message</button>
+          {/* <button className={styles.sendButton} onClick={() => handleSendMsg()}  >Send message</button> */}
+          <i onClick={() => handleSendMsg()} className={`fa-solid fa-location-arrow ${styles.icon}`}></i>
         </div>
       </div>
     </>

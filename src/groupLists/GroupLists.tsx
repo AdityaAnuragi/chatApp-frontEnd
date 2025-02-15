@@ -2,14 +2,14 @@
 import styles from "./GroupLists.module.scss"
 import { Dispatch, SetStateAction } from "react"
 
-export function GroupLists({groups, setSelectedGroup, selectedGroup}: GroupListsProps ) {
+export function GroupLists({groups, setSelectedGroup, selectedGroup, setShowCreateGroup, setShowSearchUser}: GroupListsProps ) {
   return (
     <div className={`${styles.container}`} >
       <div className={styles.routeAndButtonContainer} >
         <h2>Chats</h2>
         <div>
-          <button>a</button>
-          <button>b</button>
+          <i onClick={() => setShowCreateGroup(true)} className={`fa-solid fa-user-group ${styles.icon}`}></i>
+          <i onClick={() => setShowSearchUser(true)} className={`fa-solid fa-magnifying-glass ${styles.icon}`}></i>
         </div>
       </div>
       {/* ${selectedGroup !== null ? styles.invisible : ""} */}
@@ -22,5 +22,7 @@ export function GroupLists({groups, setSelectedGroup, selectedGroup}: GroupLists
 type GroupListsProps = {
   groups: {[id: string]: {name: string,chatType: "group" | "private"}}, 
   setSelectedGroup: Dispatch<SetStateAction<string | null>>,
-  selectedGroup: string | null
+  selectedGroup: string | null,
+  setShowCreateGroup: React.Dispatch<React.SetStateAction<boolean>>,
+  setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>
 }
