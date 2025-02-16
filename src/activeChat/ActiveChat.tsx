@@ -4,7 +4,7 @@ import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
 
-export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup }: ActiveChatTypes) {
+export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType }: ActiveChatTypes) {
 
   const scrollContainer = useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -16,6 +16,12 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       handleSendMsg()
+    }
+  }
+
+  function handleClick() {
+    if(chatType === "group") {
+      setShowInviteToGroup(true)
     }
   }
 
@@ -51,7 +57,7 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
         <div className={styles.backButtonAndConvName} >
           {/* <button onClick={() => setSelectedGroup(null)} >back</button> */}
           <i onClick={() => setSelectedGroup(null)} tabIndex={0} className={`fa-solid fa-arrow-left ${styles.icon}`}></i>
-          <h3 onClick={() => setShowInviteToGroup(true)} className={styles.groupName} >{selectedGroupName}</h3>
+          <h3 onClick={handleClick} className={chatType === "group" ? styles.groupName : ""} >{selectedGroupName}</h3>
         </div>
         <div className={styles.containerForOverflow} ref={scrollContainer} >
           {allMessages[selectedGroup]?.map((value, index) => {
@@ -70,7 +76,8 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
                   && (
                     value.isRetrying
                       ? <p>Retrying...</p>
-                      : <button onClick={() => handleSendMsg(index)} >Message failed try again</button>
+                      // : <button onClick={() => handleSendMsg(index)} >Message failed try again</button>
+                      : <i onClick={() => handleSendMsg(index)} className={`fa-solid fa-rotate-right ${styles.icon}`}></i>
                   )
                 }
               </div>
@@ -93,6 +100,7 @@ type ActiveChatTypes = {
   selectedGroupName: string
   id: number,
   draftMsg: string,
+  chatType: "group" | "private"
   handleSendMsg: (indexOfMessage?: number | undefined) => void,
   handleOnChange: React.ChangeEventHandler<HTMLInputElement>,
   setShowInviteToGroup: React.Dispatch<React.SetStateAction<boolean>>,

@@ -81,7 +81,8 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
                   return (
                     <div key={user.id} className={styles.userNameAndAddUser} >
                       <p>{user.name}</p>
-                      <button className={styles.addUser} onClick={() => handleClick(user.id, user.name)} >Add user</button>
+                      {/* <button className={styles.addUser} onClick={() => handleClick(user.id, user.name)} >Add user</button> */}
+                      <i onClick={() => handleClick(user.id, user.name)} className={`fa-solid fa-plus ${styles.icon}`}></i>
                     </div>
                   )
                 })

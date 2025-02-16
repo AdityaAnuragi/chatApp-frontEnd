@@ -325,8 +325,9 @@ function App() {
                 id={id}
                 selectedGroup={selectedGroup}
                 selectedGroupName={groups[selectedGroup].name}
-                handleSendMsg={handleSendMsg}
                 draftMsg={draftMsg}
+                chatType={groups[selectedGroup].chatType}
+                handleSendMsg={handleSendMsg}
                 // handleKeyDown={handleKeyDown}
                 handleOnChange={(e) => setDraftMsg(e.target.value)}
                 setShowInviteToGroup={setShowInviteToGroup}
