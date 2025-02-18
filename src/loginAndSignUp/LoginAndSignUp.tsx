@@ -13,7 +13,7 @@ export function LoginAndSignUp() {
   function handleClick() {
     (async () => {
       try {
-      // make the URL as a templete literal string, /signup or /login
+      / make the URL as a templete literal string, /signup or /login
         const response = await fetch("http://localhost:3000/signup", {
           method: "POST",
           body: JSON.stringify({
