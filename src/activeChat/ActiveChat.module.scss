@@ -1,4 +1,4 @@
-@import '../icon.module.scss';
+@use '../icon.module.scss';
 
 $distance-from-message: 0.75rem;
 $border-radius: 0.5rem;
@@ -119,10 +119,10 @@ $border-radius: 0.5rem;
 
   // margin-top: auto;
   // margin-bottom: auto;
-  @include iconStyles;
+  @include icon.iconStyles;
 }
 
 .icon:hover {
   // background-color: rgb(206, 199, 199);
-  @include iconStylesOnHover;
+  @include icon.iconStylesOnHover;
 }

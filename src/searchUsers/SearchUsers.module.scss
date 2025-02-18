@@ -1,4 +1,4 @@
-@import '../icon.module.scss';
+@use '../icon.module.scss';
 
 .container {
   width: 100%;
@@ -122,9 +122,9 @@
 
 .icon {
   width: fit-content;
-  @include iconStyles
+  @include icon.iconStyles
 }
 
 .icon:hover {
-  @include iconStylesOnHover
+  @include icon.iconStylesOnHover
 }

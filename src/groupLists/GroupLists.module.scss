@@ -1,4 +1,4 @@
-@import '../icon.module.scss';
+@use '../icon.module.scss';
 
 $borderRadius: 1rem;
 
@@ -114,9 +114,9 @@ $borderRadius: 1rem;
 
 
 .icon {
-  @include iconStyles
+  @include icon.iconStyles
 }
 
 .icon:hover {
-  @include iconStylesOnHover
+  @include icon.iconStylesOnHover
 }
