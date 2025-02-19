@@ -72,8 +72,12 @@ $font-size: 1.5rem;
 
 .toggleBetweenLoginAndSignUp {
   cursor: pointer;
+  user-select: none;
   text-decoration: underline blue;
   font-size: 1.2rem;
+  width: fit-content;
+  border: 0px;
+  background-color: transparent;
 }
 
 .loginOrSignUpButton {
@@ -84,11 +88,15 @@ $font-size: 1.5rem;
   padding: 0.5rem;
   border: 0px;
   border-radius: 2rem;
-  margin-left: auto;
+  // margin-left: auto;
 
   background-color: rgb(188, 250, 188);
 
   transition: all 0.05s ease-out;
+}
+
+.right {
+  margin-left: auto;
 }
 
 .loginOrSignUpButton:active { 

@@ -5,10 +5,10 @@ export function LoginAndSignUp() {
 
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
-  const [hasError, setHasError] = useState(false)
+  const [error, setError] = useState<"username taken" | "invalid password" | "unexpected error" | "">("")
   const [isSignUp, setIsSignUp] = useState(true)
 
-  / make the error state be more explicit, i.e signUpError or loginError
+  / sign in functionality
 
   function handleClick() {
     (async () => {
@@ -24,14 +24,30 @@ export function LoginAndSignUp() {
             "Content-type": "application/json; charset=UTF-8"
           }
         })
-        console.log(response.ok)
-        if( !(response.ok) ) {
-          throw new Error("An error occured")
+
+        if(response.status === 406) {
+          // incase username is already taken
+          throw new Error("406");
         }
-        setHasError(false)
+        else if( !(response.ok) ) {
+          throw new Error("An unexpected error occured")
+        }
+
+        const userId = await response.json()
+        console.log(`user id is ${userId}`)
+        // console.log(response.ok)
+        setError("")
       }
-      catch {
-        setHasError(true)
+      catch(e) {
+        if(e instanceof Error && e.message === "406") {
+          // console.log(e.name)
+          // console.log(e.stack)
+          // console.log(e.message)
+          setError("username taken")
+        }
+        else {
+          setError("unexpected error")
+        }
       }
 
     })()
@@ -46,7 +62,7 @@ export function LoginAndSignUp() {
   return (
     <div className={styles.container} >
       <div className={styles.form} >
-        <h2 className={styles.loginOrSignUp} >Sign Up</h2>
+        <h2 className={styles.loginOrSignUp} >{isSignUp ? "Sign up" : "Login"}</h2>
         <label className={styles.label} >
           Name
           <input className={styles.inputFields} value={name} onChange={e => setName(e.target.value)} type="text" placeholder="eg: Aditya" />
@@ -57,11 +73,18 @@ export function LoginAndSignUp() {
           <input className={styles.inputFields} value={password} onChange={e => setPassword(e.target.value)} onKeyDown={handleKeyDown} type="password" />
         </label>
 
-        <p className={`${hasError ? "" : styles.invisible} ${styles.ifUserNameTaken}`} >User name already taken</p>
+        <p className={`${error ? "" : styles.invisible} ${styles.ifUserNameTaken}`} >
+          {error === "username taken"
+            ? "Username already taken"
+            : error === "invalid password"
+              ? "Incorrect credentials"
+              : "An unexpected error occured"
+          }
+        </p>
 
-        {<p className={styles.toggleBetweenLoginAndSignUp} onClick={() => setIsSignUp(curr => !curr)} >{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</p>}
+        {<button className={`${styles.toggleBetweenLoginAndSignUp}`} onClick={() => setIsSignUp(curr => !curr)} >{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</button>}
 
-        <button className={styles.loginOrSignUpButton} onClick={handleClick} >
+        <button className={`${styles.loginOrSignUpButton} ${styles.right}`} onClick={handleClick} >
           Sign Up
         </button>
 
