@@ -1,10 +1,12 @@
 import { useState } from "react"
 
-import { socket } from "../socket"
+// import { socket } from "../socket"
 
 import styles from "./CreateGroup.module.scss"
+import { Socket } from "socket.io-client"
+import { ServerToClientEvents, ClientToServerEvents } from "../socket"
 
-export function CreateGroup( {setShowCreateGroup, userId}: CreateGroupParams ) { 
+export function CreateGroup( {setShowCreateGroup, userId, socket}: CreateGroupParams ) { 
 
   const [groupName, setGroupName] = useState("")
 
@@ -45,5 +47,6 @@ export function CreateGroup( {setShowCreateGroup, userId}: CreateGroupParams ) {
 
 type CreateGroupParams = {
   setShowCreateGroup: React.Dispatch<React.SetStateAction<boolean>>,
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>
   userId: number,
 }

@@ -308,8 +308,8 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     <>
       <div className={styles.wrapFullScreen} >
 
-        {(showSearchUser || showInviteToGroup) && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} forCreatingPvtConvo={showSearchUser} selectedGroupId={selectedGroup} setShowInviteToGroup={setShowInviteToGroup} selectedGroupName={selectedGroup && groups[selectedGroup].name} />}
-        {showCreateGroup && <CreateGroup setShowCreateGroup={setShowCreateGroup} userId={id} />}
+        {(showSearchUser || showInviteToGroup) && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} forCreatingPvtConvo={showSearchUser} selectedGroupId={selectedGroup} setShowInviteToGroup={setShowInviteToGroup} selectedGroupName={selectedGroup && groups[selectedGroup].name} socket={socket} />}
+        {showCreateGroup && <CreateGroup setShowCreateGroup={setShowCreateGroup} userId={id} socket={socket} />}
 
         {(!isConnected) && <h2>You are offline right now</h2>}
 

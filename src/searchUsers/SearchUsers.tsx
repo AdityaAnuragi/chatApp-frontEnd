@@ -1,9 +1,11 @@
 import { useState } from "react"
 import styles from "./SearchUsers.module.scss"
+import { Socket } from "socket.io-client"
+import { ClientToServerEvents, ServerToClientEvents } from "../socket"
 
-import { socket } from "../socket"
+// import { socket } from "../socket"
 
-export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtConvo, selectedGroupId, setShowInviteToGroup, selectedGroupName }: SearchUsersParams) {
+export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtConvo, selectedGroupId, setShowInviteToGroup, selectedGroupName, socket }: SearchUsersParams) {
 
   const [searchInput, setSearchInput] = useState("")
   const [hasError, setHasError] = useState(false)
@@ -101,7 +103,8 @@ type SearchUsersParams = {
   sender: string
   forCreatingPvtConvo: boolean,
   selectedGroupId: string | null,
-  selectedGroupName: string | null
+  selectedGroupName: string | null,
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>
   setShowSearchUser: React.Dispatch<React.SetStateAction<boolean>>,
   setShowInviteToGroup: React.Dispatch<React.SetStateAction<boolean>>
 }

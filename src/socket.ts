@@ -1,7 +1,7 @@
-import { io, Socket } from 'socket.io-client';
+// import { io, Socket } from 'socket.io-client';
 
 // "undefined" means the URL will be computed from the `window.location` object
-const URL = 'http://localhost:3000';
+// const URL = 'http://localhost:3000';
 
 export type ServerToClientEvents = {
   message: (sender: string, id: number, msg: string, fromGroup: string) => void,
@@ -25,9 +25,9 @@ export const allNames = ["", "Aditya", "Ben", "Connor"]
 export const randomId = Math.floor(Math.random() * (allNames.length - 1) ) + 1
 // export const theName = allNames[randomId]
 
-export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(URL, {
-  autoConnect: true,
-  query: {
-    userId: randomId
-  }
-});
+// export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(URL, {
+//   autoConnect: true,
+//   query: {
+//     userId: randomId
+//   }
+// });
