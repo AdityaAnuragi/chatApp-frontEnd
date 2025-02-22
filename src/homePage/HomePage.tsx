@@ -3,7 +3,9 @@ import { useEffect, useState } from "react"
 
 import styles from "./HomePage.module.scss"
 
-import { socket, ServerToClientEvents, ParametersToSendMessage, allNames, randomId } from "../socket"
+import { Socket } from 'socket.io-client';
+
+import { ServerToClientEvents, ClientToServerEvents, ParametersToSendMessage } from "../socket"
 import { Message } from "../message/Message"
 import { GroupLists } from "../groupLists/GroupLists"
 import { ActiveChat } from "../activeChat/ActiveChat"
@@ -15,7 +17,7 @@ import { CreateGroup } from "../createGroups/CreateGroups"
 // const allNames = ["Aditya", "Ben", "Connor", "Davey", "Evelyn", "Franklin", "Geralt", "Hank", "Kratos", "Leon", "Markus", "Trevor"]
 // const allNames = ["", "Aditya", "Ben"]
 // const randomId = Math.floor(Math.random() * (allNames.length - 1) ) + 1
-const theName = allNames[randomId]
+// const theName = allNames[randomId]
 // console.log(`index is ${randomId}`)
 // NEXT TASKS: 
 
@@ -23,11 +25,11 @@ const theName = allNames[randomId]
 
 // 2) make it dynamic, make the userId work
 
-export function HomePage() {
+export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClientEvents, ClientToServerEvents>, sender: string, id: number }) {
   const [isConnected, setIsConnected] = useState(socket.connected)
   // const [sender, setSender] = useState(theName)
-  const sender = theName
-  const id = randomId
+  // const sender = theName
+  // const id = randomId
   const [allMessages, setAllMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
@@ -36,10 +38,6 @@ export function HomePage() {
   const [showCreateGroup, setShowCreateGroup] = useState(false)
   const [showInviteToGroup, setShowInviteToGroup] = useState(false)
   const [windowSize, setWindowSize] = useState(document.getElementsByTagName("html")[0].clientWidth)
-
-  useEffect(() => {
-    console.log("A project by Aditya Anuragi")
-  }, [])
 
   useEffect(() => {
     function handleRoomJoin(roomName: string) {
@@ -139,7 +137,7 @@ export function HomePage() {
       socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
       socket.off("makeClientJoinRoom", makeClientJoinRoom)
     }
-  }, [allMessages, groups, id, selectedGroup])
+  }, [allMessages, groups, id, selectedGroup, socket])
 
   useEffect(() => {
     function handleFocus() {
@@ -174,7 +172,7 @@ export function HomePage() {
       window.removeEventListener("online", handleOnline)
     }
 
-  }, [])
+  }, [socket])
 
   useEffect(() => {
     function handleResize() {
@@ -187,7 +185,7 @@ export function HomePage() {
       window.removeEventListener("resize", handleResize)
     }
 
-  },[])
+  }, [])
 
   function handleSendMsg(indexOfMessage?: number) {
     // let index = -1;
@@ -316,11 +314,12 @@ export function HomePage() {
         {(!isConnected) && <h2>You are offline right now</h2>}
 
         <div className={`${styles.groupListAndActiveChat}`} >
-          {((Object.keys(groups).length !== 0) && ((selectedGroup === null) || windowSize > 600)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} setShowCreateGroup={setShowCreateGroup} setShowSearchUser={setShowSearchUser} />}
+          {((selectedGroup === null) || (windowSize > 600)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} setShowCreateGroup={setShowCreateGroup} setShowSearchUser={setShowSearchUser} />}
 
           {(selectedGroup !== null) && (selectedGroup) && (
             <div className={`${styles.activeChatWrapper}`} >
               <ActiveChat
+                key={selectedGroup}
                 allMessages={allMessages}
                 id={id}
                 selectedGroup={selectedGroup}

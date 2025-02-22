@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { Chats } from "../App"
+import { Chats } from "../homePage/HomePage"
 import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"

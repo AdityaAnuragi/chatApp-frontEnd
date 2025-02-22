@@ -25,7 +25,7 @@ $buttonAndInputHeight: 3rem;
   width: 15%;
   padding: 0rem 2rem;
 
-  margin-top: 10%;
+  margin-top: 20vh;
 
   display: flex;
   flex-direction: column;
@@ -35,19 +35,19 @@ $buttonAndInputHeight: 3rem;
   @media (max-width: 1440px) {
     width: 25%;
     height: 18%;
-    margin-top: 20%;
+    // margin-top: 20%;
   }
 
   @media (max-width: 1024px) {
     width: 30%;
     height: 18%;
-    margin-top: 30%;
+    // margin-top: 30%;
   }
 
   @media (max-width: 768px) {
     width: 35%;
     height: 18%;
-    margin-top: 40%;
+    // margin-top: 40%;
   }
 
   @media (max-width: 600px) {
@@ -56,7 +56,7 @@ $buttonAndInputHeight: 3rem;
     // flex-direction: column;
 
     width: 70%;
-    margin-top: 60%;
+    // margin-top: 60%;
     // height: 75%;
 
   }

@@ -1,20 +1,23 @@
 import { useState } from "react"
 import styles from "./LoginAndSignUp.module.scss"
 
-export function LoginAndSignUp() {
+export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userId: number) => void, name: string, setName: React.Dispatch<React.SetStateAction<string>> }) {
 
-  const [name, setName] = useState("")
+  // const [name, setName] = useState("Aditya")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<"username taken" | "invalid password" | "unexpected error" | "">("")
   const [isSignUp, setIsSignUp] = useState(true)
 
-  / sign in functionality
+  // sign in functionality
 
   function handleClick() {
+
+    setError("");
+
     (async () => {
       try {
-      / make the URL as a templete literal string, /signup or /login
-        const response = await fetch("http://localhost:3000/signup", {
+        // make the URL as a templete literal string, /signup or /login
+        const response = await fetch(`http://localhost:3000/${isSignUp ? "signup" : "signin"}`, {
           method: "POST",
           body: JSON.stringify({
             name,
@@ -25,21 +28,22 @@ export function LoginAndSignUp() {
           }
         })
 
-        if(response.status === 406) {
+        if (response.status === 406) {
           // incase username is already taken
           throw new Error("406");
         }
-        else if( !(response.ok) ) {
+        else if (!(response.ok)) {
           throw new Error("An unexpected error occured")
         }
 
         const userId = await response.json()
         console.log(`user id is ${userId}`)
         // console.log(response.ok)
+        logInUser(Number(userId))
         setError("")
       }
-      catch(e) {
-        if(e instanceof Error && e.message === "406") {
+      catch (e) {
+        if (e instanceof Error && e.message === "406") {
           // console.log(e.name)
           // console.log(e.stack)
           // console.log(e.message)
@@ -54,7 +58,7 @@ export function LoginAndSignUp() {
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if(e.key === "Enter") {
+    if (e.key === "Enter") {
       handleClick()
     }
   }
@@ -82,10 +86,10 @@ export function LoginAndSignUp() {
           }
         </p>
 
-        {<button className={`${styles.toggleBetweenLoginAndSignUp}`} onClick={() => setIsSignUp(curr => !curr)} >{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</button>}
+        {<button className={`${styles.toggleBetweenLoginAndSignUp}`} onClick={() => {setIsSignUp(curr => !curr);setError("")}} >{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</button>}
 
         <button className={`${styles.loginOrSignUpButton} ${styles.right}`} onClick={handleClick} >
-          Sign Up
+          {isSignUp ? "Sign Up" : "Login"}
         </button>
 
       </div>

@@ -1,10 +1,35 @@
-// import { HomePage } from "./homePage/HomePage"
+import { useEffect, useState } from "react"
 
+import { HomePage } from "./homePage/HomePage"
 import { LoginAndSignUp } from "./loginAndSignUp/LoginAndSignUp"
 
+import { io, Socket } from 'socket.io-client';
+import { ServerToClientEvents, ClientToServerEvents } from "./socket";
 
 function App() {
-  return <LoginAndSignUp />
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userId, setUserId] = useState(-1)
+  const [name, setName] = useState("")
+  const URL = "http://localhost:3000"
+
+  useEffect(() => {
+    console.log("A project by Aditya Anuragi")
+  }, [])
+
+  const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(URL, {
+    autoConnect: true,
+    query: {
+      userId
+    }
+  });
+
+  function logInUser(userId: number) {
+    // console.log(`The number is ${userId}`)
+    setUserId(userId)
+    setIsLoggedIn(true)
+  }
+
+  return isLoggedIn ? <HomePage socket={socket} id={userId} sender={name} key={`${isLoggedIn}`} /> : <LoginAndSignUp logInUser={logInUser} name={name} setName={setName} key={`${isLoggedIn}`} />
 }
 
 export default App
