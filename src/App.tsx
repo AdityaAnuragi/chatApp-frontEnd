@@ -10,7 +10,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userId, setUserId] = useState(-1)
   const [name, setName] = useState("")
-  const URL = "http://localhost:3000"
+  const URL = "https://chatapp-server-3x2r.onrender.com"
 
   const socket = useRef<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null)
 
