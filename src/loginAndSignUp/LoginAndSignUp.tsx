@@ -69,7 +69,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
         <h2 className={styles.loginOrSignUp} >{isSignUp ? "Sign up" : "Login"}</h2>
         <label className={styles.label} >
           Name
-          <input className={styles.inputFields} value={name} onChange={e => setName(e.target.value)} type="text" placeholder="eg: Aditya" />
+          <input className={styles.inputFields} value={name} onChange={e => setName(e.target.value)} type="text" placeholder="eg: Aditya" maxLength={100} />
         </label>
 
         <label className={styles.label} >

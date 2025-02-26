@@ -36,6 +36,7 @@ export function CreateGroup( {setShowCreateGroup, userId, socket}: CreateGroupPa
           onChange={(e) => setGroupName(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="eg: Project team"
+          maxLength={100}
           autoFocus 
         />
         <button className={styles.button} onClick={handleClick} >Create group</button>
