@@ -244,12 +244,11 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
         return
       }
 
-      console.log(`Trial attempt: ${totalTries - maxTries + 1}`)
-      socket.timeout(4000).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, response, cryptoId, selectedGroup) => {
-        console.log(`The status is ${response}`)
-
+      // console.log(`Trial attempt: ${totalTries - maxTries + 1}`)
+      socket.timeout(4000).emit("message", sender, id, msg, selectedGroup, cryptoId, (error, _response, cryptoId, selectedGroup) => {
+        // console.log(`The status is ${response}`)
         if (error) {
-          console.log("there was an error, trying again")
+          // console.log("there was an error, trying again")
           // console.log(`Retry crypto id is ${cryptoId}`)
           retryMessage(sender, id, draftMsg, nonNullSelectedGroup, theActualCryptoId, maxTries - 1)
         }
