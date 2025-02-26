@@ -17,7 +17,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
     (async () => {
       try {
         // make the URL as a templete literal string, /signup or /login
-        const response = await fetch(`http://localhost:3000/${isSignUp ? "signup" : "signin"}`, {
+        const response = await fetch(`https://chatapp-server-3x2r.onrender.com/${isSignUp ? "signup" : "signin"}`, {
           method: "POST",
           body: JSON.stringify({
             name,
