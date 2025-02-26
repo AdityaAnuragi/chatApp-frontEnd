@@ -21,7 +21,7 @@ $buttonAndInputHeight: 3rem;
   background-color: white;
   border-radius: 1rem;
 
-  height: 23%;
+  height: 15rem;
   width: 15%;
   padding: 0rem 2rem;
 
@@ -34,19 +34,19 @@ $buttonAndInputHeight: 3rem;
 
   @media (max-width: 1440px) {
     width: 25%;
-    height: 18%;
+    // height: 18%;
     // margin-top: 20%;
   }
 
   @media (max-width: 1024px) {
     width: 30%;
-    height: 18%;
+    // height: 18%;
     // margin-top: 30%;
   }
 
   @media (max-width: 768px) {
     width: 35%;
-    height: 18%;
+    // height: 18%;
     // margin-top: 40%;
   }
 

@@ -8,6 +8,8 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
 
   const scrollContainer = useRef() as React.MutableRefObject<HTMLDivElement>
 
+  const inputField = useRef() as React.MutableRefObject<HTMLDivElement>
+
   // function scrollDownAndSendMsg() {
   //   scrollContainer.current.scrollTo(0,scrollContainer.current.scrollHeight + 100)
   //   handleSendMsg()
@@ -87,7 +89,7 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
         <div className={styles.inputFieldAndButtonContainer}>
           <input className={styles.inputField} maxLength={40} placeholder="Type a message" type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={handleOnChange} />
           {/* <button className={styles.sendButton} onClick={() => handleSendMsg()}  >Send message</button> */}
-          <i onClick={() => handleSendMsg()} className={`fa-solid fa-location-arrow ${styles.icon}`}></i>
+          <i ref={inputField} onClick={() => handleSendMsg()} className={`fa-solid fa-location-arrow ${styles.icon}`}></i>
         </div>
       </div>
     </>
