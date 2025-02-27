@@ -86,20 +86,20 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
       })
     }
 
-    const handleGetMissedMessages: ServerToClientEvents["getMissedMessages"] = (message) => {
-      // console.log(`message on online is`)
-      // console.log(message)
+    // const handleGetMissedMessages: ServerToClientEvents["getMissedMessages"] = (message) => {
+    //   // console.log(`message on online is`)
+    //   // console.log(message)
 
-      Object.keys(message).forEach(group => {
-        message[group].forEach(message => {
-          message.isRetrying = false
-          message.messageStatus = "✅"
-        })
-      })
+    //   Object.keys(message).forEach(group => {
+    //     message[group].forEach(message => {
+    //       message.isRetrying = false
+    //       message.messageStatus = "✅"
+    //     })
+    //   })
 
-      setAllMessages(message)
+    //   setAllMessages(message)
 
-    }
+    // }
 
     const handleGetGroupIdsAndNames: ServerToClientEvents["getGroupIdsAndNames"] = (groupIdsAndName) => {
       // console.log("the groups are: ")
