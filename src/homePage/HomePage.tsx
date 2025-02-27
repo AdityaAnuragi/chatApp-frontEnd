@@ -125,7 +125,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     socket.on("message", handleMessageReceived)
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
-    socket.on("getMissedMessages", handleGetMissedMessages);
+    // socket.on("getMissedMessages", handleGetMissedMessages);
     socket.on("getGroupIdsAndNames", handleGetGroupIdsAndNames)
     socket.on("makeClientJoinRoom", makeClientJoinRoom)
 
@@ -133,7 +133,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
       socket.off("message", handleMessageReceived)
-      socket.off("getMissedMessages", handleGetMissedMessages);
+      // socket.off("getMissedMessages", handleGetMissedMessages);
       socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
       socket.off("makeClientJoinRoom", makeClientJoinRoom)
     }
