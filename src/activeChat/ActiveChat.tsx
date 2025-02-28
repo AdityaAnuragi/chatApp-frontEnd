@@ -39,6 +39,14 @@ export function ActiveChat({ allMessages, failedMessages, selectedGroup, selecte
   }, [allMessages])
 
   // useEffect(() => {
+  //   if(isConnected) {
+  //     (failedMessages[selectedGroup] || []).forEach((_message, index) => {
+  //       handleSendMsg(index + allMessages[selectedGroup].length)
+  //     })
+  //   }
+  // },[allMessages, failedMessages, handleSendMsg, isConnected, selectedGroup])
+
+  // useEffect(() => {
   //   function handleBeforeUnload(e: HashChangeEvent) {
   //     e.preventDefault()
   //     alert("back button pressed")
@@ -62,7 +70,7 @@ export function ActiveChat({ allMessages, failedMessages, selectedGroup, selecte
           <h3 onClick={handleClick} className={chatType === "group" ? styles.groupName : ""} >{selectedGroupName}</h3>
         </div>
         <div className={styles.containerForOverflow} ref={scrollContainer} >
-          {[...allMessages[selectedGroup], ...failedMessages[selectedGroup]].map((value, index) => {
+          {[...allMessages[selectedGroup], ...failedMessages[selectedGroup] || []].map((value, index) => {
             return (
               <div className={`${styles.messageAndTryAgainContainer} ${value.senderID === id ? styles.rightSide : styles.leftSide}`} >
                 <Message

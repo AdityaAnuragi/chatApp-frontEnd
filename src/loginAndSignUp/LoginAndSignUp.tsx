@@ -37,7 +37,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
         }
 
         const userId = await response.json()
-        console.log(`user id is ${userId}`)
+        // console.log(`user id is ${userId}`)
         // console.log(response.ok)
         logInUser(Number(userId))
         setError("")
@@ -85,8 +85,8 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
               : "An unexpected error occured"
           }
         </p>
-
-        {<button className={`${styles.toggleBetweenLoginAndSignUp}`} onClick={() => {setIsSignUp(curr => !curr);setError("")}} >{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</button>}
+        
+        <button className={`${styles.toggleBetweenLoginAndSignUp}`} onClick={() => {setIsSignUp(curr => !curr);setError("")}} >{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</button>
 
         <button className={`${styles.loginOrSignUpButton} ${styles.right}`} onClick={handleClick} >
           {isSignUp ? "Sign Up" : "Login"}
