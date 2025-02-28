@@ -31,6 +31,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
   // const sender = theName
   // const id = randomId
   const [allMessages, setAllMessages] = useState<Chats>({})
+  const [failedMessage, setFailedMessage] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
   const [groups, setGroups] = useState<Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]>({})
@@ -86,20 +87,20 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
       })
     }
 
-    // const handleGetMissedMessages: ServerToClientEvents["getMissedMessages"] = (message) => {
-    //   // console.log(`message on online is`)
-    //   // console.log(message)
+    const handleGetMissedMessages: ServerToClientEvents["getMissedMessages"] = (message) => {
+      // console.log(`message on online is`)
+      // console.log(message)
 
-    //   Object.keys(message).forEach(group => {
-    //     message[group].forEach(message => {
-    //       message.isRetrying = false
-    //       message.messageStatus = "✅"
-    //     })
-    //   })
+      Object.keys(message).forEach(group => {
+        message[group].forEach(message => {
+          message.isRetrying = false
+          message.messageStatus = "✅"
+        })
+      })
 
-    //   setAllMessages(message)
+      setAllMessages(message)
 
-    // }
+    }
 
     const handleGetGroupIdsAndNames: ServerToClientEvents["getGroupIdsAndNames"] = (groupIdsAndName) => {
       // console.log("the groups are: ")
@@ -125,7 +126,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     socket.on("message", handleMessageReceived)
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
-    // socket.on("getMissedMessages", handleGetMissedMessages);
+    socket.on("getMissedMessages", handleGetMissedMessages);
     socket.on("getGroupIdsAndNames", handleGetGroupIdsAndNames)
     socket.on("makeClientJoinRoom", makeClientJoinRoom)
 
@@ -133,7 +134,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
       socket.off("message", handleMessageReceived)
-      // socket.off("getMissedMessages", handleGetMissedMessages);
+      socket.off("getMissedMessages", handleGetMissedMessages);
       socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
       socket.off("makeClientJoinRoom", makeClientJoinRoom)
     }
@@ -232,12 +233,19 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     const retryMessage = (sender: ParametersToSendMessage[0], id: ParametersToSendMessage[1], msg: ParametersToSendMessage[2], selectedGroup: ParametersToSendMessage[3], cryptoId: ParametersToSendMessage[4], maxTries = totalTries) => {
       if (maxTries === 0) {
         // console.log("I can no longer try to send the message")
-
+        let deleteElement: Message;
         setAllMessages((prev) => {
           const copy = JSON.parse(JSON.stringify(prev)) as Chats
           const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
-          copy[selectedGroup][index].messageStatus = "❌"
-          copy[selectedGroup][index].isRetrying = false
+          // copy[selectedGroup][index].messageStatus = "❌"
+          // copy[selectedGroup][index].isRetrying = false
+          deleteElement = copy[selectedGroup].splice(index, 1)[0]
+          return copy
+        })
+
+        setFailedMessage(prev => {
+          const copy = JSON.parse(JSON.stringify(prev)) as Chats
+          copy[selectedGroup].push(deleteElement)
           return copy
         })
 
@@ -320,6 +328,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
               <ActiveChat
                 key={selectedGroup}
                 allMessages={allMessages}
+                failedMessages={failedMessage}
                 id={id}
                 selectedGroup={selectedGroup}
                 selectedGroupName={groups[selectedGroup].name}

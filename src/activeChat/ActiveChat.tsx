@@ -4,7 +4,7 @@ import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
 
-export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType }: ActiveChatTypes) {
+export function ActiveChat({ allMessages, failedMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType }: ActiveChatTypes) {
 
   const scrollContainer = useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -62,7 +62,7 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
           <h3 onClick={handleClick} className={chatType === "group" ? styles.groupName : ""} >{selectedGroupName}</h3>
         </div>
         <div className={styles.containerForOverflow} ref={scrollContainer} >
-          {allMessages[selectedGroup]?.map((value, index) => {
+          {[...allMessages[selectedGroup], ...failedMessages[selectedGroup]].map((value, index) => {
             return (
               <div className={`${styles.messageAndTryAgainContainer} ${value.senderID === id ? styles.rightSide : styles.leftSide}`} >
                 <Message
@@ -98,6 +98,7 @@ export function ActiveChat({ allMessages, selectedGroup, selectedGroupName, id, 
 
 type ActiveChatTypes = {
   allMessages: Chats,
+  failedMessages: Chats,
   selectedGroup: string,
   selectedGroupName: string
   id: number,
