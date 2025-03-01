@@ -7,13 +7,13 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
   const [password, setPassword] = useState("")
   const [error, setError] = useState<"username taken" | "invalid password" | "unexpected error" | "">("")
   const [isSignUp, setIsSignUp] = useState(true)
-
+  const [isLoading, setIsLoading] = useState(false)
   // sign in functionality
 
   function handleClick() {
 
     setError("");
-
+    setIsLoading(true);
     (async () => {
       try {
         // make the URL as a templete literal string, /signup or /login
@@ -40,6 +40,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
         // console.log(`user id is ${userId}`)
         // console.log(response.ok)
         logInUser(Number(userId))
+        setIsLoading(false)
         setError("")
       }
       catch (e) {
@@ -52,6 +53,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
         else {
           setError("unexpected error")
         }
+        setIsLoading(false)
       }
 
     })()
@@ -89,7 +91,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
         <button className={`${styles.toggleBetweenLoginAndSignUp}`} onClick={() => {setIsSignUp(curr => !curr);setError("")}} >{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</button>
 
         <button className={`${styles.loginOrSignUpButton} ${styles.right}`} onClick={handleClick} >
-          {isSignUp ? "Sign Up" : "Login"}
+          {isLoading ? "Loading..." : isSignUp ? "Sign Up" : "Login"}
         </button>
 
       </div>
