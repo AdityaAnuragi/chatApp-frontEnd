@@ -17,7 +17,7 @@ export function ActiveChat({ allMessages, failedMessages, selectedGroup, selecte
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      handleSendMsg()
+      handleSendMsg(selectedGroup)
     }
   }
 
@@ -87,7 +87,7 @@ export function ActiveChat({ allMessages, failedMessages, selectedGroup, selecte
                     value.isRetrying
                       ? <p>Retrying...</p>
                       // : <button onClick={() => handleSendMsg(index)} >Message failed try again</button>
-                      : <i onClick={() => handleSendMsg(index)} className={`fa-solid fa-rotate-right ${styles.icon}`}></i>
+                      : <i onClick={() => handleSendMsg(selectedGroup, index)} className={`fa-solid fa-rotate-right ${styles.icon}`}></i>
                   )
                 }
               </div>
@@ -97,7 +97,7 @@ export function ActiveChat({ allMessages, failedMessages, selectedGroup, selecte
         <div className={styles.inputFieldAndButtonContainer}>
           <input className={styles.inputField} maxLength={40} placeholder="Type a message" type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={handleOnChange} />
           {/* <button className={styles.sendButton} onClick={() => handleSendMsg()}  >Send message</button> */}
-          <i ref={inputField} onClick={() => handleSendMsg()} className={`fa-solid fa-location-arrow ${styles.icon}`}></i>
+          <i ref={inputField} onClick={() => handleSendMsg(selectedGroup)} className={`fa-solid fa-location-arrow ${styles.icon}`}></i>
         </div>
       </div>
     </>
@@ -112,7 +112,7 @@ type ActiveChatTypes = {
   id: number,
   draftMsg: string,
   chatType: "group" | "private"
-  handleSendMsg: (indexOfMessage?: number | undefined) => void,
+  handleSendMsg: (selectedGroup: string, indexOfMessage?: number | undefined) => void,
   handleOnChange: React.ChangeEventHandler<HTMLInputElement>,
   setShowInviteToGroup: React.Dispatch<React.SetStateAction<boolean>>,
   setSelectedGroup: React.Dispatch<React.SetStateAction<string | null>>

@@ -185,7 +185,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
 
   }, [])
 
-  function handleSendMsg(indexOfMessage?: number) {
+  function handleSendMsg(selectedGroup: string, indexOfMessage?: number) {
     // let index = -1;
     // console.log(`isRetry: ${isRetry}`)
     // console.log(`index: ${indexOfMessage !== undefined}`)
