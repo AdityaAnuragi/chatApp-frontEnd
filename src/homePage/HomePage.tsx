@@ -252,9 +252,6 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
             deleteElement = copy[selectedGroup].splice(index, 1)[0]
             return copy
           })
-        }
-
-        if(indexOfMessage === undefined) {
           setFailedMessage(prev => {
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
             if(copy[selectedGroup] === undefined) {
@@ -264,6 +261,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
             return copy
           })
         }
+        
         else {
           setFailedMessage(prev => {
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
