@@ -11,6 +11,7 @@ import { GroupLists } from "../groupLists/GroupLists"
 import { ActiveChat } from "../activeChat/ActiveChat"
 import { SearchUsers } from "../searchUsers/SearchUsers"
 import { CreateGroup } from "../createGroups/CreateGroups"
+import { usePrevious } from "../custom hooks/usePrev";
 
 
 
@@ -27,8 +28,12 @@ import { CreateGroup } from "../createGroups/CreateGroups"
 
 export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClientEvents, ClientToServerEvents>, sender: string, id: number }) {
   const [isConnected, setIsConnected] = useState(socket.connected)
-  const [allMessages, setAllMessages] = useState<Chats>({})
+  // failedMessage state needs to be on top of allMessages since these states are updated together by React and I need to delete from 
+  // failedMessage first it's necessary to put failedMessage on top first
+  // otherwise allMessages is set first and nothing has been deleted from failedMessage yet so it messes up the updates
+  // I found this out by seeing the ordering of the console logs
   const [failedMessage, setFailedMessage] = useState<Chats>({})
+  const [allMessages, setAllMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
   const [groups, setGroups] = useState<Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]>({})
@@ -36,6 +41,8 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
   const [showCreateGroup, setShowCreateGroup] = useState(false)
   const [showInviteToGroup, setShowInviteToGroup] = useState(false)
   const [windowSize, setWindowSize] = useState(document.getElementsByTagName("html")[0].clientWidth)
+
+  const prevIsConnected = usePrevious(isConnected)
 
   useEffect(() => {
     function handleRoomJoin(roomName: string) {
@@ -187,6 +194,9 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
 
   function handleSendMsg(selectedGroup: string, indexOfMessage?: number) {
     // let index = -1;
+    // console.log(`index that's used ${allMessages[selectedGroup!].length - indexOfMessage!}`)
+    // console.log("event handler")
+    // console.log(JSON.parse(JSON.stringify(failedMessage)))
     // console.log(`isRetry: ${isRetry}`)
     // console.log(`index: ${indexOfMessage !== undefined}`)
     // console.log("")
@@ -301,15 +311,21 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
 
           else {
             let deleteElement: Message;
-
             setFailedMessage(prev => {
+              // console.log(JSON.parse(JSON.stringify(prev)))
+
               const copy = JSON.parse(JSON.stringify(prev)) as Chats
-              deleteElement = copy[selectedGroup].splice(allMessages[selectedGroup!].length - indexOfMessage!, 1)[0]
+              deleteElement = copy[selectedGroup].splice(0, 1)[0]
+
+              // console.log(deleteElement)
               return copy
             })
 
             setAllMessages(prev => {
+              // console.log(JSON.parse(JSON.stringify(prev)))
               const copy = JSON.parse(JSON.stringify(prev)) as Chats
+
+              // console.log(deleteElement)
               copy[selectedGroup].push({...deleteElement, messageStatus: "✅"})
               return copy
             })
@@ -327,7 +343,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     retryMessage(sender, id, (indexOfMessage !== undefined) ? failedMessage[selectedGroup!][allMessages[selectedGroup!].length - indexOfMessage!].msg.split(": ")[1] : draftMsg, nonNullSelectedGroup, cryptoId)
 
     // socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, cryptoId, (response, cryptoId, selectedGroup) => {
-    //   // console.log(`The status is ${response.status}`)
+    //   console.log(`The status is ${response.status}`)
 
     //   if (response.status === "ok") {
     //     setAllMessages((prev) => {
@@ -368,6 +384,8 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
             <div className={`${styles.activeChatWrapper}`} >
               <ActiveChat
                 key={selectedGroup}
+                prevIsConnected={prevIsConnected}
+                isConnected={isConnected}
                 allMessages={allMessages}
                 failedMessages={failedMessage}
                 // isConnected={isConnected}

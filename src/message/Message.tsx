@@ -14,13 +14,13 @@ export function Message({senderID, userID, msg, messageStatus}: MessageProps) {
   // const emitEvent = useRef( (userID === senderID) && true )
 
   // useEffect(() => {
-  //   // console.log(`Should an event be emitted: ${emitEvent.current}`)
+  //   console.log(`Should an event be emitted: ${emitEvent.current}`)
 
   //   if(emitEvent.current) {
   //     console.log("I am emitting a message!")
   //     console.log(`Value is ${emitEvent.current}`)
   //     socket.emit("message", sender, senderID, msg, selectedGroup, (response) => {
-  //       // console.log(`The status is ${response.status}`)
+  //       console.log(`The status is ${response.status}`)
   //       if(response.status === "ok") {
   //         setIsSent(true)
   //       }
