@@ -32,8 +32,8 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
   // failedMessage first it's necessary to put failedMessage on top first
   // otherwise allMessages is set first and nothing has been deleted from failedMessage yet so it messes up the updates
   // I found this out by seeing the ordering of the console logs
-  const [failedMessage, setFailedMessage] = useState<Chats>({})
-  const [allMessages, setAllMessages] = useState<Chats>({})
+  const [unsentMessages, setUnsentMessages] = useState<Chats>({})
+  const [sentMessages, setSentMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
   const [groups, setGroups] = useState<Parameters<ServerToClientEvents["getGroupIdsAndNames"]>[0]>({})
@@ -47,7 +47,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
   useEffect(() => {
     function handleRoomJoin(roomName: string) {
       socket.emit("joinRoom", roomName)
-      setAllMessages(prev => {
+      setSentMessages(prev => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
         // console.log(`${roomName} is the roomName`)
         if (copy[roomName] === undefined) {
@@ -67,7 +67,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
       // }
       // console.log("groups to join")
       // console.log(Object.keys(allMessages))
-      Object.keys(allMessages).forEach(group => {
+      Object.keys(sentMessages).forEach(group => {
         socket.emit("joinRoom", group)
       })
 
@@ -81,7 +81,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     const handleMessageReceived: ServerToClientEvents["message"] = (sender, idReceived, msg, fromGroup) => {
       if (idReceived === id) return
 
-      setAllMessages((curr) => {
+      setSentMessages((curr) => {
         // console.log("setting this state")
         const copy = JSON.parse(JSON.stringify(curr)) as Chats
         // copy.push({msg: `${sender}: ${msg}`, id: self.crypto.randomUUID(), senderID: idReceived})
@@ -102,7 +102,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
         })
       })
 
-      setAllMessages(message)
+      setSentMessages(message)
 
     }
 
@@ -142,7 +142,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
       socket.off("getGroupIdsAndNames", handleGetGroupIdsAndNames)
       socket.off("makeClientJoinRoom", makeClientJoinRoom)
     }
-  }, [allMessages, groups, id, selectedGroup, socket])
+  }, [sentMessages, groups, id, selectedGroup, socket])
 
   useEffect(() => {
     function handleFocus() {
@@ -212,7 +212,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     // and 0 index of failedMessage (with combined map method) ends up becoming allMessages[selectedGroup].length + actualIndex (say 0)
     // so to access the correct thing I need to subtract the length of the allMessages[selectedGroup]
 
-    const cryptoId = (indexOfMessage !== undefined) ? failedMessage[selectedGroup!][allMessages[selectedGroup!].length - indexOfMessage!].id : self.crypto.randomUUID()
+    const cryptoId = (indexOfMessage !== undefined) ? unsentMessages[selectedGroup!][sentMessages[selectedGroup!].length - indexOfMessage!].id : self.crypto.randomUUID()
 
     // console.log(`cryptoId is ${cryptoId}`)
 
@@ -221,7 +221,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     // console.log("")
 
     if (indexOfMessage === undefined) {
-      setFailedMessage((prev) => {
+      setUnsentMessages((prev) => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
         const nonNullSelectedGroup = selectedGroup!
 
@@ -234,13 +234,13 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     }
 
     else {
-      setFailedMessage((prev) => {
+      setUnsentMessages((prev) => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
         const nonNullSelectedGroup = selectedGroup!
         // copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗", isRetrying: false })
         // index -= 1
         // console.log("setting isRetying to true")
-        copy[nonNullSelectedGroup][allMessages[selectedGroup!].length - indexOfMessage!].isRetrying = true
+        copy[nonNullSelectedGroup][sentMessages[selectedGroup!].length - indexOfMessage!].isRetrying = true
         return copy
       })
     }
@@ -265,7 +265,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
           //   deleteElement = copy[selectedGroup].splice(index, 1)[0]
           //   return copy
           // })
-          setFailedMessage(prev => {
+          setUnsentMessages(prev => {
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
             if (copy[selectedGroup] === undefined) {
               copy[selectedGroup] = []
@@ -278,9 +278,9 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
         }
 
         else {
-          setFailedMessage(prev => {
+          setUnsentMessages(prev => {
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
-            copy[selectedGroup][allMessages[selectedGroup!].length - indexOfMessage!].isRetrying = false
+            copy[selectedGroup][sentMessages[selectedGroup!].length - indexOfMessage!].isRetrying = false
             return copy
           })
         }
@@ -332,7 +332,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
 
           // else {
           let deleteElement: Message;
-          setFailedMessage(prev => {
+          setUnsentMessages(prev => {
             // console.log(JSON.parse(JSON.stringify(prev)))
 
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
@@ -343,7 +343,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
             return copy
           })
 
-          setAllMessages(prev => {
+          setSentMessages(prev => {
             // console.log(JSON.parse(JSON.stringify(prev)))
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
 
@@ -362,7 +362,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     // console.log(`index: ${indexOfMessage !== undefined}`)
     // console.log("")
 
-    retryMessage(sender, id, (indexOfMessage !== undefined) ? failedMessage[selectedGroup!][allMessages[selectedGroup!].length - indexOfMessage!].msg.split(": ")[1] : draftMsg, nonNullSelectedGroup, cryptoId)
+    retryMessage(sender, id, (indexOfMessage !== undefined) ? unsentMessages[selectedGroup!][sentMessages[selectedGroup!].length - indexOfMessage!].msg.split(": ")[1] : draftMsg, nonNullSelectedGroup, cryptoId)
 
     // socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, cryptoId, (response, cryptoId, selectedGroup) => {
     //   console.log(`The status is ${response.status}`)
@@ -408,8 +408,8 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
                 key={selectedGroup}
                 prevIsConnected={prevIsConnected}
                 isConnected={isConnected}
-                allMessages={allMessages}
-                failedMessages={failedMessage}
+                sentMessages={sentMessages}
+                unsentMessages={unsentMessages}
                 // isConnected={isConnected}
                 id={id}
                 selectedGroup={selectedGroup}

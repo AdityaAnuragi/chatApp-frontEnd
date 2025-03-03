@@ -4,7 +4,7 @@ import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
 
-export function ActiveChat({ prevIsConnected, isConnected, allMessages, failedMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType }: ActiveChatTypes) {
+export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType }: ActiveChatTypes) {
 
   const scrollContainer = useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -36,7 +36,7 @@ export function ActiveChat({ prevIsConnected, isConnected, allMessages, failedMe
       left: 0,
       behavior: (scrollContainer.current.scrollHeight - scrollContainer.current.scrollTop) <= 1000 ? "smooth" : "instant",
     })
-  }, [allMessages, failedMessages])
+  }, [sentMessages, unsentMessages])
 
   
   // useEffect(() => {
@@ -55,19 +55,19 @@ export function ActiveChat({ prevIsConnected, isConnected, allMessages, failedMe
         // handleSendMsg(selectedGroup, allMessages[selectedGroup].length - totalDeletes)
         // totalDeletes += 1
       // })
-      Object.keys(failedMessages).forEach(groupName => {
+      Object.keys(unsentMessages).forEach(groupName => {
 
-        if(failedMessages[groupName] && failedMessages[groupName].length >= 0) {
-          for(let totalDeletes = 0; totalDeletes < failedMessages[groupName].length; totalDeletes++) {
-            if(failedMessages[groupName][totalDeletes].messageStatus === "❌") {
-              handleSendMsg(groupName, allMessages[groupName].length - totalDeletes)
+        if(unsentMessages[groupName] && unsentMessages[groupName].length >= 0) {
+          for(let totalDeletes = 0; totalDeletes < unsentMessages[groupName].length; totalDeletes++) {
+            if(unsentMessages[groupName][totalDeletes].messageStatus === "❌") {
+              handleSendMsg(groupName, sentMessages[groupName].length - totalDeletes)
             }
           }
         }
 
       })
     }
-  },[isConnected, allMessages, prevIsConnected, failedMessages, handleSendMsg])
+  },[isConnected, sentMessages, prevIsConnected, unsentMessages, handleSendMsg])
 
   // useEffect(() => {
   //   function handleBeforeUnload(e: HashChangeEvent) {
@@ -93,7 +93,7 @@ export function ActiveChat({ prevIsConnected, isConnected, allMessages, failedMe
           <h3 onClick={handleClick} className={chatType === "group" ? styles.groupName : ""} >{selectedGroupName}</h3>
         </div>
         <div className={styles.containerForOverflow} ref={scrollContainer} >
-          {[...allMessages[selectedGroup], ...(failedMessages[selectedGroup] || []) ].map((value, index) => {
+          {[...sentMessages[selectedGroup], ...(unsentMessages[selectedGroup] || []) ].map((value, index) => {
             return (
               <div key={value.id} className={`${styles.messageAndTryAgainContainer} ${value.senderID === id ? styles.rightSide : styles.leftSide}`} >
                 <Message
@@ -130,8 +130,8 @@ export function ActiveChat({ prevIsConnected, isConnected, allMessages, failedMe
 type ActiveChatTypes = {
   prevIsConnected: boolean | null,
   isConnected: boolean,
-  allMessages: Chats,
-  failedMessages: Chats,
+  sentMessages: Chats,
+  unsentMessages: Chats,
   selectedGroup: string,
   selectedGroupName: string
   id: number,
