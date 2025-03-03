@@ -36,7 +36,7 @@ export function ActiveChat({ prevIsConnected, isConnected, allMessages, failedMe
       left: 0,
       behavior: (scrollContainer.current.scrollHeight - scrollContainer.current.scrollTop) <= 1000 ? "smooth" : "instant",
     })
-  }, [allMessages])
+  }, [allMessages, failedMessages])
 
   
   // useEffect(() => {
@@ -48,7 +48,6 @@ export function ActiveChat({ prevIsConnected, isConnected, allMessages, failedMe
   useEffect(() => {
     if(isConnected && (prevIsConnected === false) ) {
       // console.log("useEffect")
-      let totalDeletes = 0;
       
       // (failedMessages[selectedGroup] || []).forEach((_message, _index) => {
         // handleSendMsg(selectedGroup, index + allMessages[selectedGroup].length - totalDeletes)
@@ -56,20 +55,19 @@ export function ActiveChat({ prevIsConnected, isConnected, allMessages, failedMe
         // handleSendMsg(selectedGroup, allMessages[selectedGroup].length - totalDeletes)
         // totalDeletes += 1
       // })
-      if(failedMessages[selectedGroup] && failedMessages[selectedGroup].length >= 0) {
-        for(let i = 0; i < failedMessages[selectedGroup].length; i++) {
-          handleSendMsg(selectedGroup, allMessages[selectedGroup].length - totalDeletes)
-          totalDeletes += 1
-        }
-      }
+      Object.keys(failedMessages).forEach(groupName => {
 
-      // if(failedMessages[selectedGroup] && allMessages[selectedGroup]) {
-      //   console.log("inside")
-      //   handleSendMsg(selectedGroup, allMessages[selectedGroup].length)
-      // }
+        if(failedMessages[groupName] && failedMessages[groupName].length >= 0) {
+          for(let totalDeletes = 0; totalDeletes < failedMessages[groupName].length; totalDeletes++) {
+            if(failedMessages[groupName][totalDeletes].messageStatus === "❌") {
+              handleSendMsg(groupName, allMessages[groupName].length - totalDeletes)
+            }
+          }
+        }
+
+      })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[isConnected, allMessages])
+  },[isConnected, allMessages, prevIsConnected, failedMessages, handleSendMsg])
 
   // useEffect(() => {
   //   function handleBeforeUnload(e: HashChangeEvent) {

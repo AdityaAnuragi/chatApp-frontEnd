@@ -221,9 +221,12 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     // console.log("")
 
     if (indexOfMessage === undefined) {
-      setAllMessages((prev) => {
+      setFailedMessage((prev) => {
         const copy = JSON.parse(JSON.stringify(prev)) as Chats
         const nonNullSelectedGroup = selectedGroup!
+
+        copy[nonNullSelectedGroup] = copy[nonNullSelectedGroup] ?? []
+
         copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗", isRetrying: false })
         // index -= 1
         return copy
@@ -252,26 +255,28 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     const retryMessage = (sender: ParametersToSendMessage[0], id: ParametersToSendMessage[1], msg: ParametersToSendMessage[2], selectedGroup: ParametersToSendMessage[3], cryptoId: ParametersToSendMessage[4], maxTries = totalTries) => {
       if (maxTries === 0) {
         // console.log("I can no longer try to send the message")
-        let deleteElement: Message;
-        if(indexOfMessage === undefined) {
-          setAllMessages((prev) => {
-            const copy = JSON.parse(JSON.stringify(prev)) as Chats
-            const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
-            // copy[selectedGroup][index].messageStatus = "❌"
-            // copy[selectedGroup][index].isRetrying = false
-            deleteElement = copy[selectedGroup].splice(index, 1)[0]
-            return copy
-          })
+        // let deleteElement: Message;
+        if (indexOfMessage === undefined) {
+          // setAllMessages((prev) => {
+          //   const copy = JSON.parse(JSON.stringify(prev)) as Chats
+          //   const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
+          //   // copy[selectedGroup][index].messageStatus = "❌"
+          //   // copy[selectedGroup][index].isRetrying = false
+          //   deleteElement = copy[selectedGroup].splice(index, 1)[0]
+          //   return copy
+          // })
           setFailedMessage(prev => {
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
-            if(copy[selectedGroup] === undefined) {
+            if (copy[selectedGroup] === undefined) {
               copy[selectedGroup] = []
             }
-            copy[selectedGroup].push({...deleteElement, messageStatus: "❌"})
+            // copy[selectedGroup].push({...deleteElement, messageStatus: "❌"})
+            const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
+            copy[selectedGroup][index].messageStatus = "❌"
             return copy
           })
         }
-        
+
         else {
           setFailedMessage(prev => {
             const copy = JSON.parse(JSON.stringify(prev)) as Chats
@@ -295,42 +300,59 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
         else {
           // console.log(`Got a response ${response.status}, with attempt number ${maxTries}`)
           // console.log(`Returned cryptoId is ${cryptoId}`)
-          if(indexOfMessage === undefined) {
-            setAllMessages((prev) => {
-              const copy = JSON.parse(JSON.stringify(prev)) as Chats
-              // const nonNullSelectedGroup = selectedGroup!
-              // console.log("state is ")
-              // console.log(copy)
-              const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
-              // console.log(`Returned crypto id is`)
-              // console.log(`index is ${index}`)
-              copy[selectedGroup][index].messageStatus = "✅"
-              return copy
-            })
-          }
+          // if (indexOfMessage === undefined) {
 
-          else {
-            let deleteElement: Message;
-            setFailedMessage(prev => {
-              // console.log(JSON.parse(JSON.stringify(prev)))
+          //   let deleteElement: Message;
+          //   setFailedMessage(prev => {
+          //     // console.log(JSON.parse(JSON.stringify(prev)))
 
-              const copy = JSON.parse(JSON.stringify(prev)) as Chats
-              deleteElement = copy[selectedGroup].splice(0, 1)[0]
+          //     const copy = JSON.parse(JSON.stringify(prev)) as Chats
+          //     deleteElement = copy[selectedGroup].splice(0, 1)[0]
 
-              // console.log(deleteElement)
-              return copy
-            })
+          //     // console.log(deleteElement)
+          //     return copy
+          //   })
 
-            setAllMessages(prev => {
-              // console.log(JSON.parse(JSON.stringify(prev)))
-              const copy = JSON.parse(JSON.stringify(prev)) as Chats
+          //   setAllMessages(prev => {
+          //     // console.log(JSON.parse(JSON.stringify(prev)))
+          //     const copy = JSON.parse(JSON.stringify(prev)) as Chats
 
-              // console.log(deleteElement)
-              copy[selectedGroup].push({...deleteElement, messageStatus: "✅"})
-              return copy
-            })
+          //     // console.log(deleteElement)
+          //     copy[selectedGroup].push({ ...deleteElement, messageStatus: "✅" })
+          //     return copy
+          //   })
 
-          }
+          //   // setAllMessages((prev) => {
+          //   //   const copy = JSON.parse(JSON.stringify(prev)) as Chats
+          //   //   const index = copy[selectedGroup].findIndex((value) => value.id === cryptoId)
+          //   //   copy[selectedGroup][index].messageStatus = "✅"
+          //   //   return copy
+          //   // })
+          // }
+
+          // else {
+          let deleteElement: Message;
+          setFailedMessage(prev => {
+            // console.log(JSON.parse(JSON.stringify(prev)))
+
+            const copy = JSON.parse(JSON.stringify(prev)) as Chats
+            const index = copy[selectedGroup].findIndex(value => value.id === cryptoId)
+            deleteElement = copy[selectedGroup].splice(index, 1)[0]
+
+            // console.log(deleteElement)
+            return copy
+          })
+
+          setAllMessages(prev => {
+            // console.log(JSON.parse(JSON.stringify(prev)))
+            const copy = JSON.parse(JSON.stringify(prev)) as Chats
+
+            // console.log(deleteElement)
+            copy[selectedGroup].push({ ...deleteElement, messageStatus: "✅" })
+            return copy
+          })
+
+          // }
 
         }
       })
