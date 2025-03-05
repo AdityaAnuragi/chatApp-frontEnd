@@ -153,11 +153,11 @@ $border-radius: 1rem;
   align-items: center;
 
   cursor: pointer;
-
+  width: 100%;
   background-color: rgb(48, 159, 48);
   // text-align: center;
-  border-bottom-left-radius: calc($border-radius - 2px);
-  border-bottom-right-radius: calc($border-radius - 2px);
+  border-bottom-left-radius: calc($border-radius - 6px);
+  border-bottom-right-radius: calc($border-radius - 6px);
   min-height: 3rem;
   font-size: 1.5rem;
 
@@ -166,4 +166,16 @@ $border-radius: 1rem;
   &:active {
     transform: scale(0.99)
   }
+}
+
+// .iconAndText {
+//   display: flex;
+//   justify-content: space-around;
+
+//   width: 50%;
+//   border: 2px solid blue;
+// }
+
+.doneText {
+  margin-left: 1.2rem;
 }

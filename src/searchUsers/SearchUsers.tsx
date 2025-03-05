@@ -63,7 +63,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if(e.key === "Enter") {
+    if (e.key === "Enter") {
       handleSearch()
     }
   }
@@ -98,7 +98,12 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
                 : <p>No users found</p>
             }
           </div>
-          {showDone && <div className={styles.done} onClick={() => setShowSearchUser(false)} >Done</div>}
+          {showDone &&
+            <div className={styles.done} onClick={() => setShowSearchUser(false)} >
+              <i className="fa-solid fa-check"></i>
+              <p className={styles.doneText} >Done</p>
+            </div>
+          }
 
         </div>
       </div>
