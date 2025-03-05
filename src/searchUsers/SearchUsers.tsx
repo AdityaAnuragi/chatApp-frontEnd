@@ -9,6 +9,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
 
   const [searchInput, setSearchInput] = useState("")
   const [hasError, setHasError] = useState(false)
+  const [showDone, setShowDone] = useState(false)
   const [users, setUsers] = useState<User[]>()
 
   function handleSearch() {
@@ -47,12 +48,18 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
   }
 
   function handleClick(newUserId: string, newUserName: string) {
+    setShowDone(true)
     if (forCreatingPvtConvo) {
       createPvtConvo(newUserId, newUserName)
     }
     else {
       inviteToGroup(selectedGroupId, newUserId)
     }
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchInput(e.target.value)
+    setShowDone(false)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -70,7 +77,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
           {/* {forCreatingPvtConvo ? <h4>Search for users</h4> :<h4>Add new user to group</h4>} */}
           <h2 className={styles.information} >{forCreatingPvtConvo ? "Search for users" : "Add new user to group"}</h2>
           <div className={styles.searchInputAndButton} >
-            <input type="text" className={styles.searchField} onChange={(e) => setSearchInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="eg: Aditya" maxLength={100} autoFocus />
+            <input type="text" className={styles.searchField} onChange={handleChange} onKeyDown={handleKeyDown} placeholder="eg: Aditya" maxLength={100} autoFocus />
             {/* <button className={styles.searchButton} onClick={handleSearch} >Search</button> */}
             <i onClick={handleSearch} className={`fa-solid fa-magnifying-glass ${styles.icon}`}></i>
           </div>
@@ -91,6 +98,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
                 : <p>No users found</p>
             }
           </div>
+          {showDone && <div className={styles.done} onClick={() => setShowSearchUser(false)} >Done</div>}
 
         </div>
       </div>

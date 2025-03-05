@@ -1,5 +1,7 @@
 @use '../icon.module.scss';
 
+$border-radius: 1rem;
+
 .container {
   width: 100%;
   height: 100%;
@@ -19,8 +21,8 @@
 .searchFieldAndUserList {
   // border: 2px solid yellow;
   background-color: white;
-  border-radius: 1rem;
-  padding: 0.3rem;
+  border-radius: $border-radius;
+  // padding: 0.3rem;
   display: flex;
   flex-direction: column;
 
@@ -93,7 +95,7 @@
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-
+  height: 1.925rem;
   // border: 2px solid blue;
   padding: 0rem 0.75rem;
   margin-top: 0.5rem;
@@ -117,14 +119,51 @@
 .information {
   // margin-left: auto;
   // margin-right: auto;
+  height: 1.7rem;
   margin: 0rem auto 0.4rem;
 }
 
 .icon {
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+
+  // border: 2px solid red;
+  // display: inline-block;
+
+  padding: 0rem;
+  // font-size: 10rem;
   width: fit-content;
-  @include icon.iconStyles
+  // height: 1.125rem;
+  // height: 3rem;
+  // text-align: center;
+  // vertical-align: middle;
+  @include icon.iconStyles;
+  // font-size: 10rem
 }
 
 .icon:hover {
   @include icon.iconStylesOnHover
+}
+
+
+.done {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  background-color: rgb(48, 159, 48);
+  // text-align: center;
+  border-bottom-left-radius: calc($border-radius - 2px);
+  border-bottom-right-radius: calc($border-radius - 2px);
+  min-height: 3rem;
+  font-size: 1.5rem;
+
+  transition: all 0.05s ease-out;
+
+  &:active {
+    transform: scale(0.99)
+  }
 }
