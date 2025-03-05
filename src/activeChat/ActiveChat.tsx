@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { Chats } from "../homePage/HomePage"
+import { Chats, UnsentChats } from "../homePage/HomePage"
 import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
@@ -114,6 +114,7 @@ export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentM
                   )
                 }
               </div>
+              
             )
           })}
         </div>
@@ -131,7 +132,7 @@ type ActiveChatTypes = {
   prevIsConnected: boolean | null,
   isConnected: boolean,
   sentMessages: Chats,
-  unsentMessages: Chats,
+  unsentMessages: UnsentChats,
   selectedGroup: string,
   selectedGroupName: string
   id: number,

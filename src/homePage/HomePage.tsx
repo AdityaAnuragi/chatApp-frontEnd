@@ -32,7 +32,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
   // failedMessage first it's necessary to put failedMessage on top first
   // otherwise allMessages is set first and nothing has been deleted from failedMessage yet so it messes up the updates
   // I found this out by seeing the ordering of the console logs
-  const [unsentMessages, setUnsentMessages] = useState<Chats>({})
+  const [unsentMessages, setUnsentMessages] = useState<UnsentChats>({})
   const [sentMessages, setSentMessages] = useState<Chats>({})
   const [draftMsg, setDraftMsg] = useState("")
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
@@ -222,7 +222,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
 
     if (indexOfMessage === undefined) {
       setUnsentMessages((prev) => {
-        const copy = JSON.parse(JSON.stringify(prev)) as Chats
+        const copy = JSON.parse(JSON.stringify(prev)) as UnsentChats
         const nonNullSelectedGroup = selectedGroup!
 
         copy[nonNullSelectedGroup] = copy[nonNullSelectedGroup] ?? []
@@ -235,7 +235,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
 
     else {
       setUnsentMessages((prev) => {
-        const copy = JSON.parse(JSON.stringify(prev)) as Chats
+        const copy = JSON.parse(JSON.stringify(prev)) as UnsentChats
         const nonNullSelectedGroup = selectedGroup!
         // copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗", isRetrying: false })
         // index -= 1
@@ -266,7 +266,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
           //   return copy
           // })
           setUnsentMessages(prev => {
-            const copy = JSON.parse(JSON.stringify(prev)) as Chats
+            const copy = JSON.parse(JSON.stringify(prev)) as UnsentChats
             if (copy[selectedGroup] === undefined) {
               copy[selectedGroup] = []
             }
@@ -279,7 +279,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
 
         else {
           setUnsentMessages(prev => {
-            const copy = JSON.parse(JSON.stringify(prev)) as Chats
+            const copy = JSON.parse(JSON.stringify(prev)) as UnsentChats
             copy[selectedGroup][sentMessages[selectedGroup!].length - indexOfMessage!].isRetrying = false
             return copy
           })
@@ -335,7 +335,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
           setUnsentMessages(prev => {
             // console.log(JSON.parse(JSON.stringify(prev)))
 
-            const copy = JSON.parse(JSON.stringify(prev)) as Chats
+            const copy = JSON.parse(JSON.stringify(prev)) as UnsentChats
             const index = copy[selectedGroup].findIndex(value => value.id === cryptoId)
             deleteElement = copy[selectedGroup].splice(index, 1)[0]
 
@@ -431,6 +431,10 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
   )
 }
 
+type ChangePropertyOfObject<T extends object, KeyToChange extends keyof T, NewValue> = {
+  [Property in keyof T]: Property extends KeyToChange ? NewValue : T[Property];
+};
+
 type Message = {
   msg: string,
   id: `${string}-${string}-${string}-${string}-${string}`,
@@ -438,11 +442,15 @@ type Message = {
   messageStatus: "🕗" | "✅" | "❌",
   isRetrying: boolean
 }
-
 export type Chats = {
   [groupName: string]: Message[]
 }
 
+type UnsentMessage = ChangePropertyOfObject<Message, "messageStatus", "🕗" | "❌">
+
+export type UnsentChats = {
+  [groupName: string]: UnsentMessage[]
+}
 
 
 
