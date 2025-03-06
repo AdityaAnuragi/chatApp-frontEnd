@@ -13,8 +13,8 @@
   // height: 90vh;
   // border: 2px solid black;
 
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 0px;
+  margin-right: 0px;
 
   display: flex;
   justify-content: flex-start;
@@ -43,8 +43,8 @@
 .wrapFullScreen {
   display: flex;
   flex-direction: column;
-
-  width: 98vw;
+  // border: 2px solid blue;
+  width: 99vw;
   height: 96vh;
 }
 
@@ -64,4 +64,34 @@
   // border: 1px solid black;
   border-radius: 1rem;
   margin-right: 1rem;
+}
+
+
+.offline {
+  position: fixed;
+  width: 100vw;
+
+  top: 0rem;
+  transition: all 1s ease 1s;
+
+  /* only transition top property */
+  // top: -1rem;
+  left: 0rem;
+  text-align: center;
+  background-color: rgb(252, 41, 41);
+  margin: 0rem;
+}
+
+// .red {
+//   background-color: rgb(252, 41, 41);
+// }
+
+// .blue {
+//   background-color: blue;
+// }
+
+.invisible {
+  opacity: 0;
+  // position: fixed;
+  top: -5rem;
 }

@@ -392,12 +392,13 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
 
   return (
     <>
+      {/* {(isConnected) && <h2 className={styles.offline} >You are offline right now</h2>} */}
       <div className={styles.wrapFullScreen} >
 
         {(showSearchUser || showInviteToGroup) && <SearchUsers userId={id} setShowSearchUser={setShowSearchUser} sender={sender} forCreatingPvtConvo={showSearchUser} selectedGroupId={selectedGroup} setShowInviteToGroup={setShowInviteToGroup} selectedGroupName={selectedGroup && groups[selectedGroup].name} socket={socket} />}
         {showCreateGroup && <CreateGroup setShowCreateGroup={setShowCreateGroup} userId={id} socket={socket} />}
 
-        {(!isConnected) && <h2>You are offline right now</h2>}
+        <h2 className={`${styles.offline} ${isConnected && styles.invisible}`} >You are offline right now</h2>
 
         <div className={`${styles.groupListAndActiveChat}`} >
           {((selectedGroup === null) || (windowSize > 600)) && <GroupLists groups={groups} setSelectedGroup={setSelectedGroup} selectedGroup={selectedGroup} setShowCreateGroup={setShowCreateGroup} setShowSearchUser={setShowSearchUser} />}
