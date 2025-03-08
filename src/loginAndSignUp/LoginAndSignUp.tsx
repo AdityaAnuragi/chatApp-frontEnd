@@ -123,7 +123,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
 
         <label className={styles.label} >
           Password
-          <input name="password" type="password" autoComplete="new-password" className={styles.inputFields} value={password} onChange={e => setPassword(e.target.value)} onKeyDown={handleKeyDown} />
+          <input name="password" type="password" autoComplete={isSignUp ? "new-password" : ""} className={styles.inputFields} value={password} onChange={e => setPassword(e.target.value)} onKeyDown={handleKeyDown} />
         </label>
 
         <p className={`${error ? "" : styles.invisible} ${styles.ifUserNameTaken}`} >
