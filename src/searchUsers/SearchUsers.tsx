@@ -15,7 +15,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
   function handleSearch() {
     (async () => {
       try {
-        const res = await fetch("https://chatapp-server-3x2r.onrender.com/users", {
+        const res = await fetch("https://chatapp-server-production-6c0f.up.railway.app/users", {
           method: "POST",
           body: JSON.stringify({
             search: searchInput
