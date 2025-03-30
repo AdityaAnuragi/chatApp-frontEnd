@@ -4,13 +4,13 @@ import { HomePage } from "./homePage/HomePage"
 import { LoginAndSignUp } from "./loginAndSignUp/LoginAndSignUp"
 
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientEvents, ClientToServerEvents } from "./socket";
+import { ServerToClientEvents, ClientToServerEvents, URL as serverUrl } from "./socket";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userId, setUserId] = useState(-1)
   const [name, setName] = useState("")
-  const URL = "http://chatapp-server-production-6c0f.up.railway.app/"
+  const URL = `${serverUrl}/`
 
   const socket = useRef<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null)
 

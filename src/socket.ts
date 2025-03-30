@@ -1,7 +1,8 @@
 // import { io, Socket } from 'socket.io-client';
 
 // "undefined" means the URL will be computed from the `window.location` object
-// const URL = 'https://chatapp-server-3x2r.onrender.com';
+export const URL = 'https://chatapp-server-production-6c0f.up.railway.app';
+// export const URL = 'http://localhost:10000';
 
 export type ServerToClientEvents = {
   message: (sender: string, id: number, msg: string, fromGroup: string) => void,

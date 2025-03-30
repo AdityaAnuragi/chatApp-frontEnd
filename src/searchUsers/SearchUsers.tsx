@@ -1,7 +1,7 @@
 import { useState } from "react"
 import styles from "./SearchUsers.module.scss"
 import { Socket } from "socket.io-client"
-import { ClientToServerEvents, ServerToClientEvents } from "../socket"
+import { ClientToServerEvents, ServerToClientEvents, URL } from "../socket"
 
 // import { socket } from "../socket"
 
@@ -15,7 +15,7 @@ export function SearchUsers({ userId, setShowSearchUser, sender, forCreatingPvtC
   function handleSearch() {
     (async () => {
       try {
-        const res = await fetch("https://chatapp-server-production-6c0f.up.railway.app/users", {
+        const res = await fetch(`${URL}/users`, {
           method: "POST",
           body: JSON.stringify({
             search: searchInput

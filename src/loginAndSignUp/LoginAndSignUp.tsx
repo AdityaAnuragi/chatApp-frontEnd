@@ -1,6 +1,8 @@
 import { useState } from "react"
 import styles from "./LoginAndSignUp.module.scss"
 
+import { URL } from "../socket"
+
 export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userId: number) => void, name: string, setName: React.Dispatch<React.SetStateAction<string>> }) {
 
   // const [name, setName] = useState("Aditya")
@@ -14,7 +16,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
     (async () => {
       try {
         // make the URL as a templete literal string, /signup or /login
-        const response = await fetch(`https://chatapp-server-production-6c0f.up.railway.app/${isSignUp ? "signup" : "signin"}`, {
+        const response = await fetch(`${URL}/${isSignUp ? "signup" : "signin"}`, {
           method: "POST",
           body: JSON.stringify({
             name,
