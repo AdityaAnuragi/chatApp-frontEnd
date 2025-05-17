@@ -18,6 +18,9 @@ function App() {
 
   useEffect(() => {
     console.log("A project by Aditya Anuragi")
+    console.log("My GitHub profile: https://github.com/AdityaAnuragi")
+    console.log("My LinkedIn profile: https://www.linkedin.com/in/aditya-anuragi/")
+
   }, [])
 
   // const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(URL, {

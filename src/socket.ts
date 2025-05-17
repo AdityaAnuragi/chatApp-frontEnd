@@ -2,7 +2,7 @@
 
 // "undefined" means the URL will be computed from the `window.location` object
 export const URL = 'https://chatapp-server-production-b0fc.up.railway.app';
-// export const URL = 'http://localhost:10000';
+// export const URL = 'http://localhost:3000';
 
 export type ServerToClientEvents = {
   message: (sender: string, id: number, msg: string, fromGroup: string) => void,

@@ -1,15 +1,18 @@
-import { useState } from "react"
+import {useState} from "react"
 import styles from "./LoginAndSignUp.module.scss"
 
-import { URL } from "../socket"
+import githubLogoSvg from "../../public/Github_white_logo.png";
 
-export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userId: number) => void, name: string, setName: React.Dispatch<React.SetStateAction<string>> }) {
+import {URL} from "../socket"
+
+export function LoginAndSignUp({logInUser, name, setName}: { logInUser: (userId: number) => void, name: string, setName: React.Dispatch<React.SetStateAction<string>> }) {
 
   // const [name, setName] = useState("Aditya")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<"username taken" | "invalid password" | "unexpected error" | "">("")
   const [isSignUp, setIsSignUp] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+
   // sign in functionality
 
   function signUpOrLogin() {
@@ -30,8 +33,7 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
         if (response.status === 406) {
           // incase username is already taken
           throw new Error("406");
-        }
-        else if (!(response.ok)) {
+        } else if (!(response.ok)) {
           throw new Error("An unexpected error occured")
         }
 
@@ -41,15 +43,13 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
         logInUser(Number(userId))
         setIsLoading(false)
         setError("")
-      }
-      catch (e) {
+      } catch (e) {
         if (e instanceof Error && e.message === "406") {
           // console.log(e.name)
           // console.log(e.stack)
           // console.log(e.message)
           setError("username taken")
-        }
-        else {
+        } else {
           setError("unexpected error")
         }
         setIsLoading(false)
@@ -116,19 +116,25 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
 
   return (
     <div className={styles.container} >
-      <div className={styles.form} >
-        <h2 className={styles.loginOrSignUp} >{isSignUp ? "Sign up" : "Login"}</h2>
-        <label className={styles.label} >
+      <a href={"https://github.com/AdityaAnuragi/chatApp-frontEnd"} className={styles.githubLogoWrapper} target="_blank" rel="noopener noreferrer" >
+        <svg  className={styles.github}>
+          <polygon points="0,0 0,100 100,100" fill="black" transform="rotate(180, 50, 50)"/>
+        </svg>
+        <img src={githubLogoSvg} alt="Github Logo" width={40} height={40} className={styles.githubImage} />
+      </a>
+      <div className={styles.form}>
+        <h2 className={styles.loginOrSignUp}>{isSignUp ? "Sign up" : "Login"}</h2>
+        <label className={styles.label}>
           Name
-          <input name="username" type="text" className={styles.inputFields} value={name} onChange={e => setName(e.target.value)}  placeholder="eg: Aditya" maxLength={100} />
+          <input name="username" type="text" className={styles.inputFields} value={name} onChange={e => setName(e.target.value)} placeholder="eg: Aditya" maxLength={100}/>
         </label>
 
-        <label className={styles.label} >
+        <label className={styles.label}>
           Password
-          <input name="password" type="password" autoComplete={isSignUp ? "new-password" : ""} className={styles.inputFields} value={password} onChange={e => setPassword(e.target.value)} onKeyDown={handleKeyDown} />
+          <input name="password" type="password" autoComplete={isSignUp ? "new-password" : ""} className={styles.inputFields} value={password} onChange={e => setPassword(e.target.value)} onKeyDown={handleKeyDown}/>
         </label>
 
-        <p className={`${error ? "" : styles.invisible} ${styles.ifUserNameTaken}`} >
+        <p className={`${error ? "" : styles.invisible} ${styles.ifUserNameTaken}`}>
           {error === "username taken"
             ? "Username already taken"
             : error === "invalid password"
@@ -137,13 +143,16 @@ export function LoginAndSignUp({ logInUser, name, setName }: { logInUser: (userI
           }
         </p>
 
-        <button className={`${styles.toggleBetweenLoginAndSignUp}`} onClick={() => { setIsSignUp(curr => !curr); setError("") }} >{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</button>
+        <button className={`${styles.toggleBetweenLoginAndSignUp}`} onClick={() => {
+          setIsSignUp(curr => !curr);
+          setError("")
+        }}>{isSignUp ? "Existing user? Sign in" : "Not registered? Sign up"}</button>
 
         {/* <button className={`${styles.loginOrSignUpButton} ${styles.right}`} onClick={handleClick}/>
           {isLoading ? "Loading..." : isSignUp ? "Sign Up" : "Login"}
         </button> */}
 
-        <button type="submit" className={`${styles.loginOrSignUpButton} ${styles.right}`} onClick={handleClick} >
+        <button type="submit" className={`${styles.loginOrSignUpButton} ${styles.right}`} onClick={handleClick}>
           {isLoading ? "Loading..." : isSignUp ? "Sign Up" : "Login"}
         </button>
 

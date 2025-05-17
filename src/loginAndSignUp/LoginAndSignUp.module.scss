@@ -6,14 +6,15 @@ $font-size: 1.5rem;
   // align-items: center;
 
   width: 100%;
-  height: 100dvh;
+  height: 97dvh;
   // min-height: 100%;
   // border: 2px solid blue;
+
 }
 
 .form {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: space-evenly;
 
   width: 30%;
@@ -47,7 +48,7 @@ $font-size: 1.5rem;
 .label {
   display: flex;
   justify-content: space-between;
-  
+
   font-size: $font-size;
   // border: 2px solid red;
   margin-bottom: 1.3rem;
@@ -103,7 +104,7 @@ $font-size: 1.5rem;
   margin-left: auto;
 }
 
-.loginOrSignUpButton:active { 
+.loginOrSignUpButton:active {
   transform: scale(0.9)
 }
 
@@ -115,3 +116,40 @@ $font-size: 1.5rem;
   margin-top: 0rem;
   margin-bottom: 0rem;
 }
+
+.githubLogoWrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  .github {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height:  100px;
+    @media (max-width: 425px) {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  .githubImage {
+    z-index: 100;
+    display: block;
+    position: absolute;
+    top: 33%;
+    right: 33%;
+    //transform: translate(-50%, 50%);
+    transform-origin: center;
+    transform: translate(-20%, 33%);
+    @media (max-width: 425px) {
+      width: 20px;
+      height: 20px;
+
+    }
+
+  }
+
+}
+
