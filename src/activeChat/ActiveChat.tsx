@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react"
-import { Chats, UnsentChats } from "../homePage/HomePage"
-import { Message } from "../message/Message"
+import {useEffect, useRef} from "react"
+import {Chats, UnsentChats} from "../homePage/HomePage"
+import {Message} from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
 
-export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType }: ActiveChatTypes) {
+export function ActiveChat({prevIsConnected, isConnected, sentMessages, unsentMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType}: ActiveChatTypes) {
 
   const scrollContainer = useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -22,7 +22,7 @@ export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentM
   }
 
   function handleClick() {
-    if(chatType === "group") {
+    if (chatType === "group") {
       setShowInviteToGroup(true)
     }
   }
@@ -38,7 +38,7 @@ export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentM
     })
   }, [sentMessages, unsentMessages])
 
-  
+
   // useEffect(() => {
   //   if(isConnected && (failedMessages[selectedGroup]?.length >= 0) ) {
   //     handleSendMsg(selectedGroup, allMessages[selectedGroup].length)
@@ -46,28 +46,31 @@ export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentM
   // }, [allMessages, failedMessages, handleSendMsg, isConnected, selectedGroup])
 
   useEffect(() => {
-    if(isConnected && (prevIsConnected === false) ) {
+    if (isConnected && (prevIsConnected === false)) {
       // console.log("useEffect")
-      
+
       // (failedMessages[selectedGroup] || []).forEach((_message, _index) => {
-        // handleSendMsg(selectedGroup, index + allMessages[selectedGroup].length - totalDeletes)
+      // handleSendMsg(selectedGroup, index + allMessages[selectedGroup].length - totalDeletes)
 
-        // handleSendMsg(selectedGroup, allMessages[selectedGroup].length - totalDeletes)
-        // totalDeletes += 1
+      // handleSendMsg(selectedGroup, allMessages[selectedGroup].length - totalDeletes)
+      // totalDeletes += 1
       // })
-      Object.keys(unsentMessages).forEach(groupName => {
+      console.log(JSON.parse(JSON.stringify(unsentMessages)))
 
-        if(unsentMessages[groupName] && unsentMessages[groupName].length >= 0) {
-          for(let totalDeletes = 0; totalDeletes < unsentMessages[groupName].length; totalDeletes++) {
-            if(unsentMessages[groupName][totalDeletes].messageStatus === "❌") {
-              handleSendMsg(groupName, sentMessages[groupName].length - totalDeletes)
-            }
-          }
-        }
+      // Object.keys(unsentMessages).forEach(groupName => {
 
-      })
+
+        // if(unsentMessages[groupName] && unsentMessages[groupName].length >= 0) {
+        //   for(let totalDeletes = 0; totalDeletes < unsentMessages[groupName].length; totalDeletes++) {
+        //     if(unsentMessages[groupName][totalDeletes].messageStatus === "❌") {
+        //       handleSendMsg(groupName, sentMessages[groupName].length - totalDeletes)
+        //     }
+        //   }
+        // }
+
+      // })
     }
-  },[isConnected, sentMessages, prevIsConnected, unsentMessages, handleSendMsg])
+  }, [isConnected, sentMessages, prevIsConnected, unsentMessages, handleSendMsg])
 
   // useEffect(() => {
   //   function handleBeforeUnload(e: HashChangeEvent) {
@@ -86,16 +89,16 @@ export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentM
 
   return (
     <>
-      <div className={styles.container} >
-        <div className={styles.backButtonAndConvName} >
+      <div className={styles.container}>
+        <div className={styles.backButtonAndConvName}>
           {/* <button onClick={() => setSelectedGroup(null)} >back</button> */}
           <i onClick={() => setSelectedGroup(null)} tabIndex={0} className={`fa-solid fa-arrow-left ${styles.icon}`}></i>
-          <h3 onClick={handleClick} className={chatType === "group" ? styles.groupName : ""} >{selectedGroupName}</h3>
+          <h3 onClick={handleClick} className={chatType === "group" ? styles.groupName : ""}>{selectedGroupName}</h3>
         </div>
-        <div className={styles.containerForOverflow} ref={scrollContainer} >
-          {[...sentMessages[selectedGroup], ...(unsentMessages[selectedGroup] || []) ].map((value, index) => {
+        <div className={styles.containerForOverflow} ref={scrollContainer}>
+          {[...sentMessages[selectedGroup], ...(unsentMessages[selectedGroup] || [])].map((value, index) => {
             return (
-              <div key={value.id} className={`${styles.messageAndTryAgainContainer} ${value.senderID === id ? styles.rightSide : styles.leftSide}`} >
+              <div key={value.id} className={`${styles.messageAndTryAgainContainer} ${value.senderID === id ? styles.rightSide : styles.leftSide}`}>
                 <Message
                   key={value.id}
                   // sender={sender}
@@ -103,7 +106,7 @@ export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentM
                   userID={id}
                   msg={value.msg.split(": ")[1]}
                   messageStatus={value.messageStatus}
-                // selectedGroup={selectedGroup}
+                  // selectedGroup={selectedGroup}
                 />
                 {value.messageStatus === "❌"
                   && (
@@ -114,12 +117,12 @@ export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentM
                   )
                 }
               </div>
-              
+
             )
           })}
         </div>
         <div className={styles.inputFieldAndButtonContainer}>
-          <input className={styles.inputField} maxLength={40} placeholder="Type a message" type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={handleOnChange} />
+          <input className={styles.inputField} maxLength={40} placeholder="Type a message" type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={handleOnChange}/>
           {/* <button className={styles.sendButton} onClick={() => handleSendMsg()}  >Send message</button> */}
           <i ref={inputField} onClick={() => handleSendMsg(selectedGroup)} className={`fa-solid fa-location-arrow ${styles.icon}`}></i>
         </div>

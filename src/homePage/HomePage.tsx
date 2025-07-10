@@ -212,7 +212,9 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     // and 0 index of failedMessage (with combined map method) ends up becoming allMessages[selectedGroup].length + actualIndex (say 0)
     // so to access the correct thing I need to subtract the length of the allMessages[selectedGroup]
 
-    const cryptoId = (indexOfMessage !== undefined) ? unsentMessages[selectedGroup!][sentMessages[selectedGroup!].length - indexOfMessage!].id : self.crypto.randomUUID()
+    console.log(sentMessages[selectedGroup!].length)
+    console.log(indexOfMessage)
+    const cryptoId = (indexOfMessage !== undefined) ? unsentMessages[selectedGroup!][indexOfMessage! - sentMessages[selectedGroup!].length].id : self.crypto.randomUUID()
 
     // console.log(`cryptoId is ${cryptoId}`)
 
@@ -240,7 +242,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
         // copy[nonNullSelectedGroup].push({ msg: `${sender}: ${draftMsg}`, id: cryptoId, senderID: id, messageStatus: "🕗", isRetrying: false })
         // index -= 1
         // console.log("setting isRetying to true")
-        copy[nonNullSelectedGroup][sentMessages[selectedGroup!].length - indexOfMessage!].isRetrying = true
+        copy[nonNullSelectedGroup][indexOfMessage! - sentMessages[selectedGroup!].length].isRetrying = true
         return copy
       })
     }
@@ -280,7 +282,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
         else {
           setUnsentMessages(prev => {
             const copy = JSON.parse(JSON.stringify(prev)) as UnsentChats
-            copy[selectedGroup][sentMessages[selectedGroup!].length - indexOfMessage!].isRetrying = false
+            copy[selectedGroup][indexOfMessage! - sentMessages[selectedGroup!].length].isRetrying = false
             return copy
           })
         }
@@ -362,7 +364,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     // console.log(`index: ${indexOfMessage !== undefined}`)
     // console.log("")
 
-    retryMessage(sender, id, (indexOfMessage !== undefined) ? unsentMessages[selectedGroup!][sentMessages[selectedGroup!].length - indexOfMessage!].msg.split(": ")[1] : draftMsg, nonNullSelectedGroup, cryptoId)
+    retryMessage(sender, id, (indexOfMessage !== undefined) ? unsentMessages[selectedGroup!][indexOfMessage! - sentMessages[selectedGroup!].length].msg.split(": ")[1] : draftMsg, nonNullSelectedGroup, cryptoId)
 
     // socket.emit("message", sender, id, draftMsg, nonNullSelectedGroup, cryptoId, (response, cryptoId, selectedGroup) => {
     //   console.log(`The status is ${response.status}`)
