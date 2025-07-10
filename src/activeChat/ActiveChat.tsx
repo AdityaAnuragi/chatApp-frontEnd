@@ -55,7 +55,7 @@ export function ActiveChat({prevIsConnected, isConnected, sentMessages, unsentMe
       // handleSendMsg(selectedGroup, allMessages[selectedGroup].length - totalDeletes)
       // totalDeletes += 1
       // })
-      console.log(JSON.parse(JSON.stringify(unsentMessages)))
+      // console.log(JSON.parse(JSON.stringify(unsentMessages)))
 
       // let currGroup = ""
       //

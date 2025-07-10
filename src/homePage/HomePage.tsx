@@ -212,8 +212,8 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
     // and 0 index of failedMessage (with combined map method) ends up becoming allMessages[selectedGroup].length + actualIndex (say 0)
     // so to access the correct thing I need to subtract the length of the allMessages[selectedGroup]
 
-    console.log(sentMessages[selectedGroup!].length)
-    console.log(indexOfMessage)
+    //console.log(sentMessages[selectedGroup!].length)
+    //console.log(indexOfMessage)
     const cryptoId = (indexOfMessage !== undefined) ? unsentMessages[selectedGroup!][indexOfMessage! - sentMessages[selectedGroup!].length].id : self.crypto.randomUUID()
 
     // console.log(`cryptoId is ${cryptoId}`)
