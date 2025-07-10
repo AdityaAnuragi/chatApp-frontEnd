@@ -296,7 +296,7 @@ export function HomePage({ socket, id, sender }: { socket: Socket<ServerToClient
         if (error) {
           // console.log("there was an error, trying again")
           // console.log(`Retry crypto id is ${cryptoId}`)
-          retryMessage(sender, id, draftMsg, nonNullSelectedGroup, theActualCryptoId, maxTries - 1)
+          retryMessage(sender, id, msg, nonNullSelectedGroup, theActualCryptoId, maxTries - 1)
         }
 
         else {

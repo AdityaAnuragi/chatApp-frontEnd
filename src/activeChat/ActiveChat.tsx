@@ -57,20 +57,32 @@ export function ActiveChat({prevIsConnected, isConnected, sentMessages, unsentMe
       // })
       console.log(JSON.parse(JSON.stringify(unsentMessages)))
 
-      // Object.keys(unsentMessages).forEach(groupName => {
+      // let currGroup = ""
+      //
+      // if(Object.keys(unsentMessages).length > 0) {
+      //   currGroup = Object.keys(unsentMessages)[0]
+      // }
+      // else {
+      //   return;
+      // }
+      //
+      // console.log(currGroup, sentMessages[selectedGroup].length)
 
+      Object.keys(unsentMessages).forEach(groupName => {
+        if(unsentMessages[groupName] && unsentMessages[groupName].length >= 0) {
+          for(let totalDeletes = 0; totalDeletes < unsentMessages[groupName].length; totalDeletes++) {
+            if(unsentMessages[groupName][totalDeletes].messageStatus === "❌") {
+              handleSendMsg(groupName, sentMessages[groupName].length + totalDeletes)
+            }
+          }
 
-        // if(unsentMessages[groupName] && unsentMessages[groupName].length >= 0) {
-        //   for(let totalDeletes = 0; totalDeletes < unsentMessages[groupName].length; totalDeletes++) {
-        //     if(unsentMessages[groupName][totalDeletes].messageStatus === "❌") {
-        //       handleSendMsg(groupName, sentMessages[groupName].length - totalDeletes)
-        //     }
-        //   }
-        // }
+          // console.log(unsentMessages[groupName])
 
-      // })
+        }
+
+      })
     }
-  }, [isConnected, sentMessages, prevIsConnected, unsentMessages, handleSendMsg])
+  }, [isConnected, sentMessages, unsentMessages, handleSendMsg, selectedGroup, prevIsConnected])
 
   // useEffect(() => {
   //   function handleBeforeUnload(e: HashChangeEvent) {
