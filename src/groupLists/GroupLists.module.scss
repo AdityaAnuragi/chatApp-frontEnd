@@ -1,4 +1,5 @@
 @use '../icon.module.scss';
+@use '../_theme' as *;
 
 $borderRadius: 1rem;
 
@@ -17,7 +18,8 @@ $borderRadius: 1rem;
 
   overflow-x: auto;
 
-  background-color: rgb(252, 229, 229);
+  background-color: $panel;
+  border: 1px solid $border;
   border-radius: $borderRadius;
 
   @media (max-width: 1024px) {
@@ -67,7 +69,8 @@ $borderRadius: 1rem;
 
   border-width: 0px 0px 0.0625rem;
   border-style: solid;
-  border-color: grey;
+  border-color: $border;
+  color: $muted;
 
   // margin-bottom: 1.2rem;
 
@@ -76,9 +79,7 @@ $borderRadius: 1rem;
 
 }
 
-.group:hover {
-  background-color: rgb(208, 254, 208);
-}
+.group:hover { background-color: $accent-weak; color: $text; }
 
 
 .firstGroup {
@@ -86,18 +87,17 @@ $borderRadius: 1rem;
   // border-top-right-radius: $borderRadius;
   border-width: 0.0625rem 0px;
   border-style: solid;
-  border-color: grey;
+  border-color: $border;
   // border: 2px solid blue;
 }
 
 .selectedGroup {
-  background-color: rgb(188, 250, 188);
+  background-color: $accent-weak;
+  color: $text;
   // background-color: rgb(232, 225, 255);
 }
 
-.selectedGroup:hover {
-  background-color: rgb(188, 250, 188);
-}
+.selectedGroup:hover { background-color: $accent-weak; }
 
 .routeAndButtonContainer {
   display: flex;

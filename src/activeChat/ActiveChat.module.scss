@@ -1,4 +1,5 @@
 @use '../icon.module.scss';
+@use '../_theme' as *;
 
 $distance-from-message: 0.75rem;
 $border-radius: 0.5rem;
@@ -8,7 +9,7 @@ $border-radius: 0.5rem;
   justify-content: flex-start;
   flex-direction: row;
 
-  border: 1px solid black;
+  border: 1px solid $border;
   padding: 0.25rem 0.5rem;
   border-radius: 1rem;
   margin-bottom: 1rem;
@@ -23,12 +24,13 @@ $border-radius: 0.5rem;
 .rightSide {
   margin-right: $distance-from-message;
   margin-left: auto;
-  background-color: rgb(217, 253, 211);
+  background-color: $bubble-outgoing;
 }
 
 .leftSide {
   margin-left: $distance-from-message;
   margin-right: auto;
+  background-color: $bubble-incoming;
 }
 
 .containerForOverflow {
@@ -55,7 +57,7 @@ $border-radius: 0.5rem;
   width: 100%;
   min-height: 2.5rem;
 
-  background-color: white;
+  background-color: $panel;
   // border: 2px solid blue;
 }
 
@@ -69,6 +71,9 @@ $border-radius: 0.5rem;
   flex-grow: 1;
   font-size: 1.2rem;
   border-radius: $border-radius;
+  border: 1px solid $border;
+  background-color: #2a3942;
+  color: $text;
   // margin-bottom: 0.5rem;
 }
 
@@ -100,12 +105,14 @@ $border-radius: 0.5rem;
 
 .groupName {
   cursor: pointer;
+  color: $text;
 }
 
 .backButtonAndConvName {
   display: flex;
   align-items: center;
   // border: 2px solid blue;
+  color: $text;
 }
 
 .icon {

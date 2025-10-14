@@ -1,3 +1,9 @@
+@use "../_theme" as *;
+
+.container > * {
+  max-width: 100%;
+}
+
 .container {
   display: flex;
   flex-direction: row;
@@ -7,9 +13,24 @@
   // max-width: 80%;
   // message height also needs something specific i guess
 
+  color: $text;
 }
 
 .messageStatus {
   margin-right: 0.5rem;
+}
+
+.incoming {
+  background-color: $bubble-incoming;
+  border: 1px solid $border;
+  border-radius: 0.5rem;
+  color: $text;
+}
+
+.outgoing {
+  background-color: $bubble-outgoing;
+  border: 1px solid lighten($bubble-outgoing, 15%);
+  border-radius: 0.5rem;
+  color: $text;
 }
 

@@ -1,3 +1,4 @@
+@use "../_theme" as *;
 // .messageAndTryAgainContainer {
 //   display: flex;
 //   border: 2px solid black;
@@ -18,7 +19,10 @@
 
   display: flex;
   justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0 0.75rem;
 
+  color: $text;
 }
 
 
@@ -37,6 +41,9 @@
   height: 100%;
 
   // overflow-y: scroll;
+  background-color: $panel;
+  border: 1px solid $border;
+  border-radius: 1rem;
 }
 
 
@@ -46,6 +53,8 @@
   // border: 2px solid blue;
   width: 99vw;
   height: 96vh;
+  background-color: $bg;
+  padding: 0 0.75rem; // symmetric horizontal padding
 }
 
 // @media (max-width: 426px) {
@@ -80,15 +89,12 @@
   text-align: center;
   // background-color: red;
   margin: 0rem;
+  color: $text;
 }
 
-.red {
-  background-color: rgb(254, 91, 91);
-}
+.red { background-color: $danger; }
 
-.blue {
-  background-color: rgb(62, 207, 255);
-}
+.blue { background-color: $success; }
 
 .invisible {
   opacity: 0;

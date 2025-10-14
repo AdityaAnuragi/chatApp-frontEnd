@@ -1,0 +1,39 @@
+@use "./_theme" as *;
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: $bg;
+  color: $text;
+}
+
+/* Scrollbar - webkit */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: $panel;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: $border;
+  border-radius: 8px;
+  border: 2px solid $panel;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: lighten($border, 8%);
+}
+
+/* Scrollbar - Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $border $panel;
+}
+
+
