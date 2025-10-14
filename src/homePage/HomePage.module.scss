@@ -7,7 +7,7 @@
 // }
 
 .groupListAndActiveChat {
-  width: 97vw;
+  width: 100%;
   height: 100%;
   // max-height: 90vh;
   flex-grow: 1;
@@ -20,7 +20,7 @@
   display: flex;
   justify-content: flex-start;
   gap: 0.75rem;
-  padding: 0 0.75rem;
+  // padding: 0 0.75rem;
 
   color: $text;
 }
@@ -34,7 +34,8 @@
   flex-grow: 1;
 
   box-sizing: border-box;
-  width: 80%;
+  // let flex take available space to prevent overflow with gaps
+  min-width: 0; // allow flex child to shrink and avoid horizontal scroll
   // @media (max-width: 426px) {
   //   display: none;
   // }
@@ -44,17 +45,23 @@
   background-color: $panel;
   border: 1px solid $border;
   border-radius: 1rem;
+  overflow: hidden; // clip sticky input + inner scrollbar to rounded edges
 }
 
 
 .wrapFullScreen {
+
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 96vw;
   display: flex;
   flex-direction: column;
   // border: 2px solid blue;
-  width: 99vw;
+  width: 100%;
   height: 96vh;
   background-color: $bg;
-  padding: 0 0.75rem; // symmetric horizontal padding
+  padding: 0.75rem 0.75rem; // symmetric horizontal padding
+  overflow-x: hidden; // final guard against horizontal scroll
 }
 
 // @media (max-width: 426px) {

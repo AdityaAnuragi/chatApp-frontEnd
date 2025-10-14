@@ -4,6 +4,8 @@
 $borderRadius: 1rem;
 
 .container {
+  display: flex;
+  flex-direction: column;
   width: 24%;
   min-width: 24%;
 
@@ -16,11 +18,12 @@ $borderRadius: 1rem;
   // border-style: solid;
   // border-color: black;
 
-  overflow-x: auto;
+  overflow: hidden; // clip rounded corners
 
   background-color: $panel;
   border: 1px solid $border;
   border-radius: $borderRadius;
+  box-sizing: border-box;
 
   @media (max-width: 1024px) {
     width: 30%;
@@ -47,6 +50,13 @@ $borderRadius: 1rem;
     width: 96%;
     min-width: 100%;
   }
+}
+
+.scrollArea {
+  flex: 1 1 auto;
+  min-height: 0; // allow child to shrink
+  overflow-y: auto; // restore scrollbar without leaking
+  scrollbar-gutter: stable; // keep layout from shifting
 }
 
 .invisible {

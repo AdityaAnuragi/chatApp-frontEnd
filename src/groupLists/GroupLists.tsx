@@ -12,8 +12,14 @@ export function GroupLists({groups, setSelectedGroup, selectedGroup, setShowCrea
           <i onClick={() => setShowSearchUser(true)} className={`fa-solid fa-magnifying-glass ${styles.icon}`}></i>
         </div>
       </div>
-      {/* ${selectedGroup !== null ? styles.invisible : ""} */}
-      {Object.keys(groups).map((group, index) => <div className={`${styles.group} ${group === selectedGroup ? styles.selectedGroup : ""} ${index === 0 ? styles.firstGroup : ""}`} key={group} onClick={() => setSelectedGroup(group)}>{`${groups[group].name}`}</div>)}
+      <div className={styles.scrollArea}>
+        {/* ${selectedGroup !== null ? styles.invisible : ""} */}
+        {Object.keys(groups).map((group, index) => (
+          <div className={`${styles.group} ${group === selectedGroup ? styles.selectedGroup : ""} ${index === 0 ? styles.firstGroup : ""}`} key={group} onClick={() => setSelectedGroup(group)}>
+            {`${groups[group].name}`}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

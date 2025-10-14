@@ -44,6 +44,9 @@ $border-radius: 0.5rem;
   flex-direction: column;
 
   // border: 2px solid red;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  background-color: $panel;
 }
 
 .inputFieldAndButtonContainer {
@@ -59,6 +62,7 @@ $border-radius: 0.5rem;
 
   background-color: $panel;
   // border: 2px solid blue;
+  border-top: 1px solid $border;
 }
 
 .sendButton {

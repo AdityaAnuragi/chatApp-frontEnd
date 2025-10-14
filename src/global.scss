@@ -8,6 +8,7 @@ body {
   margin: 0;
   background-color: $bg;
   color: $text;
+  overflow-x: hidden; // prevent horizontal scrollbar
 }
 
 /* Scrollbar - webkit */
