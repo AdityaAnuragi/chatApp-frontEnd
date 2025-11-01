@@ -1,10 +1,10 @@
-import {useEffect, useRef} from "react"
-import {Chats, UnsentChats} from "../homePage/HomePage"
-import {Message} from "../message/Message"
+import { useEffect, useRef } from "react"
+import { Chats, UnsentChats } from "../homePage/HomePage"
+import { Message } from "../message/Message"
 
 import styles from "./ActiveChat.module.scss"
 
-export function ActiveChat({prevIsConnected, isConnected, sentMessages, unsentMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType}: ActiveChatTypes) {
+export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentMessages, selectedGroup, selectedGroupName, id, handleSendMsg, draftMsg, handleOnChange, setShowInviteToGroup, setSelectedGroup, chatType }: ActiveChatTypes) {
 
   const scrollContainer = useRef() as React.MutableRefObject<HTMLDivElement>
 
@@ -69,9 +69,9 @@ export function ActiveChat({prevIsConnected, isConnected, sentMessages, unsentMe
       // console.log(currGroup, sentMessages[selectedGroup].length)
 
       Object.keys(unsentMessages).forEach(groupName => {
-        if(unsentMessages[groupName] && unsentMessages[groupName].length >= 0) {
-          for(let totalDeletes = 0; totalDeletes < unsentMessages[groupName].length; totalDeletes++) {
-            if(unsentMessages[groupName][totalDeletes].messageStatus === "❌") {
+        if (unsentMessages[groupName] && unsentMessages[groupName].length >= 0) {
+          for (let totalDeletes = 0; totalDeletes < unsentMessages[groupName].length; totalDeletes++) {
+            if (unsentMessages[groupName][totalDeletes].messageStatus === "❌") {
               handleSendMsg(groupName, sentMessages[groupName].length + totalDeletes)
             }
           }
@@ -102,10 +102,13 @@ export function ActiveChat({prevIsConnected, isConnected, sentMessages, unsentMe
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.backButtonAndConvName}>
+        <div className={styles.selectedChat}>
           {/* <button onClick={() => setSelectedGroup(null)} >back</button> */}
-          <i onClick={() => setSelectedGroup(null)} tabIndex={0} className={`fa-solid fa-arrow-left ${styles.icon}`}></i>
-          <h3 onClick={handleClick} className={chatType === "group" ? styles.groupName : ""}>{selectedGroupName}</h3>
+          <div className={styles.backButtonAndConvName}>
+            <i onClick={() => setSelectedGroup(null)} tabIndex={0} className={`fa-solid fa-arrow-left ${styles.icon}`}></i>
+            <h3 className={chatType === "group" ? styles.groupName : ""}>{selectedGroupName}</h3>
+          </div>
+          <button onClick={handleClick} className={styles.addUserButton} >Add user</button>
         </div>
         <div className={styles.containerForOverflow} ref={scrollContainer}>
           {[...sentMessages[selectedGroup], ...(unsentMessages[selectedGroup] || [])].map((value, index) => {
@@ -118,7 +121,7 @@ export function ActiveChat({prevIsConnected, isConnected, sentMessages, unsentMe
                   userID={id}
                   msg={value.msg.split(": ")[1]}
                   messageStatus={value.messageStatus}
-                  // selectedGroup={selectedGroup}
+                // selectedGroup={selectedGroup}
                 />
                 {value.messageStatus === "❌"
                   && (
@@ -134,7 +137,7 @@ export function ActiveChat({prevIsConnected, isConnected, sentMessages, unsentMe
           })}
         </div>
         <div className={styles.inputFieldAndButtonContainer}>
-          <input className={styles.inputField} maxLength={40} placeholder="Type a message" type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={handleOnChange}/>
+          <input className={styles.inputField} maxLength={40} placeholder="Type a message" type="text" value={draftMsg} onKeyDown={handleKeyDown} onChange={handleOnChange} />
           {/* <button className={styles.sendButton} onClick={() => handleSendMsg()}  >Send message</button> */}
           <i ref={inputField} onClick={() => handleSendMsg(selectedGroup)} className={`fa-solid fa-location-arrow ${styles.icon}`}></i>
         </div>

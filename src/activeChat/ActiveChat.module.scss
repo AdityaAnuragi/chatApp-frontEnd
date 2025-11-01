@@ -108,15 +108,20 @@ $border-radius: 0.5rem;
 }
 
 .groupName {
-  cursor: pointer;
+  // cursor: pointer;
   color: $text;
 }
 
-.backButtonAndConvName {
+.selectedChat {
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   // border: 2px solid blue;
   color: $text;
+
+  // padding-left: 0.5rem;
+  padding-right: 1rem;
 }
 
 .icon {
@@ -131,9 +136,33 @@ $border-radius: 0.5rem;
   // margin-top: auto;
   // margin-bottom: auto;
   @include icon.iconStyles;
+  cursor: pointer;
 }
 
 .icon:hover {
   // background-color: rgb(206, 199, 199);
   @include icon.iconStylesOnHover;
+}
+
+.backButtonAndConvName {
+  display: flex;
+}
+
+.addUserButton {
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border: 0px;
+  border-radius: 1.5rem;
+  background-color: $accent-weak;
+  color: $text;
+  font-size: 0.9rem;
+  transition: all 0.05s ease-out;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:hover {
+    background-color: #35393d;
+  }
 }
