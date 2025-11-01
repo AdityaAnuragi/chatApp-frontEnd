@@ -1,4 +1,5 @@
 @use '../icon.module.scss';
+@use '../_theme' as *;
 
 $border-radius: 1rem;
 
@@ -20,7 +21,8 @@ $border-radius: 1rem;
 
 .searchFieldAndUserList {
   // border: 2px solid yellow;
-  background-color: white;
+  background-color: $panel;
+  border: 1px solid $border;
   border-radius: $border-radius;
   // padding: 0.3rem;
   display: flex;
@@ -52,6 +54,11 @@ $border-radius: 1rem;
   // width: 60%;
   flex-grow: 1;
   font-size: 2rem;
+  background-color: #2a3942;
+  color: $text;
+  border: 1px solid $border;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
   
   @media (max-width: 2560px) {
     max-width: 90%;
@@ -84,6 +91,11 @@ $border-radius: 1rem;
   padding: 0rem 1rem;
   // border: 2px solid blue;
   width: 100%;
+  color: $text;
+
+  p {
+    color: $text;
+  }
 }
 
 .addUser {
@@ -114,6 +126,12 @@ $border-radius: 1rem;
   // max-height: 65%;
   flex-grow: 1;
   overflow-y: auto;
+  color: $text;
+
+  p {
+    color: $text;
+    padding: 0rem 1rem;
+  }
 }
 
 .information {
@@ -121,6 +139,7 @@ $border-radius: 1rem;
   // margin-right: auto;
   height: 1.7rem;
   margin: 0rem auto 0.4rem;
+  color: $text;
 }
 
 .icon {
@@ -154,12 +173,13 @@ $border-radius: 1rem;
 
   cursor: pointer;
   width: 100%;
-  background-color: rgb(48, 159, 48);
+  background-color: $success;
   // text-align: center;
   border-bottom-left-radius: calc($border-radius - 6px);
   border-bottom-right-radius: calc($border-radius - 6px);
   min-height: 3rem;
   font-size: 1.5rem;
+  color: #fff;
 
   transition: all 0.05s ease-out;
 
