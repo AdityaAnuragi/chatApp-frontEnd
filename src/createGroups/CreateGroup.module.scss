@@ -1,3 +1,5 @@
+@use '../_theme' as *;
+
 $buttonAndInputHeight: 3rem;
 
 .container {
@@ -18,7 +20,7 @@ $buttonAndInputHeight: 3rem;
 
 .inputFieldAndUsers {
   // border: 2px solid yellow;
-  background-color: white;
+  background-color: $panel;
   border-radius: 1rem;
 
   height: 15rem;
@@ -73,8 +75,9 @@ $buttonAndInputHeight: 3rem;
   min-width: 10rem;
   max-width: 45rem;
   font-size: 1.2rem;
+  border-width: 0px;
   border-radius: 0.5rem;
-
+  background-color:  #2a3942;
   margin: 0rem;
   // flex: 1
 }
@@ -83,7 +86,8 @@ $buttonAndInputHeight: 3rem;
   margin-top: 0.5rem;
   border-width: 0px;
   border-radius: 0.5rem;
-  background-color: rgb(188, 250, 188);
+  //background-color: rgb(188, 250, 188);
+  background-color: $accent;
   transition: all 0.05s ease-out;
 
   margin: 0rem;
@@ -100,5 +104,6 @@ $buttonAndInputHeight: 3rem;
 
 .information {
   margin: 0rem;
+  font-size: 1.2rem;
   // margin-bottom: 0.5rem;
 }

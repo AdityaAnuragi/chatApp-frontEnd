@@ -108,7 +108,7 @@ export function ActiveChat({ prevIsConnected, isConnected, sentMessages, unsentM
             <i onClick={() => setSelectedGroup(null)} tabIndex={0} className={`fa-solid fa-arrow-left ${styles.icon}`}></i>
             <h3 className={chatType === "group" ? styles.groupName : ""}>{selectedGroupName}</h3>
           </div>
-          <button onClick={handleClick} className={styles.addUserButton} >Add user</button>
+          {chatType === "group" && <button onClick={handleClick} className={styles.addUserButton}>Add user</button>}
         </div>
         <div className={styles.containerForOverflow} ref={scrollContainer}>
           {[...sentMessages[selectedGroup], ...(unsentMessages[selectedGroup] || [])].map((value, index) => {
